@@ -3,17 +3,24 @@
 A semigroup (representation) theory library for SageMath
 """
 
+import os
+import sys
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
+from setuptools.command.test import test as TestCommand
 # To use a consistent encoding
 from codecs import open
-from os import path
 
-here = path.abspath(path.dirname(__file__))
+here = os.path.abspath(os.path.dirname(__file__))
 
 # Get the long description from the README file
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
+
+class SageTest(TestCommand):
+    def run_tests(self):
+        errno = os.system("sage -t sage_semigroups")
+        sys.exit(errno)
 
 setup(
     name='sage-semigroups',
@@ -34,12 +41,7 @@ setup(
         #'Programming Language :: Python :: 3',
     ],
     keywords='SageMath, semigroup theory',
-    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
-    setup_requires=[], # TODO: whatever for testing ?
+    packages=find_packages(),
     install_requires=['recursive-monkey-patch'],
-    extras_require={
-        'dev': ['check-manifest'],
-        'test': ['coverage'],
-    },
-    #test_suite = 'nose.collector',
+    cmdclass = {'test': SageTest},
 )
