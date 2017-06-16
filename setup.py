@@ -30,7 +30,7 @@ setup(
     url='https://github.com/nthiery/sage-semigroups',
     author='Nicolas M. Thiéry',
     author_email='nthiery@users.sf.net',
-    license='GPLv3',
+    license='GPLv2+',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Science/Research'
@@ -42,6 +42,6 @@ setup(
     ],
     keywords='SageMath, semigroup theory',
     packages=find_packages(),
-    install_requires=['recursive-monkey-patch'],
+    install_requires=['sage-package', 'recursive-monkey-patch'], # 'Sage'
     cmdclass = {'test': SageTest},
 )
