@@ -1,3 +1,31 @@
+
+import unittest
+
+class InstanceTester:
+    def __init__(self, instance, elements = None, verbose = False, prefix = "", max_runs = 4096, failure_exception = None, **options):
+        """
+        A gadget attached to an instance providing it with testing utilities.
+
+        EXAMPLES::
+
+            sage: from sage.misc.sage_unittest import InstanceTester
+            sage: InstanceTester(instance = ZZ, verbose = True, elements = [1,2,3])
+            Testing utilities for Integer Ring
+
+        This is used by ``SageObject._tester``, which see::
+
+            sage: QQ._tester()
+            Testing utilities for Rational Field
+        """
+        unittest.TestCase.__init__(self)
+        self._instance = instance
+        self._verbose = verbose
+        self._elements = elements
+        self._prefix = prefix
+        self._max_runs = max_runs
+        if failure_exception:
+            self.failureException = failure_exception
+
 class ReturnOnError(Exception):
     pass
 
@@ -122,12 +150,13 @@ class TestMethodFromIs(MethodDecorator):
     def __init__(self, f):
         r"""
         """
-        assert isinstance(f, IsMethod)
-        return super(TestMethodFromIs, self).__init__(f.f)
+        if isinstance(f, IsMethod):
+            f = f.f
+        return super(TestMethodFromIs, self).__init__(f)
 
-    def __call__(self, **kwds):
+    def __call__(self, raise_on_failure=False, proof=False, **kwds):
         r"""
         """
-        self.f(self._instance, **kwds)
+        self.f(self._instance, raise_on_failure=raise_on_failure, proof=proof, **kwds)
 
 _test_method_from_is = TestMethodFromIs
