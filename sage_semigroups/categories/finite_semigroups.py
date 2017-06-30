@@ -14,7 +14,7 @@ Status: imported everything from finite_semigroups.py in the Sage-Combinat queue
 from sage.misc.abstract_method import abstract_method
 from sage.misc.cachefunc import cached_method
 from sage.misc.misc import attrcall
-from sage.misc.sage_unittest import is_method
+from sage_semigroups.misc.sage_unittest import is_method
 #from sage.categories.character_ring_functor import CharacterRingsCategory
 #from sage.categories.with_realizations import WithRealizationsCategory
 from sage.categories.groups import Groups

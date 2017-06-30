@@ -17,7 +17,7 @@ features into the Sage library::
 We test that the sage categories have been properly monkey patched::
 
     sage: Semigroups().Finite().parent_class.is_r_trivial
-    <unbound method FiniteSemigroups.parent_class.is_r_trivial>
+    <class 'sage_semigroups.misc.sage_unittest.IsMethod'>
     sage: Semigroups().Finite().parent_class.is_r_trivial.__module__
     'sage_semigroups.categories.finite_semigroups'
 """
