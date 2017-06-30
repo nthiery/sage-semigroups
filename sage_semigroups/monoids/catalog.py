@@ -7,3 +7,4 @@ from sage_semigroups.monoids.free_semilattice import FreeSemilattice
 from sage_semigroups.monoids.set_compositions_monoid import SetCompositionsMonoid
 from sage_semigroups.monoids.set_partitions_monoid import SetPartitionsMonoid
 from sage_semigroups.monoids.sign_vectors_monoid import  SignVectorsMonoid
+from sage_semigroups.monoids.karnofsky_rhodes_expansion import KarnofskyRhodesExpansion
