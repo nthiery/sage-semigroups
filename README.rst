@@ -11,20 +11,22 @@ discarded.
 Installation
 ------------
 
+Stable version (not much there yet)::
+
     sage -pip install sage-semigroups
 
-For the bleeding edge version:
+For the bleeding edge version::
 
     git clone https://github.com/nthiery/sage-semigroups.git
     cd sage-semigroups
     sage -pip install .
 
 In both cases, this installs the library in the Sage tree. You may
-instead want to install sage-semigroup in your user directory:
+instead want to install sage-semigroup in your user directory::
 
     sage -pip install --user ...
 
-Or to install it in editable mode for development:
+Or to install it in editable mode for development::
 
     sage -pip install --user -e ...
 
@@ -33,21 +35,21 @@ See the help of the corresponding pip options for details
 Usage
 -----
 
-Run sage as usual, and do:
+Run sage as usual, and do::
 
     sage: import sage-semigroups
 
-The features are then available as if they were native Sage features:
+The features are then available as if they were native Sage features::
 
     TODO: add some examples
 
 The intention is to make the later integration of those features into
 Sage as transparent as possible. To enable this, the code is
-structured as in the SageMath library; for example the features in
+structured as in the SageMath library; for example the features in::
 
     sage_semigroups.categories.j_trivial_monoids.JTrivialMonoids
 
-get merged into:
+get merged into::
 
     sage.categories.j_trivial_monoids.JTrivialMonoids
 
