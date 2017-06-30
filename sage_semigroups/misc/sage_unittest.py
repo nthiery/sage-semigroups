@@ -44,7 +44,7 @@ class IsMethod(MethodDecorator):
         ...       def __init__(self, sets):
         ...           self._sets = sets
         ...       @is_method
-        ...       def is_finite(self, proof = False, **options):
+        ...       def is_finite(self, proof=False, **options):
         ...           tester = self._tester(**options)
         ...           if proof: # we only run a full test if proof=True
         ...               sets = self._sets
@@ -52,7 +52,7 @@ class IsMethod(MethodDecorator):
         ...               sets = self._sets[:1]
         ...           for set in sets:
         ...               tester.assert_( set.is_finite(), "The set %s is not finite"%set )
-        ...           return FiniteEnumeratedSets()       # todo: use Sets().Finite() after #10963
+        ...           return Sets().Finite()
         ...
         sage: class FiniteUnion(Union):
         ...       _test_finite = _test_method_from_is(Union.is_finite)
@@ -98,16 +98,16 @@ class IsMethod(MethodDecorator):
 
         sage: from sage.misc.sageinspect import sage_getsource
         sage: sage_getsource(U.is_finite)
-        '      @is_method...def is_finite(self, proof = False, **options):...'
+        '      @is_method...def is_finite(self, proof=False, **options):...'
         sage: from sage.misc.sageinspect import sage_getsource
         sage: sage_getsource(V._test_finite)
-        '      @is_method...def is_finite(self, proof = False, **options):...'
+        '      @is_method...def is_finite(self, proof=False, **options):...'
     """
-    def __call__(self, raise_on_failure = False, proof = True, **kwds):
+    def __call__(self, raise_on_failure=False, proof=True, **kwds):
         """
         """
         try:
-            category = self.f(self._instance, failure_exception = None if raise_on_failure else ReturnOnError, proof = proof, **kwds)
+            category = self.f(self._instance, failure_exception=None if raise_on_failure else ReturnOnError, proof=proof, **kwds)
             if category:
                 self._instance._refine_category_(category)
             return True
