@@ -62,10 +62,9 @@ class FiniteLeftRegularBands(Category):
             return tuple([z for z in self if x*z == z and self.j_lequal(jclass[0],z)])
 
         def restriction(self, jclass):
-            # EXPERIMENTAL!
-            return subsemigroup(self, self.interval(self.one(),jclass))
-            #return self.subquotient(self.interval(self.one(),jclass),
-            #        category = self.category().Subquotients())
+            return self.subsemigroup(generators=self.interval(self.one(), jclass),
+                                     one=self.one(),
+                                     category=self.category().Subquotients())
 
         @cached_method
         def r_poset(self):
@@ -190,9 +189,11 @@ class FiniteLeftRegularBands(Category):
                 resX = self.restriction(X)
                 res_dist = {}
                 for x in distribution:
-                    y = resX.retract(x)
-                    if y is not None:
+                    try:
+                        y = resX.retract(x)
                         res_dist[y] = distribution[x]
+                    except:
+                        pass
                 sdX = resX.stationary_distribution(res_dist)
                 stat_dists[X] = A.sum_of_terms((resX.lift(x),sdX[x]) for x in sdX)
             return stat_dists
@@ -201,23 +202,14 @@ class FiniteLeftRegularBands(Category):
             resX = self.restriction(X)
             res_dist = {}
             for x in distribution:
-                y = resX.retract(x)
-                if y is not None:
+                try:
+                    y = resX.retract(x)
                     res_dist[y] = distribution[x]
+                except:
+                    pass
             return res_dist
 
         def restricted_distributions(self, distribution):
-            #res_dists = {}
-            #for X in self.support_lattice():
-            #    resX = self.restriction(X)
-            #    res_dist = {}
-            #    for x in distribution:
-            #        y = resX.retract(x)
-            #        if y is not None:
-            #            res_dist[y] = distribution[x]
-            #    res_dists[X] = res_dist
-            #return res_dists
-
             res_dists = {}
             for X in self.support_lattice():
                 res_dists[X] = self.restricted_distribution(X, distribution)
@@ -327,49 +319,4 @@ class FiniteLeftRegularBands(Category):
                 R = self.base_ring()
                 scalar = R(1) / R(len(X))
                 return scalar * self.sum(self.basis()[x] for x in X)
-
-##############################
-#  HACK: Subsemigroup class  #
-##############################
-@cached_function
-def subsemigroup(semigroup, subsemigroup_elements):
-    class MyHackedSubSemigroupClass(UniqueRepresentation, Parent):
-        def _element_constructor_(self, x):
-            return self.retract(self.ambient()(x))
-
-        def __init__(self, subsemigroup_elements, category = None):
-            if category is None:
-                category = semigroup.category().Subquotients()
-            Parent.__init__(self, category = category)
-            self._sselts = subsemigroup_elements
-
-        def semigroup_generators(self):
-            return [self.element_class(self, x) for x in self._sselts]
-
-        def _repr_(self):
-            return "subsemigroup of %s" % self.ambient()
-
-        def ambient(self):
-            return semigroup
-
-        def lift(self, x):
-            assert x in self
-            return x.value
-
-        def an_element(self):
-            return self.semigroup_generators()[0]
-
-        # HACK ... retract should return None if not possible
-        def retract(self, x):
-            assert x in self.ambient()
-            y = self.element_class(self, x)
-            if y not in self.semigroup_generators():
-                return None
-            else:
-                return y
-
-        class Element(ElementWrapper):
-            pass
-
-    return MyHackedSubSemigroupClass(subsemigroup_elements)
 
