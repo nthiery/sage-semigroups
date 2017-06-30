@@ -37,7 +37,7 @@ Usage
 
 Run sage as usual, and do::
 
-    sage: import sage-semigroups
+    sage: import sage_semigroups
 
 The features are then available as if they were native Sage features::
 
