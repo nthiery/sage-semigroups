@@ -54,7 +54,7 @@ get merged into::
     sage.categories.j_trivial_monoids.JTrivialMonoids
 
 This is achieved using the `Recursive Monkey Patching
-<http//github.com/nthiery/recursive-monkey-patch>`_ package, which see
+<https://github.com/nthiery/recursive-monkey-patch>`_ package, which see
 for details.
 
 
