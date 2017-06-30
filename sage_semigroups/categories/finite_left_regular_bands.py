@@ -18,13 +18,14 @@ from sage.structure.element_wrapper import ElementWrapper
 from sage.sets.set import Set
 from sage.rings.rational_field import QQ
 
+# TODO: define an axiom Idempotent/Band and make this into RTrivial.Finite.Idempotent
 class FiniteLeftRegularBands(Category):
     @cached_method
     def super_categories(self):
         # TODO: generalize, we should allow LRB semigroups as well
         # from sage.categories.semigroups import Semigroups
-        # return [Semigroups().HTrivial().Finite()]
-        return [Monoids().HTrivial().Finite()]
+        # return [Semigroups().RTrivial().Finite()]
+        return [Monoids().RTrivial().Finite()]
 
     class ParentMethods:
         def __iter__(self):
