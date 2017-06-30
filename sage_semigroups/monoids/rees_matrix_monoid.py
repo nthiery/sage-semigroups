@@ -23,7 +23,7 @@ from sage.sets.family import Family
 from sage.rings.integer import Integer
 
 class AperiodicReesMatrixMonoid(UniqueRepresentation, Parent):
-    """
+    r"""
     INPUT:
 
      - ``P`` -- an `n\times m` matrix with `0`/`1` coefficients
