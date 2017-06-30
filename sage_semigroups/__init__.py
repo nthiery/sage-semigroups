@@ -1,18 +1,23 @@
-"""
-Sage-Semigroups's initialization
+r"""
+`sage-semigroups <https://github.com/nthiery/sage-semigroups>`_: A semigroup (representation) theory library for SageMath
 
-Loading this module initializes the library by monkey patching its
-features into the Sage library::
+Loading this module initializes the sage-semigroups library. Some of
+the features are extensions of existing classes or modules of the Sage
+library, and directly inserted (monkey patched) there::
 
     sage: import sage_semigroups
-    Loading sage-semigroups and patching its features into Sage's library:
-    Monkey patching sage.categories.finite_semigroups.FiniteSemigroups.ParentMethods.is_r_trivial
-    Monkey patching sage.categories.finite_semigroups.FiniteSemigroups.parent_class.is_r_trivial
-    Monkey patching sage.categories.h_trivial_semigroups.HTrivialSemigroups.Finite
-    Monkey patching sage.categories.h_trivial_semigroups.HTrivialSemigroups.Finite_extra_super_categories
-    Monkey patching sage.categories.truc
-    Monkey patching sage.monoids.catalog
-    Monkey patching sage.monoids.rees_matrix_monoid
+    Loading sage-semigroups and patching its features into Sage's library: ...
+
+Others are added to the global namespace, like the new catalog of
+semigroups::
+
+    sage: semigroups
+    <module 'sage_semigroups.monoids.catalog' from '...'>
+    sage: semigroups.AperiodicReesMatrixMonoid
+    <class 'sage_semigroups.monoids.rees_matrix_monoid.AperiodicReesMatrixMonoid'>
+
+
+TESTS:
 
 We test that the sage categories have been properly monkey patched::
 
@@ -28,4 +33,22 @@ from recursive_monkey_patch import monkey_patch
 import sage
 # TODO: do we want this? Should this list the features that are being patched?
 print("Loading sage-semigroups and patching its features into Sage's library:")
-monkey_patch(sys.modules[__name__], sage, log_level=logging.INFO)
+sage_semigroups = sys.modules[__name__]
+monkey_patch(sage_semigroups, sage, log_level=logging.INFO)
+
+# Insert the content of sage_semigroups.all in the global name space
+from sage.repl.user_globals import initialize_globals
+initialize_globals(sage_semigroups.all)
+
+# Some traces of an attempt
+from sage.repl.ipython_extension import SageCustomizations
+all = SageCustomizations.all_globals()
+all.foo = 3
+
+"""
+At this stage, the insertion in the global name space works in the
+doctest where the library is imported, but is reinitialized in later
+doctests::
+
+    sage: semigroups
+"""
