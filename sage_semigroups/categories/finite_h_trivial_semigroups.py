@@ -1,5 +1,9 @@
 r"""
 FiniteHTrivialSemigroups
+
+::
+
+    sage: import sage_semigroups    # random
 """
 #*****************************************************************************
 #  Copyright (C) 2009-2011 Nicolas M. Thiery <nthiery at users.sf.net>
@@ -32,11 +36,11 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
     EXAMPLES::
 
         sage: Semigroups().HTrivial().Finite()
-        Category of finite h trivial monoids
+        Category of finite aperiodic semigroups
         sage: Semigroups().HTrivial().Finite().super_categories()
         [Category of finite semigroups, Category of aperiodic semigroups]
         sage: Monoids().HTrivial().Finite().example()
-        The finite H-trivial monoid of order preserving maps on {1, .., 3}
+        The finite H-trivial monoid of order preserving maps on {1, 2, 3}
 
     TESTS::
 
@@ -66,6 +70,11 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
         """
         return [Semigroups().Aperiodic()]
 
+    class Unital(CategoryWithAxiom):
+        def example(self, *args):
+            from sage_semigroups.categories.examples.finite_h_trivial_monoids import Example
+            return Example(*args)
+
     class ParentMethods:
 
         def simple_modules_index_set(self):
@@ -79,8 +88,8 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
 
             EXAMPLES::
 
-                sage: S = Monoids().HTrivial().Finite().example(5); S
-                The finite H-trivial monoid of order preserving maps on {1, .., 5}
+                sage: S = Monoids().HTrivial().Finite().example(5); S 
+                The finite H-trivial monoid of order preserving maps on {1, 2, 3, 4, 5}
                 sage: S.simple_modules_index_set()
                 {0, 1, 2, 3, 4}
             """
@@ -121,7 +130,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
             EXAMPLES::
 
                 sage: S = Monoids().Aperiodic().Finite().example(5); S
-                The finite H-trivial monoid of order preserving maps on {1, .., 5}
+                The finite H-trivial monoid of order preserving maps on {1, 2, 3, 4, 5}
                 sage: S.eggbox_picture(2)
                 [0 0 0 0 0 1]
                 [1 1 1 1 0 0]
@@ -159,7 +168,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
             EXAMPLES::
 
                 sage: S = Monoids().Aperiodic().Finite().example(5); S
-                The finite H-trivial monoid of order preserving maps on {1, .., 5}
+                The finite H-trivial monoid of order preserving maps on {1, 2, 3, 4, 5}
                 sage: S.regular_j_class_semigroup_generators(0)
                 {12345}
                 sage: S.regular_j_class_semigroup_generators(1)
@@ -208,7 +217,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
             EXAMPLES::
 
                 sage: S = Monoids().Aperiodic().Finite().example(5); S
-                The finite H-trivial monoid of order preserving maps on {1, .., 5}
+                The finite H-trivial monoid of order preserving maps on {1, 2, 3, 4, 5}
                 sage: S.simple_module_dimension(2)
                 6
                 sage: [S.simple_module_dimension(i) for i in S.simple_modules_index_set()]
@@ -313,7 +322,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
             EXAMPLES::
 
                 sage: S = Monoids().Aperiodic().Finite().example(5); S
-                The finite H-trivial monoid of order preserving maps on {1, .., 5}
+                The finite H-trivial monoid of order preserving maps on {1, 2, 3, 4, 5}
                 sage: P = S.composition_series_poset(side = 'right')
                 sage: list(P)
                 [4, 3, 2, 1, 0]
