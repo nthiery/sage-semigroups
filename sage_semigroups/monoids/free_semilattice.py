@@ -1,3 +1,11 @@
+r"""
+Free semilattice
+
+EXAMPLES::
+
+    sage: import sage_semigroups
+    Loading sage-semigroups and patching its features into Sage's library: ...
+"""
 from sage.sets.set import Set_object_enumerated
 from sage.structure.unique_representation import UniqueRepresentation
 from sage.structure.parent import Parent
