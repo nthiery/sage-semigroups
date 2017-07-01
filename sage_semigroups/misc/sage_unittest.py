@@ -154,9 +154,9 @@ class TestMethodFromIs(MethodDecorator):
             f = f.f
         return super(TestMethodFromIs, self).__init__(f)
 
-    def __call__(self, raise_on_failure=False, proof=False, **kwds):
+    def __call__(self, **kwds):
         r"""
         """
-        self.f(self._instance, raise_on_failure=raise_on_failure, proof=proof, **kwds)
+        self.f(self._instance, proof=False, **kwds)
 
 _test_method_from_is = TestMethodFromIs

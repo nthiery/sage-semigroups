@@ -16,12 +16,12 @@ from sage.misc.cachefunc import cached_method#, cached_function
 from sage.categories.category_with_axiom import CategoryWithAxiom
 from sage.categories.semigroups import Semigroups
 from sage.categories.modules import Modules
-# from sage.categories.module_functor import ModulesCategory
-# from sage.categories.algebra_functor import AlgebrasCategory
-# from sage.categories.character_ring_functor import CharacterRingsCategory
-# from sage.categories.set_with_action_functor import SetsWithActionCategory
-#from sage.categories.realizations import RealizationsCategory
-#from sage.categories.with_realizations import WithRealizationsCategory
+from sage_semigroups.categories.module_functor import ModulesCategory
+from sage.categories.algebra_functor import AlgebrasCategory
+from sage_semigroups.categories.character_ring_functor import CharacterRingsCategory
+from sage_semigroups.categories.set_with_action_functor import SetsWithActionCategory
+from sage.categories.realizations import RealizationsCategory
+from sage.categories.with_realizations import WithRealizationsCategory
 from sage.sets.family import Family
 
 class FiniteHTrivialSemigroups(CategoryWithAxiom):
@@ -457,525 +457,525 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
 
         pow_infinity = pow_omega # for backward compatibility
 
-    # class CharacterRings(CharacterRingsCategory):
-
-    #     class WithRealizations(WithRealizationsCategory):
-
-    #         class ParentMethods:
-
-    #             def __init_extra__(self):
-    #                 """
-    #                 TESTS::
-
-    #                     sage: M = Monoids().HTrivial().Finite().example(4); M
-    #                     The finite H-trivial monoid of order preserving maps on {1, .., 4}
-    #                     sage: G = M.character_ring()
-    #                     sage: C = G.C(); S = G.S(); T_all = G.T_all(); T = G.T()
-    #                     sage: StoC = C.coerce_map_from(S)
-    #                     sage: StoC._test_triangular()
-    #                     sage: CtoS = S.coerce_map_from(C)
-    #                     sage: CtoS._test_triangular()
-    #                     sage: TtoS = C.coerce_map_from(T)
-    #                     sage: TtoS._test_triangular()
-    #                 """
-    #                 self.StoC = self.S().module_morphism(on_basis = self.StoC_on_basis,
-    #                                                      triangular = "upper", unitriangular = True, cmp = self.C().get_order_cmp(),
-    #                                                      codomain = self.C(),
-    #                                                      category = self.character_ring_category())
-    #                 self.StoC.register_as_coercion()
-    #                 (~(self.StoC)).register_as_coercion()
-
-    #                 # Everything below is just for q=1!
-
-    #                 self.T_alltoC = self.T_all().module_morphism(on_basis = self.T_alltoC_on_basis,
-    #                                                              codomain = self.C(),
-    #                                                              category = self.character_ring_category())
-    #                 self.T_alltoC.register_as_coercion()
-
-    #                 # Could implement T -> T_all by relabelling
-    #                 self.TtoC = self.T().module_morphism(on_basis = self.TtoC_on_basis,
-    #                                                      triangular = "upper", unitriangular = True, cmp = self.C().get_order_cmp(),
-    #                                                      codomain = self.C(),
-    #                                                      category = self.character_ring_category())
-    #                 self.TtoC.register_as_coercion()
-    #                 (~(self.TtoC)).register_as_coercion()
-
-    #                 self.PtoS = self.P().module_morphism(on_basis = self.PtoS_on_basis,
-    #                                                      codomain = self.S(),
-    #                                                      category = self.character_ring_category())
-    #                 self.PtoS.register_as_coercion()
-    #                 # TODO: reenable this when the inverse will be computed lazily
-    #                 # Right now we get a recursion loop
-    #                 #(~(self.PtoS)).register_as_coercion()
-
-    #                 # TODO: could also do EtoC when q == 1
-
-    #             def dimension(self, chi):
-    #                 """
-    #                 Return the dimension of the representation with the character chi
-
-    #                 EXAMPLES::
-
-    #                     sage: M = Monoids().HTrivial().Finite().example(); M
-    #                     The finite H-trivial monoid of order preserving maps on {1, .., 3}
-    #                     sage: G = M.character_ring(side = "left"); G
-    #                     The left-character ring of The finite H-trivial monoid of order preserving maps on {1, .., 3} over Rational Field
-
-    #                 This is the dimension of the simple module indexed by ``1``::
-
-    #                     sage: S = G.S()
-    #                     sage: G.dimension(S[1])
-    #                     2
-
-    #                 As a shortcut, one can also use::
-
-    #                     sage: S[1].dimension()
-    #                     2
-
-    #                 Let us look at the dimension of all simple and left class modules::
-
-    #                     sage: for chi in G.S().basis():
-    #                     ...       print "dim %s = %s"%(chi, G.dimension(chi))
-    #                     dim S[0] = 1
-    #                     dim S[1] = 2
-    #                     dim S[2] = 1
-
-    #                     sage: for chi in G.T_all().basis():
-    #                     ...       print "dim %s = %s"%(chi, G.dimension(chi))
-    #                     dim T[0] = 1
-    #                     dim T[1] = 3
-    #                     dim T[2] = 3
-    #                 """
-    #                 semigroup = self.base()
-    #                 # The regular j_class of the identity
-    #                 i = semigroup.j_transversal_of_idempotents().inverse_family()[semigroup.one()]
-    #                 return self.C()(chi)[i]
-
-    #             @cached_method
-    #             def C(self):
-    #                 r"""
-    #                 The character ring of the monoid ``self`` on the class function basis
-
-    #                 The basis is indexed by the class functions of
-    #                 `J`-classes of idempotents. I.e., if `M` is a module,
-    #                 then `\Chi(M) = \sum c_i C_i`, where `c_i` is the
-    #                 character (i.e. the trace) on `M` of any idempotent
-    #                 `e` in the regular `J`-class indexed by `i`.
-
-    #                 For triangularity purposes, the basis is sorted
-    #                 decreasingly along a linear extension of `J`-order.
-
-    #                 .. seealso:: :meth:`simple_modules_index_set`
-
-    #                 EXAMPLES::
-
-    #                     sage: M = Monoids().HTrivial().Finite().example(); M
-    #                     The finite H-trivial monoid of order preserving maps on {1, .., 3}
-    #                     sage: C = M.character_ring().C(); C
-    #                     The right-character ring of The finite H-trivial monoid of order preserving maps on {1, .., 3} over Rational Field in the basis of characters of right-class functions modules
-    #                     sage: C.basis()
-    #                     Finite family {0: C[0], 1: C[1], 2: C[2]}
-    #                 """
-    #                 from sage.combinat.character_ring import CharacterRing
-    #                 result = CharacterRing(self, prefix = "C", modules = "%s-class functions"%self.side()) # todo: fix the name
-    #                 result.set_order(list(self.base().simple_modules_index_set()))
-    #                 return result
-
-    #             @cached_method
-    #             def T(self):
-    #                 """
-    #                 Return the ring of characters of regular left/right-class modules
-
-    #                 EXAMPLES::
-
-    #                     sage: M = Monoids().HTrivial().Finite().example(); M
-    #                     The finite H-trivial monoid of order preserving maps on {1, .., 3}
-    #                     sage: T = M.character_ring().T(); T
-    #                     The right-character ring of The finite H-trivial monoid of order preserving maps on {1, .., 3} over Rational Field in the basis of characters of regular right-class modules
-    #                     sage: T.basis()
-    #                     Finite family {0: T[0], 1: T[1], 2: T[2]}
-    #                     sage: for chi in T.basis():
-    #                     ...       print "dim %s = %s"%(chi, chi.dimension())
-    #                     dim T[0] = 1
-    #                     dim T[1] = 2
-    #                     dim T[2] = 1
-    #                 """
-    #                 from sage.combinat.character_ring import CharacterRing
-    #                 return CharacterRing(self, prefix = "T",
-    #                                      modules = "regular %s-class"%self.side())
-
-    #             @cached_method
-    #             def T_all(self):
-    #                 """
-    #                 Return the ring of characters of left/right-class modules
-
-    #                 .. note:: This includes both regular and non regular
-    #                     modules. So this is in general not isomorphic to
-    #                     the other character rings, and the indexing set
-    #                     may be completely unrelated.
-
-    #                 .. todo:: add a good example, and find a good name
-
-    #                 EXAMPLES::
-
-    #                 """
-    #                 from sage.combinat.character_ring import CharacterRing
-    #                 from sage.sets.finite_enumerated_set import FiniteEnumeratedSet
-    #                 return CharacterRing(self, prefix = "T",
-    #                                      modules = "%s-class"%self.side(),
-    #                                      index_set = FiniteEnumeratedSet(self.base().j_classes().keys()))
-
-    #             @cached_method
-    #             def StoC_on_basis(self, i):
-    #                 """
-    #                 INPUT:
-
-    #                   - ``i`` -- the index of a regular `J`-class
-
-    #                 Returns the character of all the (`J`-classes of)
-    #                 idempotents on the `i`-th simple module.
-
-    #                 EXAMPLES::
-
-    #                     sage: M = Monoids().HTrivial().Finite().example(); M
-    #                     The finite H-trivial monoid of order preserving maps on {1, .., 3}
-    #                     sage: G = M.character_ring()
-    #                     sage: G.StoC_on_basis(1)
-    #                     2*C[0] + C[1]
-
-    #                     sage: S = G.S(); C = G.C()
-    #                     sage: for chi in S.basis():
-    #                     ...       print chi, "=", C(chi)
-    #                     S[0] = C[0]
-    #                     S[1] = 2*C[0] + C[1]
-    #                     S[2] = C[0] + C[1] + C[2]
-
-    #                 The character of simple modules is the same on the
-    #                 left and on the right::
-
-    #                     sage: G = M.character_ring(side = "left")
-    #                     sage: S = G.S(); C = G.C()
-    #                     sage: for chi in S.basis():
-    #                     ...       print chi, "=", C(chi)
-    #                     S[0] = C[0]
-    #                     S[1] = 2*C[0] + C[1]
-    #                     S[2] = C[0] + C[1] + C[2]
-
-    #                     sage: for chi in C.basis():
-    #                     ...       print chi, "=", S(chi)
-    #                     C[0] = S[0]
-    #                     C[1] = -2*S[0] + S[1]
-    #                     C[2] = S[0] - S[1] + S[2]
-
-    #                 """
-    #                 chi = self.base().simple_module(i, side = "right", base_ring = self.modules_base_ring()).character()
-    #                 if self.side() == 'left':
-    #                     chi = self.C().sum_of_terms(chi)
-    #                 return chi
-
-    #             @cached_method
-    #             def T_alltoC_on_basis(self, i):
-    #                 """
-    #                 INPUT:
-
-    #                   - ``i`` -- the index of a `J`-class
-
-    #                 Returns the character of all the (`J`-classes of)
-    #                 idempotents on the left (resp. right) class module for
-    #                 the `J`-class indexed by ``i``.
-
-    #                 .. todo:: update the examples here with a monoid
-    #                 with non regular `J`-classes.
-
-    #                 EXAMPLES::
-
-    #                     sage: M = Monoids().HTrivial().Finite().example(); M
-    #                     The finite H-trivial monoid of order preserving maps on {1, .., 3}
-    #                     sage: side = "right"
-    #                     sage: [list(M.lr_class(i, side=side)) for i in [0,1,2]]
-    #                     [[123], [113, 133], [111]]
-    #                     sage: G = M.character_ring(side=side)
-    #                     sage: G.T_alltoC_on_basis(1)
-    #                     2*C[0] + C[1]
-    #                     sage: C = G.C(); T = G.T_all(); S = G.S()
-    #                     sage: for chi in T.basis():
-    #                     ...       print chi, "=", C(chi)
-    #                     T[0] = C[0]
-    #                     T[1] = 2*C[0] + C[1]
-    #                     T[2] = C[0] + C[1] + C[2]
-
-    #                 The decomposition of right class modules into simple modules::
-
-    #                     sage: for chi in T.basis():
-    #                     ...       print chi, "=", S(chi)
-    #                     T[0] = S[0]
-    #                     T[1] = S[1]
-    #                     T[2] = S[2]
-
-    #                 We redo the same calculations on the left::
-
-    #                     sage: side = "left"
-    #                     sage: [list(M.lr_class(i, side=side)) for i in [0,1,2]]
-    #                     [[123], [133, 233, 122], [111, 222, 333]]
-    #                     sage: G = M.character_ring(side=side)
-    #                     sage: G.T_alltoC_on_basis(1)
-    #                     3*C[0] + C[1]
-
-    #                     sage: C = G.C(); T = G.T_all(); S = G.S()
-    #                     sage: for chi in T.basis():
-    #                     ...       print chi, "=", C(chi)
-    #                     T[0] = C[0]
-    #                     T[1] = 3*C[0] + C[1]
-    #                     T[2] = 3*C[0] + 2*C[1] + C[2]
-
-    #                 The decomposition of left class modules into simple modules::
-
-    #                     sage: for chi in T.basis():
-    #                     ...       print chi, "=", S(chi)
-    #                     T[0] = S[0]
-    #                     T[1] = S[0] + S[1]
-    #                     T[2] = S[1] + S[2]
-    #                 """
-    #                 return self.base().lr_class(i, side = self.side()).algebra(self.modules_base_ring()).character()
-
-    #             @cached_method
-    #             def TtoC_on_basis(self, i):
-    #                 """
-    #                 INPUT:
-
-    #                   - ``i`` -- the index of a `J`-class
-
-    #                 Returns the character of all the (`J`-classes of)
-    #                 idempotents on the left (resp. right) class module
-    #                 for the regular `J`-class indexed by ``i``.
-
-    #                 EXAMPLES::
-
-    #                     sage: M = Monoids().HTrivial().Finite().example(); M
-    #                     The finite H-trivial monoid of order preserving maps on {1, .., 3}
-    #                     sage: side = "right"
-    #                     sage: [list(M.lr_class(i, side=side)) for i in [0,1,2]]
-    #                     [[123], [113, 133], [111]]
-    #                     sage: G = M.character_ring(side=side)
-    #                     sage: G.TtoC_on_basis(1)
-    #                     2*C[0] + C[1]
-    #                     sage: C = G.C(); T = G.T(); S = G.S()
-    #                     sage: for chi in T.basis():
-    #                     ...       print chi, "=", C(chi)
-    #                     T[0] = C[0]
-    #                     T[1] = 2*C[0] + C[1]
-    #                     T[2] = C[0] + C[1] + C[2]
-
-    #                 The decomposition of right class modules into simple modules::
-
-    #                     sage: for chi in T.basis():
-    #                     ...       print chi, "=", S(chi)
-    #                     T[0] = S[0]
-    #                     T[1] = S[1]
-    #                     T[2] = S[2]
-
-    #                 We redo the same calculations on the left::
-
-    #                     sage: side = "left"
-    #                     sage: [list(M.lr_class(i, side=side)) for i in [0,1,2]]
-    #                     [[123], [133, 233, 122], [111, 222, 333]]
-    #                     sage: G = M.character_ring(side=side)
-    #                     sage: G.TtoC_on_basis(1)
-    #                     3*C[0] + C[1]
-
-    #                     sage: C = G.C(); T = G.T(); S = G.S()
-    #                     sage: for chi in T.basis():
-    #                     ...       print chi, "=", C(chi)
-    #                     T[0] = C[0]
-    #                     T[1] = 3*C[0] + C[1]
-    #                     T[2] = 3*C[0] + 2*C[1] + C[2]
-
-    #                 The decomposition of left class modules into simple modules::
-
-    #                     sage: for chi in T.basis():
-    #                     ...       print chi, "=", S(chi)
-    #                     T[0] = S[0]
-    #                     T[1] = S[0] + S[1]
-    #                     T[2] = S[1] + S[2]
-    #                 """
-    #                 return self.base().lr_regular_class(i, side = self.side()).algebra(self.modules_base_ring()).character()
-
-    #             @cached_method
-    #             def PtoS_on_basis(self, i):
-    #                 """
-    #                 Return the character of the left (resp. right) projective module indexed by ``i``, in terms of characters of simple modules.
-    #                 INPUT:
-
-    #                   - ``i`` -- the index of a regular `J`-class / simple / projective module
-
-    #                 In other words, this gives the composition factors
-    #                 in any maximal composition series of this
-    #                 projective module.
-
-    #                 EXAMPLES::
-
-    #                     sage: W = WeylGroup(["A", 2])
-    #                     sage: W.element_class.__repr__ = W.element_class.to_permutation_string
-    #                     sage: M = BiHeckeMonoid(W); M
-    #                     bi-Hecke monoid of Weyl Group of type ['A', 2] (as a matrix group acting on the ambient space)
-    #                     sage: side = "right"
-
-    #                     sage: G = M.character_ring(side=side)
-    #                     sage: G.PtoS_on_basis(W.one())
-    #                     S[321] + S[231] + S[312] + S[213] + S[132] + S[123]
-    #                     sage: C = G.C(); P = G.P(); S = G.S()
-    #                     sage: for chi in P.basis():
-    #                     ...       print chi, "=", S(chi)
-    #                     P[123] = S[321] + S[231] + S[312] + S[213] + S[132] + S[123]
-    #                     P[213] = S[213]
-    #                     P[132] = S[132]
-    #                     P[312] = S[321] + S[312]
-    #                     P[231] = S[321] + S[231]
-    #                     P[321] = S[321]
-
-    #                 We redo the same calculations on the left::
-
-    #                     sage: side = "left"
-    #                     sage: G = M.character_ring(side=side)
-    #                     sage: G.PtoS_on_basis(W.one())
-    #                     S[123]
-    #                     sage: C = G.C(); P = G.P(); S = G.S()
-    #                     sage: for chi in P.basis():
-    #                     ...       print chi, "=", S(chi)
-    #                     P[123] = S[123]
-    #                     P[213] = S[213] + S[123]
-    #                     P[132] = S[132] + S[123]
-    #                     P[312] = S[312] + S[123]
-    #                     P[231] = S[231] + S[123]
-    #                     P[321] = S[321] + S[231] + S[312] + S[123]
-    #                 """
-    #                 M = self.base()
-    #                 S = self.S()
-    #                 if self.side() == 'left':
-    #                     side = 0
-    #                 else:
-    #                     side = 1
-    #                 return S.sum_of_terms( (t[1-side], c)
-    #                                        for (t, c) in M.cartan_matrix_as_table().iteritems()
-    #                                        if t[side] == i )
-
-    #     class Realizations(RealizationsCategory):
-
-    #         class ElementMethods:
-
-    #             def dimension(self):
-
-    #                 return self.parent().realization_of().dimension(self)
-
-
-    # class SetsWithAction(SetsWithActionCategory):
-    #     """
-    #     EXAMPLES::
-
-    #         sage: Monoids().HTrivial().Finite().SetsWithAction().Algebras(QQ).extra_super_categories()
-    #         [Category of finite h trivial monoid modules over Rational Field]
-
-    #     TESTS::
-
-    #         sage: S = Monoids().HTrivial().Finite().example()
-    #         sage: R = S.with_regular_action().algebra(QQ)
-    #         sage: R.category().is_subcategory(Monoids().HTrivial().Finite().Modules(QQ))
-    #         True
-    #     """
-
-    #     class Algebras(AlgebrasCategory):
-    #         # see the warning in sage.categories.set_with_action_functor.SetsWithActionCategory._algebras_extra_super_categories
-    #         extra_super_categories = SetsWithActionCategory._algebras_extra_super_categories.im_func
-
-    # class Modules(ModulesCategory):
-
-    #     # class FiniteDimensional ...
-
-    #     class ParentMethods:
-
-    #         def character(self):
-    #             r"""
-    #             Return the character of this module `M` in the `C` basis
-
-    #             OUTPUT:
-
-    #              - a linear combination `\chi(M) = \sum c_i C_i`, where
-    #                `c_i` is the character (i.e. the trace) on `M` of any
-    #                idempotent `e` in the regular `J`-class indexed by `i`.
-
-    #             EXAMPLES::
-
-    #                 sage: M = Monoids().HTrivial().Finite().example(); M
-    #                 The finite H-trivial monoid of order preserving maps on {1, .., 3}
-    #                 sage: M.rename("M")
-    #                 sage: R = M.regular_representation(side = 'left')
-    #                 sage: R.character()
-    #                 10*C[0] + 4*C[1] + C[2]
-    #                 sage: R.character().parent()
-    #                 The left-character ring of M over Rational Field in the basis of characters of left-class functions modules
-
-    #                 sage: R = M.regular_representation(side = 'right')
-    #                 sage: R.character()
-    #                 10*C[0] + 6*C[1] + 3*C[2]
-    #                 sage: R.character().parent()
-    #                 The right-character ring of M over Rational Field in the basis of characters of right-class functions modules
-    #             """
-    #             S = self.semigroup()
-    #             C = S.character_ring(self.base_ring(), side = self.side()).C()
-    #             base_ring = C.base_ring()
-    #             e = S.j_transversal_of_idempotents()
-
-    #             # Remark: let e and f be two idempotents, and identify
-    #             # them with the corresponding linear projections
-    #             # acting on ``self``. If e <=_J f, then the rank of e
-    #             # is smaller than the rank of f.
-    #             #
-    #             # Corollary: the set of idempotents having non zero
-    #             # character (the support below) is an upper ideal in J-order.
-    #             #
-    #             # We use this to avoid computing the character for all
-    #             # regular J-classes.
-    #             #
-    #             # I am not yet sure that this works in non zero
-    #             # characteristic, so let's be safe.
-    #             assert self.base_ring().characteristic() == 0
-
-    #             from sage.combinat.backtrack import TransitiveIdeal
-    #             P = S.j_poset_on_regular_classes()
-    #             @cached_function
-    #             def character(i):
-    #                 return self.character_of(e[i])
-    #             def children(i):
-    #                 return (j for j in P.lower_covers(i) if character(j))
-    #             support = TransitiveIdeal(children, [P.top()])
-    #             return C.sum_of_terms((i, base_ring(character(i))) for i in support)
-
-    #         def composition_factors(self):
-    #             r"""
-    #             Return the composition factors this module
-
-    #             OUTPUT:
-
-    #              - a linear combination `\chi(M) = \sum c_i S_i`,
-    #                where `c_i` is the number of composition factors of
-    #                `M` isomorphic to the simple module `S_i`.
-
-    #             EXAMPLES::
-
-    #                 sage: M = Monoids().HTrivial().Finite().example(); M
-    #                 The finite H-trivial monoid of order preserving maps on {1, .., 3}
-    #                 sage: M.rename("M")
-    #                 sage: R = M.regular_representation(side = 'left')
-    #                 sage: R.composition_factors()
-    #                 3*S[0] + 3*S[1] + S[2]
-    #                 sage: R.composition_factors().parent()
-    #                 The left-character ring of M over Rational Field in the basis of characters of simple left modules
-
-    #                 sage: R = M.regular_representation(side = 'right')
-    #                 sage: R.composition_factors()
-    #                 S[0] + 3*S[1] + 3*S[2]
-    #                 sage: R.composition_factors().parent()
-    #                 The right-character ring of M over Rational Field in the basis of characters of simple right modules
-    #             """
-    #             chi = self.character()
-    #             return chi.parent().realization_of().S()(chi)
+    class CharacterRings(CharacterRingsCategory):
+
+        class WithRealizations(WithRealizationsCategory):
+
+            class ParentMethods:
+
+                def __init_extra__(self):
+                    """
+                    TESTS::
+
+                        sage: M = Monoids().HTrivial().Finite().example(4); M
+                        The finite H-trivial monoid of order preserving maps on {1, .., 4}
+                        sage: G = M.character_ring()
+                        sage: C = G.C(); S = G.S(); T_all = G.T_all(); T = G.T()
+                        sage: StoC = C.coerce_map_from(S)
+                        sage: StoC._test_triangular()
+                        sage: CtoS = S.coerce_map_from(C)
+                        sage: CtoS._test_triangular()
+                        sage: TtoS = C.coerce_map_from(T)
+                        sage: TtoS._test_triangular()
+                    """
+                    self.StoC = self.S().module_morphism(on_basis = self.StoC_on_basis,
+                                                         triangular = "upper", unitriangular = True, cmp = self.C().get_order_cmp(),
+                                                         codomain = self.C(),
+                                                         category = self.character_ring_category())
+                    self.StoC.register_as_coercion()
+                    (~(self.StoC)).register_as_coercion()
+
+                    # Everything below is just for q=1!
+
+                    self.T_alltoC = self.T_all().module_morphism(on_basis = self.T_alltoC_on_basis,
+                                                                 codomain = self.C(),
+                                                                 category = self.character_ring_category())
+                    self.T_alltoC.register_as_coercion()
+
+                    # Could implement T -> T_all by relabelling
+                    self.TtoC = self.T().module_morphism(on_basis = self.TtoC_on_basis,
+                                                         triangular = "upper", unitriangular = True, cmp = self.C().get_order_cmp(),
+                                                         codomain = self.C(),
+                                                         category = self.character_ring_category())
+                    self.TtoC.register_as_coercion()
+                    (~(self.TtoC)).register_as_coercion()
+
+                    self.PtoS = self.P().module_morphism(on_basis = self.PtoS_on_basis,
+                                                         codomain = self.S(),
+                                                         category = self.character_ring_category())
+                    self.PtoS.register_as_coercion()
+                    # TODO: reenable this when the inverse will be computed lazily
+                    # Right now we get a recursion loop
+                    #(~(self.PtoS)).register_as_coercion()
+
+                    # TODO: could also do EtoC when q == 1
+
+                def dimension(self, chi):
+                    """
+                    Return the dimension of the representation with the character chi
+
+                    EXAMPLES::
+
+                        sage: M = Monoids().HTrivial().Finite().example(); M
+                        The finite H-trivial monoid of order preserving maps on {1, .., 3}
+                        sage: G = M.character_ring(side = "left"); G
+                        The left-character ring of The finite H-trivial monoid of order preserving maps on {1, .., 3} over Rational Field
+
+                    This is the dimension of the simple module indexed by ``1``::
+
+                        sage: S = G.S()
+                        sage: G.dimension(S[1])
+                        2
+
+                    As a shortcut, one can also use::
+
+                        sage: S[1].dimension()
+                        2
+
+                    Let us look at the dimension of all simple and left class modules::
+
+                        sage: for chi in G.S().basis():
+                        ...       print "dim %s = %s"%(chi, G.dimension(chi))
+                        dim S[0] = 1
+                        dim S[1] = 2
+                        dim S[2] = 1
+
+                        sage: for chi in G.T_all().basis():
+                        ...       print "dim %s = %s"%(chi, G.dimension(chi))
+                        dim T[0] = 1
+                        dim T[1] = 3
+                        dim T[2] = 3
+                    """
+                    semigroup = self.base()
+                    # The regular j_class of the identity
+                    i = semigroup.j_transversal_of_idempotents().inverse_family()[semigroup.one()]
+                    return self.C()(chi)[i]
+
+                @cached_method
+                def C(self):
+                    r"""
+                    The character ring of the monoid ``self`` on the class function basis
+
+                    The basis is indexed by the class functions of
+                    `J`-classes of idempotents. I.e., if `M` is a module,
+                    then `\Chi(M) = \sum c_i C_i`, where `c_i` is the
+                    character (i.e. the trace) on `M` of any idempotent
+                    `e` in the regular `J`-class indexed by `i`.
+
+                    For triangularity purposes, the basis is sorted
+                    decreasingly along a linear extension of `J`-order.
+
+                    .. seealso:: :meth:`simple_modules_index_set`
+
+                    EXAMPLES::
+
+                        sage: M = Monoids().HTrivial().Finite().example(); M
+                        The finite H-trivial monoid of order preserving maps on {1, .., 3}
+                        sage: C = M.character_ring().C(); C
+                        The right-character ring of The finite H-trivial monoid of order preserving maps on {1, .., 3} over Rational Field in the basis of characters of right-class functions modules
+                        sage: C.basis()
+                        Finite family {0: C[0], 1: C[1], 2: C[2]}
+                    """
+                    from sage_semigroups.monoids.character_ring import CharacterRing
+                    result = CharacterRing(self, prefix = "C", modules = "%s-class functions"%self.side()) # todo: fix the name
+                    result.set_order(list(self.base().simple_modules_index_set()))
+                    return result
+
+                @cached_method
+                def T(self):
+                    """
+                    Return the ring of characters of regular left/right-class modules
+
+                    EXAMPLES::
+
+                        sage: M = Monoids().HTrivial().Finite().example(); M
+                        The finite H-trivial monoid of order preserving maps on {1, .., 3}
+                        sage: T = M.character_ring().T(); T
+                        The right-character ring of The finite H-trivial monoid of order preserving maps on {1, .., 3} over Rational Field in the basis of characters of regular right-class modules
+                        sage: T.basis()
+                        Finite family {0: T[0], 1: T[1], 2: T[2]}
+                        sage: for chi in T.basis():
+                        ...       print "dim %s = %s"%(chi, chi.dimension())
+                        dim T[0] = 1
+                        dim T[1] = 2
+                        dim T[2] = 1
+                    """
+                    from sage_semigroups.monoids.character_ring import CharacterRing
+                    return CharacterRing(self, prefix = "T",
+                                         modules = "regular %s-class"%self.side())
+
+                @cached_method
+                def T_all(self):
+                    """
+                    Return the ring of characters of left/right-class modules
+
+                    .. note:: This includes both regular and non regular
+                        modules. So this is in general not isomorphic to
+                        the other character rings, and the indexing set
+                        may be completely unrelated.
+
+                    .. todo:: add a good example, and find a good name
+
+                    EXAMPLES::
+
+                    """
+                    from sage_semigroups.monoids.character_ring import CharacterRing
+                    from sage.sets.finite_enumerated_set import FiniteEnumeratedSet
+                    return CharacterRing(self, prefix = "T",
+                                         modules = "%s-class"%self.side(),
+                                         index_set = FiniteEnumeratedSet(self.base().j_classes().keys()))
+
+                @cached_method
+                def StoC_on_basis(self, i):
+                    """
+                    INPUT:
+
+                      - ``i`` -- the index of a regular `J`-class
+
+                    Returns the character of all the (`J`-classes of)
+                    idempotents on the `i`-th simple module.
+
+                    EXAMPLES::
+
+                        sage: M = Monoids().HTrivial().Finite().example(); M
+                        The finite H-trivial monoid of order preserving maps on {1, .., 3}
+                        sage: G = M.character_ring()
+                        sage: G.StoC_on_basis(1)
+                        2*C[0] + C[1]
+
+                        sage: S = G.S(); C = G.C()
+                        sage: for chi in S.basis():
+                        ...       print chi, "=", C(chi)
+                        S[0] = C[0]
+                        S[1] = 2*C[0] + C[1]
+                        S[2] = C[0] + C[1] + C[2]
+
+                    The character of simple modules is the same on the
+                    left and on the right::
+
+                        sage: G = M.character_ring(side = "left")
+                        sage: S = G.S(); C = G.C()
+                        sage: for chi in S.basis():
+                        ...       print chi, "=", C(chi)
+                        S[0] = C[0]
+                        S[1] = 2*C[0] + C[1]
+                        S[2] = C[0] + C[1] + C[2]
+
+                        sage: for chi in C.basis():
+                        ...       print chi, "=", S(chi)
+                        C[0] = S[0]
+                        C[1] = -2*S[0] + S[1]
+                        C[2] = S[0] - S[1] + S[2]
+
+                    """
+                    chi = self.base().simple_module(i, side = "right", base_ring = self.modules_base_ring()).character()
+                    if self.side() == 'left':
+                        chi = self.C().sum_of_terms(chi)
+                    return chi
+
+                @cached_method
+                def T_alltoC_on_basis(self, i):
+                    """
+                    INPUT:
+
+                      - ``i`` -- the index of a `J`-class
+
+                    Returns the character of all the (`J`-classes of)
+                    idempotents on the left (resp. right) class module for
+                    the `J`-class indexed by ``i``.
+
+                    .. todo:: update the examples here with a monoid
+                    with non regular `J`-classes.
+
+                    EXAMPLES::
+
+                        sage: M = Monoids().HTrivial().Finite().example(); M
+                        The finite H-trivial monoid of order preserving maps on {1, .., 3}
+                        sage: side = "right"
+                        sage: [list(M.lr_class(i, side=side)) for i in [0,1,2]]
+                        [[123], [113, 133], [111]]
+                        sage: G = M.character_ring(side=side)
+                        sage: G.T_alltoC_on_basis(1)
+                        2*C[0] + C[1]
+                        sage: C = G.C(); T = G.T_all(); S = G.S()
+                        sage: for chi in T.basis():
+                        ...       print chi, "=", C(chi)
+                        T[0] = C[0]
+                        T[1] = 2*C[0] + C[1]
+                        T[2] = C[0] + C[1] + C[2]
+
+                    The decomposition of right class modules into simple modules::
+
+                        sage: for chi in T.basis():
+                        ...       print chi, "=", S(chi)
+                        T[0] = S[0]
+                        T[1] = S[1]
+                        T[2] = S[2]
+
+                    We redo the same calculations on the left::
+
+                        sage: side = "left"
+                        sage: [list(M.lr_class(i, side=side)) for i in [0,1,2]]
+                        [[123], [133, 233, 122], [111, 222, 333]]
+                        sage: G = M.character_ring(side=side)
+                        sage: G.T_alltoC_on_basis(1)
+                        3*C[0] + C[1]
+
+                        sage: C = G.C(); T = G.T_all(); S = G.S()
+                        sage: for chi in T.basis():
+                        ...       print chi, "=", C(chi)
+                        T[0] = C[0]
+                        T[1] = 3*C[0] + C[1]
+                        T[2] = 3*C[0] + 2*C[1] + C[2]
+
+                    The decomposition of left class modules into simple modules::
+
+                        sage: for chi in T.basis():
+                        ...       print chi, "=", S(chi)
+                        T[0] = S[0]
+                        T[1] = S[0] + S[1]
+                        T[2] = S[1] + S[2]
+                    """
+                    return self.base().lr_class(i, side = self.side()).algebra(self.modules_base_ring()).character()
+
+                @cached_method
+                def TtoC_on_basis(self, i):
+                    """
+                    INPUT:
+
+                      - ``i`` -- the index of a `J`-class
+
+                    Returns the character of all the (`J`-classes of)
+                    idempotents on the left (resp. right) class module
+                    for the regular `J`-class indexed by ``i``.
+
+                    EXAMPLES::
+
+                        sage: M = Monoids().HTrivial().Finite().example(); M
+                        The finite H-trivial monoid of order preserving maps on {1, .., 3}
+                        sage: side = "right"
+                        sage: [list(M.lr_class(i, side=side)) for i in [0,1,2]]
+                        [[123], [113, 133], [111]]
+                        sage: G = M.character_ring(side=side)
+                        sage: G.TtoC_on_basis(1)
+                        2*C[0] + C[1]
+                        sage: C = G.C(); T = G.T(); S = G.S()
+                        sage: for chi in T.basis():
+                        ...       print chi, "=", C(chi)
+                        T[0] = C[0]
+                        T[1] = 2*C[0] + C[1]
+                        T[2] = C[0] + C[1] + C[2]
+
+                    The decomposition of right class modules into simple modules::
+
+                        sage: for chi in T.basis():
+                        ...       print chi, "=", S(chi)
+                        T[0] = S[0]
+                        T[1] = S[1]
+                        T[2] = S[2]
+
+                    We redo the same calculations on the left::
+
+                        sage: side = "left"
+                        sage: [list(M.lr_class(i, side=side)) for i in [0,1,2]]
+                        [[123], [133, 233, 122], [111, 222, 333]]
+                        sage: G = M.character_ring(side=side)
+                        sage: G.TtoC_on_basis(1)
+                        3*C[0] + C[1]
+
+                        sage: C = G.C(); T = G.T(); S = G.S()
+                        sage: for chi in T.basis():
+                        ...       print chi, "=", C(chi)
+                        T[0] = C[0]
+                        T[1] = 3*C[0] + C[1]
+                        T[2] = 3*C[0] + 2*C[1] + C[2]
+
+                    The decomposition of left class modules into simple modules::
+
+                        sage: for chi in T.basis():
+                        ...       print chi, "=", S(chi)
+                        T[0] = S[0]
+                        T[1] = S[0] + S[1]
+                        T[2] = S[1] + S[2]
+                    """
+                    return self.base().lr_regular_class(i, side = self.side()).algebra(self.modules_base_ring()).character()
+
+                @cached_method
+                def PtoS_on_basis(self, i):
+                    """
+                    Return the character of the left (resp. right) projective module indexed by ``i``, in terms of characters of simple modules.
+                    INPUT:
+
+                      - ``i`` -- the index of a regular `J`-class / simple / projective module
+
+                    In other words, this gives the composition factors
+                    in any maximal composition series of this
+                    projective module.
+
+                    EXAMPLES::
+
+                        sage: W = WeylGroup(["A", 2])
+                        sage: W.element_class.__repr__ = W.element_class.to_permutation_string
+                        sage: M = BiHeckeMonoid(W); M
+                        bi-Hecke monoid of Weyl Group of type ['A', 2] (as a matrix group acting on the ambient space)
+                        sage: side = "right"
+
+                        sage: G = M.character_ring(side=side)
+                        sage: G.PtoS_on_basis(W.one())
+                        S[321] + S[231] + S[312] + S[213] + S[132] + S[123]
+                        sage: C = G.C(); P = G.P(); S = G.S()
+                        sage: for chi in P.basis():
+                        ...       print chi, "=", S(chi)
+                        P[123] = S[321] + S[231] + S[312] + S[213] + S[132] + S[123]
+                        P[213] = S[213]
+                        P[132] = S[132]
+                        P[312] = S[321] + S[312]
+                        P[231] = S[321] + S[231]
+                        P[321] = S[321]
+
+                    We redo the same calculations on the left::
+
+                        sage: side = "left"
+                        sage: G = M.character_ring(side=side)
+                        sage: G.PtoS_on_basis(W.one())
+                        S[123]
+                        sage: C = G.C(); P = G.P(); S = G.S()
+                        sage: for chi in P.basis():
+                        ...       print chi, "=", S(chi)
+                        P[123] = S[123]
+                        P[213] = S[213] + S[123]
+                        P[132] = S[132] + S[123]
+                        P[312] = S[312] + S[123]
+                        P[231] = S[231] + S[123]
+                        P[321] = S[321] + S[231] + S[312] + S[123]
+                    """
+                    M = self.base()
+                    S = self.S()
+                    if self.side() == 'left':
+                        side = 0
+                    else:
+                        side = 1
+                    return S.sum_of_terms( (t[1-side], c)
+                                           for (t, c) in M.cartan_matrix_as_table().iteritems()
+                                           if t[side] == i )
+
+        class Realizations(RealizationsCategory):
+
+            class ElementMethods:
+
+                def dimension(self):
+
+                    return self.parent().realization_of().dimension(self)
+
+
+    class SetsWithAction(SetsWithActionCategory):
+        """
+        EXAMPLES::
+
+            sage: Monoids().HTrivial().Finite().SetsWithAction().Algebras(QQ).extra_super_categories()
+            [Category of finite h trivial monoid modules over Rational Field]
+
+        TESTS::
+
+            sage: S = Monoids().HTrivial().Finite().example()
+            sage: R = S.with_regular_action().algebra(QQ)
+            sage: R.category().is_subcategory(Monoids().HTrivial().Finite().Modules(QQ))
+            True
+        """
+
+        class Algebras(AlgebrasCategory):
+            # see the warning in sage.categories.set_with_action_functor.SetsWithActionCategory._algebras_extra_super_categories
+            extra_super_categories = SetsWithActionCategory._algebras_extra_super_categories.im_func
+
+    class Modules(ModulesCategory):
+
+        # class FiniteDimensional ...
+
+        class ParentMethods:
+
+            def character(self):
+                r"""
+                Return the character of this module `M` in the `C` basis
+
+                OUTPUT:
+
+                 - a linear combination `\chi(M) = \sum c_i C_i`, where
+                   `c_i` is the character (i.e. the trace) on `M` of any
+                   idempotent `e` in the regular `J`-class indexed by `i`.
+
+                EXAMPLES::
+
+                    sage: M = Monoids().HTrivial().Finite().example(); M
+                    The finite H-trivial monoid of order preserving maps on {1, .., 3}
+                    sage: M.rename("M")
+                    sage: R = M.regular_representation(side = 'left')
+                    sage: R.character()
+                    10*C[0] + 4*C[1] + C[2]
+                    sage: R.character().parent()
+                    The left-character ring of M over Rational Field in the basis of characters of left-class functions modules
+
+                    sage: R = M.regular_representation(side = 'right')
+                    sage: R.character()
+                    10*C[0] + 6*C[1] + 3*C[2]
+                    sage: R.character().parent()
+                    The right-character ring of M over Rational Field in the basis of characters of right-class functions modules
+                """
+                S = self.semigroup()
+                C = S.character_ring(self.base_ring(), side = self.side()).C()
+                base_ring = C.base_ring()
+                e = S.j_transversal_of_idempotents()
+
+                # Remark: let e and f be two idempotents, and identify
+                # them with the corresponding linear projections
+                # acting on ``self``. If e <=_J f, then the rank of e
+                # is smaller than the rank of f.
+                #
+                # Corollary: the set of idempotents having non zero
+                # character (the support below) is an upper ideal in J-order.
+                #
+                # We use this to avoid computing the character for all
+                # regular J-classes.
+                #
+                # I am not yet sure that this works in non zero
+                # characteristic, so let's be safe.
+                assert self.base_ring().characteristic() == 0
+
+                from sage.combinat.backtrack import TransitiveIdeal
+                P = S.j_poset_on_regular_classes()
+                @cached_function
+                def character(i):
+                    return self.character_of(e[i])
+                def children(i):
+                    return (j for j in P.lower_covers(i) if character(j))
+                support = TransitiveIdeal(children, [P.top()])
+                return C.sum_of_terms((i, base_ring(character(i))) for i in support)
+
+            def composition_factors(self):
+                r"""
+                Return the composition factors this module
+
+                OUTPUT:
+
+                 - a linear combination `\chi(M) = \sum c_i S_i`,
+                   where `c_i` is the number of composition factors of
+                   `M` isomorphic to the simple module `S_i`.
+
+                EXAMPLES::
+
+                    sage: M = Monoids().HTrivial().Finite().example(); M
+                    The finite H-trivial monoid of order preserving maps on {1, .., 3}
+                    sage: M.rename("M")
+                    sage: R = M.regular_representation(side = 'left')
+                    sage: R.composition_factors()
+                    3*S[0] + 3*S[1] + S[2]
+                    sage: R.composition_factors().parent()
+                    The left-character ring of M over Rational Field in the basis of characters of simple left modules
+
+                    sage: R = M.regular_representation(side = 'right')
+                    sage: R.composition_factors()
+                    S[0] + 3*S[1] + 3*S[2]
+                    sage: R.composition_factors().parent()
+                    The right-character ring of M over Rational Field in the basis of characters of simple right modules
+                """
+                chi = self.character()
+                return chi.parent().realization_of().S()(chi)

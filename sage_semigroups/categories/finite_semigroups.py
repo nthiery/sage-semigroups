@@ -18,9 +18,10 @@ from sage.misc.abstract_method import abstract_method
 from sage.misc.cachefunc import cached_method
 from sage.misc.misc import attrcall
 from sage_semigroups.misc.sage_unittest import is_method
-#from sage.categories.character_ring_functor import CharacterRingsCategory
-#from sage.categories.with_realizations import WithRealizationsCategory
+from sage_semigroups.categories.character_ring_functor import CharacterRingsCategory
+from sage.categories.with_realizations import WithRealizationsCategory
 from sage.categories.groups import Groups
+from sage.categories.semigroups import Semigroups
 from sage.sets.family import Family
 
 class FiniteSemigroups:
@@ -74,7 +75,7 @@ class FiniteSemigroups:
 
         # TODO: handle the duplication between is_l_trivial / is_r_trivial!
         @is_method
-        def is_l_trivial(self, **options):
+        def is_l_trivial(self, proof=True, **options):
             """
             Return whether ``self`` is L-trivial.
 
@@ -87,7 +88,7 @@ class FiniteSemigroups:
             # return LTrivialMonoids()
 
         @is_method
-        def is_r_trivial(self, **options):
+        def is_r_trivial(self, proof=True, **options):
             """
             Return whether ``self`` is R-trivial.
 
@@ -152,7 +153,7 @@ class FiniteSemigroups:
             # return RTrivialMonoids() 
 
         @is_method
-        def is_DG(self, **options):
+        def is_DG(self, proof=True, **options):
             r"""
             Returns whether the regular h_classes are all groups
 
@@ -883,7 +884,7 @@ class FiniteSemigroups:
                 [[0, 1, 0], [1, 0, 1]]
             """
             return self.subquotient(self.lr_regular_class(J, side='h'),
-                                    category = (Groups(), Semigroups().Finite().Subobjects()))
+                                    category = Groups() & Semigroups().Finite().Subobjects())
 
 
         def groups_of_regular_j_classes(self):
@@ -982,7 +983,7 @@ class FiniteSemigroups:
             from sage.categories.rings import Rings
             assert base_ring in Rings()
             assert q in base_ring
-            from sage.combinat.character_ring import AbstractCharacterRing
+            from sage_semigroups.monoids.character_ring import AbstractCharacterRing
             return AbstractCharacterRing(self, modules_base_ring, base_ring, side = side, q = q)
 
     class ElementMethods:
@@ -1008,103 +1009,102 @@ class FiniteSemigroups:
             """
             return self.parent().ideal([self], side = side)
 
-    # class CharacterRings(CharacterRingsCategory):
+    class CharacterRings(CharacterRingsCategory):
 
-    #     def super_categories(self):
-    #         """
-    #         EXAMPLES::
+        def super_categories(self):
+            """
+            EXAMPLES::
 
-    #             sage: Semigroups().Finite().CharacterRings(ZZ).super_categories()
-    #             [Category of finite dimensional modules with basis over Integer Ring]
-    #         """
-    #         from sage.categories.modules import Modules
-    #         return [Modules(self.base_ring()).WithBasis().FiniteDimensional()]
+                sage: Semigroups().Finite().CharacterRings(ZZ).super_categories()
+                [Category of finite dimensional modules with basis over Integer Ring]
+            """
+            from sage.categories.modules import Modules
+            return [Modules(self.base_ring()).WithBasis().FiniteDimensional()]
 
-    #     class WithRealizations(WithRealizationsCategory):
+        class WithRealizations(WithRealizationsCategory):
 
-    #         class ParentMethods:
+            class ParentMethods:
 
-    #             @abstract_method
-    #             def base(self):
-    #                 """
-    #                 Returns the object of which this is a character ring
+                @abstract_method
+                def base(self):
+                    """
+                    Returns the object of which this is a character ring
 
-    #                 EXAMPLES::
+                    EXAMPLES::
 
-    #                     sage: GL(3,3).character_ring(QQ).base()
-    #                     General Linear Group of degree 3 over Finite Field of size 3
-    #                 """
+                        sage: GL(3,3).character_ring(QQ).base()
+                        General Linear Group of degree 3 over Finite Field of size 3
+                    """
 
-    #             def character_ring_category_disabled(self):
-    #                 """
-    #                 EXAMPLES::
+                def character_ring_category_disabled(self):
+                    """
+                    EXAMPLES::
 
-    #                     sage: A = Semigroups().Finite().example().character_ring(GF(2))
-    #                     sage: A.character_ring_category()
-    #                     Category of character rings of finite semigroups over Integer Ring
-    #                 """
-    #                 from sage.categories.finite_dimensional_modules_with_basis import FiniteDimensionalModulesWithBasis
-    #                 return Category.join([FiniteDimensionalModulesWithBasis(self.base_ring()),
-    #                                       self.Realizations()])
+                        sage: A = Semigroups().Finite().example().character_ring(GF(2))
+                        sage: A.character_ring_category()
+                        Category of character rings of finite semigroups over Integer Ring
+                    """
+                    from sage.categories.modules import Modules
+                    return Modules(self.base_ring()).FiniteDimensional().WithBasis() & self.Realizations()
 
-    #             @cached_method
-    #             def S(self):
-    #                 """
-    #                 Return the ring of characters, in the basis of the characters of the simple modules
+                @cached_method
+                def S(self):
+                    """
+                    Return the ring of characters, in the basis of the characters of the simple modules
 
-    #                 EXAMPLES::
+                    EXAMPLES::
 
-    #                     sage: M = Monoids().HTrivial().Finite().example()
-    #                     sage: M.rename("S")
-    #                     sage: S = M.character_ring(QQ).S(); S
-    #                     The right-character ring of S over Rational Field in the basis of characters of simple right modules
-    #                     sage: S.category()
-    #                     Join of Category of realizations of character rings of finite h trivial monoids over Integer Ring and The category of realizations of The right-character ring of S over Rational Field
-    #                     sage: S.basis().keys()
-    #                     {0, 1, 2}
-    #                     sage: S.realization_of()
-    #                     The right-character ring of S over Rational Field
-    #                     sage: S in Modules(ZZ).WithBasis()
-    #                     True
-    #                     sage: TestSuite(S).run()
+                        sage: M = Monoids().HTrivial().Finite().example()
+                        sage: M.rename("S")
+                        sage: S = M.character_ring(QQ).S(); S
+                        The right-character ring of S over Rational Field in the basis of characters of simple right modules
+                        sage: S.category()
+                        Join of Category of realizations of character rings of finite h trivial monoids over Integer Ring and The category of realizations of The right-character ring of S over Rational Field
+                        sage: S.basis().keys()
+                        {0, 1, 2}
+                        sage: S.realization_of()
+                        The right-character ring of S over Rational Field
+                        sage: S in Modules(ZZ).WithBasis()
+                        True
+                        sage: TestSuite(S).run()
 
-    #                 """
-    #                 from sage.combinat.character_ring import CharacterRing
-    #                 return CharacterRing(self, prefix = "S", modules = "simple %s"%self.side())
+                    """
+                    from sage_semigroups.monoids.character_ring import CharacterRing
+                    return CharacterRing(self, prefix = "S", modules = "simple %s"%self.side())
 
-    #             @cached_method
-    #             def P(self):
-    #                 """
-    #                 Return the ring of characters, in the basis of the characters of the projective modules
+                @cached_method
+                def P(self):
+                    """
+                    Return the ring of characters, in the basis of the characters of the projective modules
 
-    #                 .. warning:: this is only guaranteed to be a basis for
-    #                     finite aperiodic monoids.
+                    .. warning:: this is only guaranteed to be a basis for
+                        finite aperiodic monoids.
 
-    #                 EXAMPLES::
+                    EXAMPLES::
 
-    #                     sage: S = Monoids().HTrivial().Finite().example()
-    #                     sage: S.rename("S")
-    #                     sage: S.character_ring(QQ).P()
-    #                     The right-character ring of S over Rational Field in the basis of characters of projective indecomposable right modules
-    #                 """
-    #                 from sage.combinat.character_ring import CharacterRing
-    #                 return CharacterRing(self, prefix = "P", modules = "projective indecomposable %s"%self.side())
+                        sage: S = Monoids().HTrivial().Finite().example()
+                        sage: S.rename("S")
+                        sage: S.character_ring(QQ).P()
+                        The right-character ring of S over Rational Field in the basis of characters of projective indecomposable right modules
+                    """
+                    from sage_semigroups.monoids.character_ring import CharacterRing
+                    return CharacterRing(self, prefix = "P", modules = "projective indecomposable %s"%self.side())
 
-    #             def E(self):
-    #                 """
-    #                 Return the ring of characters, in the basis of the characters of the modules generated by the idempotents of the monoid
+                def E(self):
+                    """
+                    Return the ring of characters, in the basis of the characters of the modules generated by the idempotents of the monoid
 
-    #                 .. warning:: this is only guaranteed to be a basis for
-    #                     finite aperiodic monoids.
+                    .. warning:: this is only guaranteed to be a basis for
+                        finite aperiodic monoids.
 
-    #                 EXAMPLES::
+                    EXAMPLES::
 
-    #                     sage: S = Monoids().HTrivial().Finite().example()
-    #                     sage: S.rename("S")
-    #                     sage: S.character_ring(QQ).E()
-    #                     The right-character ring of S over Rational Field in the basis of characters of projective e right modules
+                        sage: S = Monoids().HTrivial().Finite().example()
+                        sage: S.rename("S")
+                        sage: S.character_ring(QQ).E()
+                        The right-character ring of S over Rational Field in the basis of characters of projective e right modules
 
-    #                 .. todo:: improve the name!
-    #                 """
-    #                 from sage.combinat.character_ring import CharacterRing
-    #                 return CharacterRing(self, prefix = "E", modules = "projective e %s"%self.side())
+                    .. todo:: improve the name!
+                    """
+                    from sage_semigroups.monoids.character_ring import CharacterRing
+                    return CharacterRing(self, prefix = "E", modules = "projective e %s"%self.side())

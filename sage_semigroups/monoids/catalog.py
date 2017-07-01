@@ -8,3 +8,5 @@ from sage_semigroups.monoids.set_compositions_monoid import SetCompositionsMonoi
 from sage_semigroups.monoids.set_partitions_monoid import SetPartitionsMonoid
 from sage_semigroups.monoids.sign_vectors_monoid import  SignVectorsMonoid
 from sage_semigroups.monoids.karnofsky_rhodes_expansion import KarnofskyRhodesExpansion
+from sage_semigroups.monoids.bi_hecke_monoid import BiHeckeMonoid
+from sage_semigroups.monoids.j_trivial_monoids import NDPFMonoid, HeckeMonoid, NDPFMonoidPoset
