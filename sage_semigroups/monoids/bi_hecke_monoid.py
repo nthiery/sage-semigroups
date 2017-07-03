@@ -1,6 +1,10 @@
 # -*- encoding: utf-8 -*-
 r"""
 BiHecke Monoids
+
+::
+
+    sage: import sage_semigroups # random
 """
 #*****************************************************************************
 #  Copyright (C) 2009-2010 Nicolas M. Thiéry <nthiery at users.sf.net>
@@ -56,7 +60,8 @@ class BiHeckeMonoids(Category):
 
             Let us create the monoid, and force the initialization of the reduced words::
 
-                sage: M = BiHeckeMonoid(['A',3])
+                sage: import sage_semigroups.monoids.catalog as semigroups
+                sage: M = semigroups.BiHeckeMonoid(['A',3])
                 sage: M.cardinality()
                 477
 
@@ -111,7 +116,8 @@ class BiHeckeMonoids(Category):
 
             EXAMPLES::
 
-                sage: M = BiHeckeMonoid(['A',2]); M.cardinality()
+                sage: import sage_semigroups.monoids.catalog as semigroups
+                sage: M = semigroups.BiHeckeMonoid(['A',2]); M.cardinality()
                 sage: M.j_idempotent_representative(M.W.one())
                 []
                 sage: M.j_idempotent_representative(M.W.w0)
@@ -123,7 +129,8 @@ class BiHeckeMonoids(Category):
             """
             EXAMPLES::
 
-                sage: M = BiHeckeMonoid(['A',2])
+                sage: import sage_semigroups.monoids.catalog as semigroups
+                sage: M = semigroups.BiHeckeMonoid(['A',2])
                 sage: M.j_transversal_of_idempotents()
 
                 sage: M.simple_modules_index_set()
@@ -140,10 +147,9 @@ class BiHeckeMonoids(Category):
             """
             EXAMPLES::
 
-                sage: M = BiHeckeMonoid(["A",3])
+                sage: import sage_semigroups.monoids.catalog as semigroups
+                sage: M = semigroups.BiHeckeMonoid(["A",3])
                 sage: M.cartan_matrix_as_table_from_M0() == M.cartan_matrix_as_table()
-
-
             """
 
             result = dict()
@@ -167,9 +173,10 @@ class BiHeckeMonoids(Category):
         r"""
         EXAMPLES::
 
+            sage: import sage_semigroups.monoids.catalog as semigroups
             sage: QQ.<q> = QQ[]
             sage: W = WeylGroup(["A",3])
-            sage: G = BiHeckeMonoid(W).character_ring(q = q)
+            sage: G = semigroups.BiHeckeMonoid(W).character_ring(q = q)
             sage: S = G.S()
             sage: T = G.T()
             sage: P = G.P()
@@ -193,7 +200,7 @@ class BiHeckeMonoids(Category):
             ...       assert G.dims[w]['projective' ] == G.dim(S(P[w]))(1)
 
 
-            sage: M = BiHeckeMonoid(["A",2])
+            sage: M = semigroups.BiHeckeMonoid(["A",2])
             sage: G = M.character_ring()
             sage: E = G.E(); T = G.T();
             sage: for e in E.basis():
@@ -217,9 +224,10 @@ class BiHeckeMonoids(Category):
                     Calculating the decomposition of left projective
                     modules of M_0 into simple M modules::
 
+                        sage: import sage_semigroups.monoids.catalog as semigroups
                         sage: W = WeylGroup(["A", 3])
                         sage: W.element_class.__repr__ = W.element_class.to_permutation_string
-                        sage: M = BiHeckeMonoid(W); M
+                        sage: M = semigroups.BiHeckeMonoid(W); M
                         bi-Hecke monoid of Weyl Group of type ['A', 2] (as a matrix group acting on the ambient space)
                         sage: M0 = M.fix_w0_monoid()
                         sage: G = M.character_ring(side="right"); S = G.S()
@@ -353,9 +361,10 @@ class BiHeckeMonoids(Category):
                     """
                     EXAMPLES::
 
+                        sage: import sage_semigroups.monoids.catalog as semigroups
                         sage: W = WeylGroup(["A", 2])
                         sage: W.element_class.__repr__ = W.element_class.to_permutation_string
-                        sage: M = BiHeckeMonoid(W); M
+                        sage: M = semigroups.BiHeckeMonoid(W); M
                         bi-Hecke monoid of Weyl Group of type ['A', 2] (as a matrix group acting on the ambient space)
                         sage: side = "right"
                         sage: G = M.character_ring(side=side)
@@ -390,7 +399,8 @@ class BiHeckeMonoids(Category):
 
                     EXAMPLES::
 
-                        sage: M = BiHeckeMonoid(["A",3])
+                        sage: import sage_semigroups.monoids.catalog as semigroups
+                        sage: M = semigroups.BiHeckeMonoid(["A",3])
                         sage: p = M.W.from_compact_permutation
                         sage: QQ.<q> = QQ[]
                         sage: G = M.character_ring(q = q)
@@ -425,7 +435,8 @@ class BiHeckeMonoids(Category):
 
                     EXAMPLES::
 
-                        sage: M = BiHeckeMonoid(["A",2])
+                        sage: import sage_semigroups.monoids.catalog as semigroups
+                        sage: M = semigroups.BiHeckeMonoid(["A",2])
                         sage: M0 = M.fix_w0_monoid()
                         sage: S0 = M0.character_ring().S()
                         sage: G = M.character_ring()
@@ -452,7 +463,8 @@ class BiHeckeMonoids(Category):
 
                     EXAMPLES::
 
-                        sage: M = BiHeckeMonoid(["A",2])
+                        sage: import sage_semigroups.monoids.catalog as semigroups
+                        sage: M = semigroups.BiHeckeMonoid(["A",2])
                         sage: M0 = M.fix_w0_monoid()
                         sage: S0 = M0.character_ring().S()
                         sage: T = M.character_ring().T()
@@ -495,7 +507,8 @@ class BiHeckeMonoids(Category):
 
                     EXAMPLES::
 
-                        sage: M = BiHeckeMonoid(["A",3])
+                        sage: import sage_semigroups.monoids.catalog as semigroups
+                        sage: M = semigroups.BiHeckeMonoid(["A",3])
                         sage: M0 = M.fix_w0_monoid()
                         sage: S0 = M0.character_ring().S()
                         sage: P0 = M0.character_ring().P()
@@ -513,7 +526,8 @@ class BiHeckeMonoids(Category):
                     """
                     EXAMPLES::
 
-                        sage: M = BiHeckeMonoid(["A",2])
+                        sage: import sage_semigroups.monoids.catalog as semigroups
+                        sage: M = semigroups.BiHeckeMonoid(["A",2])
                         sage: M0 = M.fix_w0_monoid()
                         sage: P0 = M0.character_ring().P()
                         sage: G = M.character_ring() # 10 s
@@ -551,7 +565,8 @@ class BiHeckeMonoids(Category):
                     """
                     EXAMPLES::
 
-                        sage: M = BiHeckeMonoid(["A",2])
+                        sage: import sage_semigroups.monoids.catalog as semigroups
+                        sage: M = semigroups.BiHeckeMonoid(["A",2])
                         sage: M0 = M.fix_w0_monoid()
                         sage: P0 = M0.character_ring().P()
                         sage: G = M.character_ring() # 10 s
@@ -599,7 +614,8 @@ class BiHeckeMonoids(Category):
 
                     EXAMPLES::
 
-                        sage: M = BiHeckeMonoid(["A",3])
+                        sage: import sage_semigroups.monoids.catalog as semigroups
+                        sage: M = semigroups.BiHeckeMonoid(["A",3])
                         sage: M0 = M.fix_w0_monoid()
                         sage: S0 = M0.character_ring().S()
                         sage: P0 = M0.character_ring().P()
@@ -624,7 +640,8 @@ class BiHeckeMonoids(Category):
 
                     EXAMPLES::
 
-                        sage: M = BiHeckeMonoid(["A",2])
+                        sage: import sage_semigroups.monoids.catalog as semigroups
+                        sage: M = semigroups.BiHeckeMonoid(["A",2])
                         sage: G = M.character_ring()
                         sage: w = M.W.an_element()
                         sage: w
@@ -650,7 +667,8 @@ class BiHeckeBorelSubmonoids(Category):
             """
             EXAMPLES::
 
-                sage: M = BiHeckeMonoid(['A',2]).fix_w0_monoid()
+                sage: import sage_semigroups.monoids.catalog as semigroups
+                sage: M = semigroups.BiHeckeMonoid(['A',2]).fix_w0_monoid()
                 sage: M.j_transversal_of_idempotents()
 
                 sage: M.simple_modules_index_set()
@@ -684,7 +702,8 @@ class BiHeckeMonoid(AutomaticMonoid):
 
     EXAMPLES::
 
-        sage: M = BiHeckeMonoid(['A',2]); M
+        sage: import sage_semigroups.monoids.catalog as semigroups
+        sage: M = semigroups.BiHeckeMonoid(['A',2]); M
         bi-Hecke monoid of Permutation Group with generators [(1,3)(2,5)(4,6), (1,4)(2,3)(5,6)]
         sage: M.cardinality()
         23
@@ -776,11 +795,12 @@ class BiHeckeMonoid(AutomaticMonoid):
 
         EXAMPLES::
 
-	    sage: M = BiHeckeMonoid(['A',3]);
+            sage: import sage_semigroups.monoids.catalog as semigroups
+            sage: M = semigroups.BiHeckeMonoid(['A',3]);
             sage: M1 = M.fix_one_monoid();
             sage: M1.cardinality()
             71
-	    sage: M = BiHeckeMonoid(['A',2]);
+            sage: M = semigroups.BiHeckeMonoid(['A',2]);
             sage: M1 = M.fix_one_monoid();
             sage: M1.cardinality()
             sage: Poset(M1.cayley_graph(simple=True), cover_relations=False).show()
@@ -797,7 +817,8 @@ class BiHeckeMonoid(AutomaticMonoid):
 
         EXAMPLES::
 
-	    sage: M = BiHeckeMonoid(['A',3]);
+            sage: import sage_semigroups.monoids.catalog as semigroups
+            sage: M = semigroups.BiHeckeMonoid(['A',3]);
             sage: M0 = M.fix_w0_monoid()
             sage: M0.cardinality()
             71
@@ -805,10 +826,9 @@ class BiHeckeMonoid(AutomaticMonoid):
         w0 = self.W.w0
         #from sage.libs.semigroupe import semigroupe
         #F = semigroupe.AutomaticSemigroup# ...  cardinality_bound = 150000 (for S6)
-        F = AutomaticMonoid
-        return F(Family(dict((w, self.e(w,w0)) for w in self.W.grassmannian_elements(side="left"))),
-                               one = self.one(),
-                               category = BiHeckeBorelSubmonoids())
+        return self.submonoid(Family(dict((w, self.e(w,w0))
+                                     for w in self.W.grassmannian_elements(side="left"))),
+                               category=BiHeckeBorelSubmonoids())
 
     @cached_method
     def cardinality(self):
@@ -827,10 +847,11 @@ class BiHeckeMonoid(AutomaticMonoid):
 
         EXAMPLES::
 
-	    sage: M = BiHeckeMonoid(['A',2]);
+            sage: import sage_semigroups.monoids.catalog as semigroups
+            sage: M = semigroups.BiHeckeMonoid(['A',2]);
             sage: H0 = M.zero_hecke_monoid(); H0.cardinality()
             6
-	    sage: M = BiHeckeMonoid(['A',3]);
+            sage: M = semigroups.BiHeckeMonoid(['A',3]);
             sage: H0 = M.zero_hecke_monoid(); H0.cardinality()
             24
         """
@@ -842,7 +863,8 @@ class BiHeckeMonoid(AutomaticMonoid):
 
         EXAMPLES::
 
-            sage: M = BiHeckeMonoid(["A",2])
+            sage: import sage_semigroups.monoids.catalog as semigroups
+            sage: M = semigroups.BiHeckeMonoid(["A",2])
             sage: for w in sorted(M.W):
             ...       print w, len(list(M.projective_module1(w)))
             123 1
@@ -869,7 +891,8 @@ class BiHeckeMonoid(AutomaticMonoid):
 
         EXAMPLES::
 
-            sage: M = BiHeckeMonoid(["A",2])
+            sage: import sage_semigroups.monoids.catalog as semigroups
+            sage: M = semigroups.BiHeckeMonoid(["A",2])
             sage: for w in sorted(M.W):
             ...       print w, len(list(M.projective_module3(w)))
             123 1
@@ -878,7 +901,7 @@ class BiHeckeMonoid(AutomaticMonoid):
             231 3
             312 3
             321 6
-            sage: M = BiHeckeMonoid(["A",3])
+            sage: M = semigroups.BiHeckeMonoid(["A",3])
             sage: for w in sorted(M.W):
             ...       print w, len(list(M.projective_module3(w)))
             1234:  1  1  1
@@ -925,7 +948,8 @@ class BiHeckeMonoid(AutomaticMonoid):
 
         EXAMPLES::
 
-            sage: M = BiHeckeMonoid(["A",2])
+            sage: import sage_semigroups.monoids.catalog as semigroups
+            sage: M = semigroups.BiHeckeMonoid(["A",2])
             sage: for w in sorted(M.W):
             ...       print w, len(list(M.projective_module3(w)))
             123 1
@@ -934,7 +958,7 @@ class BiHeckeMonoid(AutomaticMonoid):
             231 3
             312 3
             321 6
-            sage: M = BiHeckeMonoid(["A",3])
+            sage: M = semigroups.BiHeckeMonoid(["A",3])
             sage: for w in sorted(M.W):
             ...       print w, len(list(M.projective_module3(w)))
             1234:  1  1  1
@@ -993,9 +1017,10 @@ class BiHeckeMonoid(AutomaticMonoid):
         """
         EXAMPLES::
 
-            sage: M = BiHeckeMonoid(["A",2])
+            sage: import sage_semigroups.monoids.catalog as semigroups
+            sage: M = semigroups.BiHeckeMonoid(["A",2])
             sage: print M.latex_graph_node_placement()
-            sage: M = BiHeckeMonoid(["A",2]); fd = open("essai-inner.tex", "write"); fd.write(M.latex_graph_inner()); fd.close()
+            sage: M = semigroups.BiHeckeMonoid(["A",2]); fd = open("essai-inner.tex", "write"); fd.write(M.latex_graph_inner()); fd.close()
         """
         colors = {1:"blue", 2:"red", 3:"green"}
         result = r"""\begin{pgfonlayer}{nodes}
@@ -1115,7 +1140,8 @@ class BiHeckeMonoid(AutomaticMonoid):
 
             EXAMPLES::
 
-                sage: M = BiHeckeMonoid(["A",3])
+                sage: import sage_semigroups.monoids.catalog as semigroups
+                sage: M = semigroups.BiHeckeMonoid(["A",3])
                 sage: M.list()                          # required for the moment to get the reduced word ...
                 sage: latex(M.one())
                 sage: view(M.one(), format = 'pdf')
