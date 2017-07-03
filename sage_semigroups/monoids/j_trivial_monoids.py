@@ -1,5 +1,9 @@
 """
 This is a completely experimental file ! use at your own risks !!!
+
+::
+
+    sage: import sage_semigroups # random
 """
 
 import operator
@@ -25,7 +29,7 @@ class HeckeMonoid(AutomaticMonoid):
 
     EXAMPLES::
 
-        sage: from sage.combinat.j_trivial_monoids import *
+        sage: from sage.monoids.j_trivial_monoids import *
         sage: H = HeckeMonoid(['A',3])
         sage: pi = H.semigroup_generators(); pi
         sage: pi
@@ -40,7 +44,7 @@ class HeckeMonoid(AutomaticMonoid):
         """
         EXAMPLES::
 
-            sage: from sage.combinat.j_trivial_monoids import *
+            sage: from sage.monoids.j_trivial_monoids import *
             sage: HeckeMonoid(['A',3]).cardinality()
             24
         """
@@ -68,7 +72,7 @@ class HeckeMonoid(AutomaticMonoid):
         """
         EXAMPLES::
 
-            sage: from sage.combinat.j_trivial_monoids import *
+            sage: from sage.monoids.j_trivial_monoids import *
             sage: HeckeMonoid(WeylGroup(["A",2])).quiver_index()
             [({1}, {2}), ({2}, {1})]
             sage: HeckeMonoid(WeylGroup(["A",3])).quiver_index()
@@ -113,7 +117,7 @@ class HeckeMonoid(AutomaticMonoid):
         """
         EXAMPLES::
 
-            sage: from sage.combinat.j_trivial_monoids import *
+            sage: from sage.monoids.j_trivial_monoids import *
             sage: H = HeckeMonoid(['A',3])
             sage: H.cardinality()
             sage: H.quiver_element(([1,2],[1,3]))
@@ -127,7 +131,7 @@ class HeckeMonoid(AutomaticMonoid):
 
     def quiver_elements(self):
         """
-            sage: from sage.combinat.j_trivial_monoids import *
+            sage: from sage.monoids.j_trivial_monoids import *
             sage: H = HeckeMonoid(['A',3])
             sage: H.cardinality()
             sage: H.quiver_elements()
@@ -145,7 +149,7 @@ class NDPFMonoid(AutomaticMonoid):
     """
     EXAMPLES::
 
-        sage: from sage.combinat.j_trivial_monoids import *
+        sage: from sage.monoids.j_trivial_monoids import *
         sage: p = NDPFMonoid(3)
         sage: TestSuite(p).run()
     """
@@ -168,7 +172,7 @@ class NDPFMonoidB(AutomaticMonoid):
     """
     EXAMPLES::
 
-        sage: from sage.combinat.j_trivial_monoids import *
+        sage: from sage.monoids.j_trivial_monoids import *
         sage: p = NDPFMonoidB(3)
         sage: TestSuite(p).run()
     """
@@ -191,7 +195,7 @@ class ContractingMonoidPoset(AutomaticMonoid):
     """
     EXAMPLES::
 
-        sage: from sage.combinat.j_trivial_monoids import *
+        sage: from sage.monoids.j_trivial_monoids import *
         sage: p = ContractingMonoidPoset(Posets.IntegerPartitions(4))
         sage: TestSuite(p).run()
         Failure in _test_j_trivial:
@@ -228,7 +232,7 @@ class NDPFMonoidPoset(AutomaticMonoid):
     """
     EXAMPLES::
 
-        sage: from sage.combinat.j_trivial_monoids import *
+        sage: from sage.monoids.j_trivial_monoids import *
         sage: M = NDPFMonoidPoset(Posets.IntegerPartitions(4))
         sage: M
         NDPF monoid of Poset ([[(4,), (3, 1)], [(4,), (2, 2)], [(3, 1), (2, 1, 1)], [(2, 2), (2, 1, 1)], [(2, 1, 1), (1, 1, 1, 1)]])
@@ -258,7 +262,7 @@ def compatible_semi_group(poset):
 # WARNING : This is not always a semi-group
 class CompatibleSemiGroup(UniqueRepresentation, Parent):
     """
-    sage: from sage.combinat.j_trivial_monoids import *
+    sage: from sage.monoids.j_trivial_monoids import *
     sage: MC = compatible_semi_group(Posets.IntegerPartitions(4))
     sage: TestSuite(MC).run()
     sage: MC.zero()
@@ -347,7 +351,7 @@ def IdempotentGeneratedSubMonoid(monoid):
 
 def check_conj_q_matrix(M):
     """
-    sage: from sage.combinat.j_trivial_monoids import *
+    sage: from sage.monoids.j_trivial_monoids import *
     sage: for p in Posets(3):
     ...       check_conj_q_matrix(NDPFMonoidPoset(p))
     ([1], 1, 1)
@@ -387,7 +391,7 @@ class NDPFMonoidPosetNew(FiniteSetEndoMaps_N):
 
     EXAMPLES::
 
-        sage: from sage.combinat.j_trivial_monoids import *
+        sage: from sage.monoids.j_trivial_monoids import *
         sage: P = Posets(3)[3]
         sage: M = NDPFMonoidPosetNew(P)
         sage: M.cardinality()
@@ -425,7 +429,7 @@ class NDPFMonoidPosetNew(FiniteSetEndoMaps_N):
 
     def _iter_(self):
         """
-        sage: from sage.combinat.j_trivial_monoids import *
+        sage: from sage.monoids.j_trivial_monoids import *
         sage: P = Posets(4)[14]
         sage: M = NDPFMonoidPosetNew(P)
         sage: M.cardinality()
@@ -505,7 +509,7 @@ class NDPFMonoidPosetNew(FiniteSetEndoMaps_N):
 
         EXAMPLES::
 
-            sage: from sage.combinat.j_trivial_monoids import *
+            sage: from sage.monoids.j_trivial_monoids import *
             sage: M = NDPFMonoidPosetNew(Posets(4)[14])
             sage: for x in M: x.check()
             sage: M([0, 1, 2, 2])
@@ -544,7 +548,7 @@ class NDPFMonoidPosetNewSet(FiniteSetEndoMaps_Set):
     """
     EXAMPLES::
 
-        sage: from sage.combinat.j_trivial_monoids import *
+        sage: from sage.monoids.j_trivial_monoids import *
         sage: P = Posets(3)[3]
         sage: M = NDPFMonoidPosetNewSet(P)
         sage: M.cardinality()
@@ -565,7 +569,7 @@ class NDPFMonoidPosetNewSet(FiniteSetEndoMaps_Set):
 
     def an_element(self):
         """
-        sage: from sage.combinat.j_trivial_monoids import *
+        sage: from sage.monoids.j_trivial_monoids import *
         sage: P = Posets(3)[3]
         sage: M = NDPFMonoidPosetNewSet(P)
         sage: M.an_element()
@@ -582,7 +586,7 @@ class NDPFMonoidPosetNewSet(FiniteSetEndoMaps_Set):
 
     def _iter_(self):
         """
-        sage: from sage.combinat.j_trivial_monoids import *
+        sage: from sage.monoids.j_trivial_monoids import *
         sage: P = Posets(4)[14]
         sage: M = NDPFMonoidPosetNewSet(P)
         sage: M.cardinality()
@@ -644,7 +648,7 @@ class NDPFMonoidPosetNewSet(FiniteSetEndoMaps_Set):
 
         EXAMPLES::
 
-            sage: from sage.combinat.j_trivial_monoids import *
+            sage: from sage.monoids.j_trivial_monoids import *
             sage: M = NDPFMonoidPosetNewSet(Posets(4)[14])
             sage: for x in M: x.check()
             sage: M([0, 1, 2, 2])
