@@ -1771,4 +1771,5 @@ def weyl_from_compact_permutation(self, x):
         1324
     """
     return self.from_reduced_word(Permutation(reversed(ZZ(x).digits())).reduced_word())
-WeylGroup(["A", 2]).__class__.from_compact_permutation = weyl_from_compact_permutation
+
+# WeylGroup(["A", 2]).__class__.from_compact_permutation = weyl_from_compact_permutation
