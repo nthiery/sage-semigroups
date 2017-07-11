@@ -66,7 +66,8 @@ class HeckeMonoid(AutomaticMonoid):
                                  category=category)
         self.domain = self.W
         self.codomain = self.W
-        self.cache_element_methods(["rank"])
+        # This would requires add_cache-nt.patch from the Sage-Combinat queue
+        #self.cache_element_methods(["rank"])
 
     def quiver_index_iterator(self):
         """
