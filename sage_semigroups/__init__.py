@@ -45,9 +45,9 @@ from sage.repl.user_globals import initialize_globals
 initialize_globals(sage_semigroups.all)
 
 # Some traces of an attempt
-from sage.repl.ipython_extension import SageCustomizations
-all = SageCustomizations.all_globals()
-all.foo = 3
+# from sage.repl.ipython_extension import SageCustomizations
+# all = SageCustomizations.all_globals()
+# all.foo = 3
 
 """
 At this stage, the insertion in the global name space works in the
