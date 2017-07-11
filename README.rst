@@ -41,15 +41,30 @@ Run sage as usual, and do::
 
 The features are then available as if they were native Sage features::
 
-    TODO: add some examples
+    sage: semigroups.<tab>
+    sage: H = semigroups.HeckeMonoid(["A",3])
+    sage: H.is_l_trivial()
+    True
+    sage: H.quiver()
+    Digraph on 8 vertices
+    sage: H.cartan_matrix()
+    [1 0 0 0 0 0 0 0]
+    [0 1 1 1 0 0 0 0]
+    [0 1 2 1 1 0 0 0]
+    [0 1 1 1 0 0 0 0]
+    [0 0 1 0 2 1 1 0]
+    [0 0 0 0 1 1 1 0]
+    [0 0 0 0 1 1 1 0]
+    [0 0 0 0 0 0 0 1]
 
 The intention is to make the later integration of those features into
 Sage as transparent as possible. To enable this, the code is
-structured as in the SageMath library; for example the features in::
+structured as in the SageMath library; for example the features
+implemented in::
 
     sage_semigroups.categories.j_trivial_monoids.JTrivialMonoids
 
-get merged into::
+get merged into the corresponding native Sage category::
 
     sage.categories.j_trivial_monoids.JTrivialMonoids
 
