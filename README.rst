@@ -8,6 +8,35 @@ repository where experimental features can be shared among researchers
 and mature until they get integrated into the main SageMath library or
 discarded.
 
+News
+----
+
+- June 2017: up to now, that repository had been a mostly empty shell.
+  At the occasion of a sprint with Franco Saliola, most of the
+  semigroup code from the Sage-Combinat queue was imported in
+  sage-semigroups, together with private code from Franco. As a
+  result, a dozen semigroups are available in the ``semigroups.*``
+  catalog. In principle, the code to compute the representation theory
+  of j-trivial / aperiodic monoids is there too. However the latter
+  code has been imported as is, and still remains to be updated w.r.t.
+  the new environment.
+
+  **Most tests don't pass at this stage**
+
+  Use at your own risk, and expect many failures!
+
+Future plans
+------------
+
+- Clean up to get all tests to pass;
+- As much as possible, use `libsemigroups <https://github.com/james-d-mitchell/libsemigroups/>`_
+  and GAP's `Semigroups package <https://gap-packages.github.io/Semigroups/>`_ for
+  the semigroups;
+- Focus on the representation theory aspects (e.g. representation
+  theory of general semigroups) and on providing special families of
+  monoids whose definition use other features of Sage (e.g. root
+  systems).
+
 Installation
 ------------
 
