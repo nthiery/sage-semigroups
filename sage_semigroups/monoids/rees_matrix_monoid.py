@@ -108,13 +108,62 @@ class AperiodicReesMatrixMonoid(UniqueRepresentation, Parent):
         self._mat = mat
         Parent.__init__(self, category=Monoids().Aperiodic().Finite().FinitelyGenerated())
 
+    def _repr_(self):
+        """
+        EXAMPLES::
+
+            sage: from sage_semigroups.monoids.rees_matrix_monoid import AperiodicReesMatrixMonoid
+            sage: AperiodicReesMatrixMonoid(matrix(3,3,1))
+            Aperiodic Rees matrix monoid of matrix [1 0 0]
+                                                   [0 1 0]
+                                                   [0 0 1]
+        """
+        return "Aperiodic Rees matrix monoid of matrix %s"%self._mat
+
     def cardinality(self):
         return Integer(2 + self._m * self._n)
 
     def semigroup_generators(self):
         return Family(self.list())
 
+    def an_element(self):
+        """
+        Return an element of ``self``.
+
+        EXAMPLES::
+
+            sage: from sage_semigroups.monoids.rees_matrix_monoid import AperiodicReesMatrixMonoid
+            sage: M = AperiodicReesMatrixMonoid(matrix(3,3,1))
+            sage: M.an_element()
+            (1, 2)
+            sage: M = AperiodicReesMatrixMonoid(matrix([[1,1,1]]))
+            sage: M.an_element()
+            (0, 2)
+            sage: M = AperiodicReesMatrixMonoid(matrix([[1,1],[1,1]]))
+            sage: M.an_element()
+            (1, 1)
+            sage: M = AperiodicReesMatrixMonoid(matrix(0,0))
+            sage: M.an_element()
+            0
+        """
+        if self._m == 0 and self._n == 0:
+            return self.zero()
+        return self._element_constructor_((min(1, self._m-1), min(2, self._n-1)))
+
     def __iter__(self):
+        """
+        Iterate through the elements of ``self``.
+
+        EXAMPLES::
+
+            sage: from sage_semigroups.monoids.rees_matrix_monoid import AperiodicReesMatrixMonoid
+            sage: M = AperiodicReesMatrixMonoid(matrix(2,2,1))
+            sage: list(M)
+            [0, (0, 0), (0, 1), (1, 0), (1, 1), 1]
+            sage: M = AperiodicReesMatrixMonoid(matrix([1,1,1]))
+            sage: list(M)
+            [0, (0, 0), (0, 1), (0, 2), 1]
+        """
         yield self.zero()
         for i in range(self._m):
             for j in range(self._n):
