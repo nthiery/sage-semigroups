@@ -1,5 +1,3 @@
-from sage.misc.cachefunc import cached_method
-
 class Monoids:
     class ParentMethods:
 
