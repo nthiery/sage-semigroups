@@ -1,6 +1,10 @@
 sage-semigroups: A semigroup (representation) theory library for SageMath
 =========================================================================
 
+.. image:: https://mybinder.org/badge.svg
+   :target: https://mybinder.org/v2/gh/nthiery/sage-semigroups/master?filepath=demo.ipynb
+   :alt: Run on binder
+
 sage-semigroups is a library for computational semigroup
 (representation) theory, for the open source mathematical system
 `SageMath <http://sagemath.org>`_. Its intention is to serve as a
@@ -64,7 +68,10 @@ See the help of the corresponding pip options for details
 Usage
 -----
 
-Run sage as usual, and do::
+See the brief `demo notebook <demo.ipynb>`_, or try it live on
+`Binder <https://mybinder.org/v2/gh/nthiery/sage-semigroups/master?filepath=demo.ipynb>`_.
+
+In short:
 
     sage: import sage_semigroups
 
