@@ -66,9 +66,10 @@ See the help of the corresponding pip options for details
 Usage
 -----
 
-See the `demo notebook <demo.ipynb>`_ for more examples.
+See the brief `demo notebook <demo.ipynb>`_, or try it live on
+`Binder <https://mybinder.org/v2/gh/nthiery/sage-semigroups/master?filepath=demo.ipynb>`_.
 
-Run sage as usual, and do::
+In short:
 
     sage: import sage_semigroups
 
