@@ -117,5 +117,6 @@ Nicolas M. Thiéry, ... and resurrected from the former Sage-Combinat
 patch queue.
 
 You can use
-`this bib file <https://github.com/nthiery/sage-semigroups/blob/master/sage-semingroup.bib>`_ to
-cite this work.
+`this bib file
+<https://raw.githubusercontent.com/nthiery/sage-semigroups/master/sage-semigroups.bib>`_
+to cite this work.
