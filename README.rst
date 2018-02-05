@@ -1,6 +1,8 @@
 sage-semigroups: A semigroup (representation) theory library for SageMath
 =========================================================================
 
+.. image:: https://mybinder.org/badge.svg :target: https://mybinder.org/v2/gh/nthiery/sage-semigroups/master?filepath=demo.ipynb
+
 sage-semigroups is a library for computational semigroup
 (representation) theory, for the open source mathematical system
 `SageMath <http://sagemath.org>`_. Its intention is to serve as a
