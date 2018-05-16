@@ -115,3 +115,8 @@ Acknowledgements
 A lot of the code was authored by Florent Hivert, Franco Saliola,
 Nicolas M. Thiéry, ... and resurrected from the former Sage-Combinat
 patch queue.
+
+You can use
+`this bib file
+<https://raw.githubusercontent.com/nthiery/sage-semigroups/master/sage-semigroups.bib>`_
+to cite this work.

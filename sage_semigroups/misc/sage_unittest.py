@@ -2,7 +2,7 @@
 import unittest
 
 class InstanceTester:
-    def __init__(self, instance, elements = None, verbose = False, prefix = "", max_runs = 4096, failure_exception = None, **options):
+    def __init__(self, instance, elements = None, verbose = False, prefix = "", max_runs = 4096, max_samples = 1024, failure_exception = None, **options):
         """
         A gadget attached to an instance providing it with testing utilities.
 
@@ -23,6 +23,7 @@ class InstanceTester:
         self._elements = elements
         self._prefix = prefix
         self._max_runs = max_runs
+        self._max_samples = max_samples
         if failure_exception:
             self.failureException = failure_exception
 

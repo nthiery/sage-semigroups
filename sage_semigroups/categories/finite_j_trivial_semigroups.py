@@ -103,7 +103,7 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
             return result
 
         @cached_method
-        def cartan_matrix(self, q = None):
+        def cartan_matrix(self, q = None, idempotents = None):
             """
             EXAMPLES::
 
@@ -148,7 +148,8 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
             """
             #left_symbols,  right_modules = cartan_data_of_j_trivial_monoid(self, side="left" )
             #right_symbols, left_modules  = cartan_data_of_j_trivial_monoid(self, side="right")
-            idempotents = self.idempotents()
+            if idempotents is None:
+                idempotents = self.idempotents()
             #idempotents = [self.retract(self.ambient.e(w)) for w in self.ambient.W]
             rank = rank_from_list(idempotents)
             from sage.matrix.constructor import matrix
