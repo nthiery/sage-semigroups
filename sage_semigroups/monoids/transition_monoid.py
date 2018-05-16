@@ -9,6 +9,7 @@ The Transition Monoid of an automaton
 #******************************************************************************
 
 import functools
+import operator
 from copy import copy
 from sage.sets.family import Family
 from sage.sets.finite_set_maps import FiniteSetMaps
@@ -46,7 +47,7 @@ class TransitionMonoidOfDeterministicAutomaton(AutomaticMonoid):
     def __classcall__(cls, automaton, alphabet=None, category=None, side='right'):
         automaton = copy(automaton)
         automaton._immutable = True  # should be automaton.set_immutable
-        category = Monoids().Transformation().Subobjects().or_subcategory(category, join=True)
+        category = Monoids().Transformation().Finite().Subobjects().FinitelyGenerated().or_subcategory(category, join=True)
         if alphabet is None:
             alphabet = tuple(sorted(set(automaton.edge_labels())))
         else:
@@ -82,9 +83,7 @@ class TransitionMonoidOfDeterministicAutomaton(AutomaticMonoid):
         def generator(a):
             return ambient( functools.partial(automaton.transition, a = a) )
         generators = Family( alphabet, generator )
-        AutomaticMonoid.__init__(self, generators,
-                                 one = ambient.one(),
-                                 category= category)
+        AutomaticMonoid.__init__(self, generators, ambient, ambient.one(), operator.mul, category)
 
     def automaton(self):
         r"""
