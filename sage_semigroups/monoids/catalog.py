@@ -1,12 +1,1 @@
-#from sage.misc.lazy_import import lazy_import
-#lazy_import('sage_semigroups.monoids.rees_matrix_monoid', AperiodicReesMatrixMonoid)
-from sage_semigroups.monoids.rees_matrix_monoid import AperiodicReesMatrixMonoid
-from sage_semigroups.monoids.free_left_regular_band import FreeLeftRegularBand
-from sage_semigroups.monoids.free_partially_commutative_left_regular_band import FreePartiallyCommutativeLeftRegularBand
-from sage_semigroups.monoids.free_semilattice import FreeSemilattice
-from sage_semigroups.monoids.set_compositions_monoid import SetCompositionsMonoid
-from sage_semigroups.monoids.set_partitions_monoid import SetPartitionsMonoid
-from sage_semigroups.monoids.sign_vectors_monoid import  SignVectorsMonoid
-from sage_semigroups.monoids.karnofsky_rhodes_expansion import KarnofskyRhodesExpansion
-from sage_semigroups.monoids.bi_hecke_monoid import BiHeckeMonoid
-from sage_semigroups.monoids.j_trivial_monoids import NDPFMonoid, HeckeMonoid, NDPFMonoidPoset
+from sage_semigroups.monoids.j_trivial_monoids import HeckeMonoid

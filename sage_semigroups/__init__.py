@@ -34,10 +34,7 @@ import sage
 # TODO: do we want this? Should this list the features that are being patched?
 print("Loading sage-semigroups and patching its features into Sage's library:")
 sage_semigroups = sys.modules[__name__]
-import misc, categories, monoids, graphs
-monkey_patch(sage_semigroups.misc, sage.misc, log_level=logging.INFO)
-monkey_patch(sage_semigroups.categories, sage.categories, log_level=logging.INFO)
-monkey_patch(sage_semigroups.graphs, sage.graphs, log_level=logging.INFO)
+import sage_semigroups.monoids
 monkey_patch(sage_semigroups.monoids, sage.monoids, log_level=logging.INFO)
 
 # Insert the content of sage_semigroups.all in the global name space
