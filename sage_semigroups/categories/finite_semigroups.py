@@ -551,7 +551,10 @@ class FiniteSemigroups:
             G = DiGraph()
             G.add_vertices(self.j_classes().keys())
             for (x,y,_) in self.cayley_graph_cached(side="twosided", simple=True).edge_iterator():
-                G.add_edge(self.j_class_index(y), self.j_class_index(x))
+                x = self.j_class_index(x)
+                y = self.j_class_index(y)
+                if x != y:
+                    G.add_edge(y, x)
             return Poset(G)
 
         def j_lequal(self, x, y):
