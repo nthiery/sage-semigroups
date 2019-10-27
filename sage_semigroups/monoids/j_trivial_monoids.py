@@ -114,7 +114,7 @@ class HeckeMonoid(AutomaticMonoid):
         """
         return list(self.quiver_index_iterator())
 
-    def quiver_element(self, (J, K)):
+    def quiver_element(self, JK):
         """
         EXAMPLES::
 
@@ -125,6 +125,7 @@ class HeckeMonoid(AutomaticMonoid):
 
 
         """
+        JK = pair
         pi = self.semigroup_generators()
         piJ = self.prod(pi[j] for j in J).pow_omega()
         piK = self.prod(pi[k] for k in K).pow_omega()
@@ -209,7 +210,8 @@ class ContractingMonoidPoset(AutomaticMonoid):
         self.poset = poset
         support = poset.list()
         ambient_monoid = FiniteSetMaps(support, action="right")
-        def genij((i,j)):
+        def genij(ij):
+            (i,j) = ij
             return ambient_monoid.from_dict({k: i if k == j else k for k in support})
         index = map(tuple, poset.cover_relations()) # index elems must be hashable
         self.pi = Family(index, genij)
@@ -328,7 +330,7 @@ class CompatibleSemiGroup(UniqueRepresentation, Parent):
 
         def lift(self):
             if self.is_zero():
-                raise ValueError, "Zero cannot be lifted"
+                raise ValueError("Zero cannot be lifted")
             return self.ambient_element
 
         def is_zero(self):
@@ -487,7 +489,7 @@ class NDPFMonoidPosetNew(FiniteSetEndoMaps_N):
                     res2.set_immutable()
                     self._size += 1
                     if self._size % 100 == 0:
-                        print "Size ... %i ..."%(self._size)
+                        print("Size ... %i ..."%(self._size))
                     yield res2
                 else:
                     el = linext[i]
@@ -626,7 +628,7 @@ class NDPFMonoidPosetNewSet(FiniteSetEndoMaps_Set):
                     res2.set_immutable()
                     self._size += 1
                     if self._size % 100 == 0:
-                        print "Size ... %i ..."%(self._size)
+                        print("Size ... %i ..."%(self._size))
                     yield res2
                 else:
                     el = linext[i]

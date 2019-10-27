@@ -38,10 +38,10 @@ class FreePartiallyCommutativeLeftRegularBand(UniqueRepresentation, Parent):
         elif isinstance(graph, tuple) and len(graph) == 2:
             vertices, edges = graph
         else:
-            raise ValueError, "incorrect input to __classcall__"
+            raise ValueError("incorrect input to __classcall__")
         return super(FreePartiallyCommutativeLeftRegularBand,cls).__classcall__(cls,(vertices,edges))
 
-    def __init__(self, (vertices, edges)):
+    def __init__(self, args):
         r"""
         The free partially commutative left regular band associated to the
         (undirected) graph ``graph``.
@@ -60,6 +60,7 @@ class FreePartiallyCommutativeLeftRegularBand(UniqueRepresentation, Parent):
             Free partially commutative left regular band on Graph on 4 vertices
             sage: TestSuite(S).run(skip=["_test_elements", "_test_pickling"])
         """
+        (vertices, edges) = args
         graph = Graph()
         graph.add_vertices(vertices)
         graph.add_edges(edges)

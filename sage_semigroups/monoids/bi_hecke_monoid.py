@@ -253,7 +253,7 @@ class BiHeckeMonoids(Category):
                         #(~(self.EtoT)).register_as_coercion()
 
                         self.CMtoC = self.CM().module_morphism(on_basis = self.CMtoC_on_basis,
-                                                               triangular = "upper", unitriangular = True, cmp = self.C().get_order_cmp(),
+                                                               triangular = "upper", unitriangular = True, key = self.C().get_order_key(),
                                                                codomain = self.C(),
                                                                category = self.character_ring_category())
                         self.CMtoC.register_as_coercion()
@@ -334,7 +334,7 @@ class BiHeckeMonoids(Category):
                     return CharacterRing(self, prefix = "T", modules = "translation")
 
                 def CM(self):
-                    """
+                    r"""
                     Return the character ring of the bi-Hecke monoid on the Möbius inverted class functions basis
 
                     Define by Möbius inversion the unique family
@@ -452,7 +452,7 @@ class BiHeckeMonoids(Category):
 
                 @lazy_attribute
                 def restrict_TtoS0_on_basis(self):
-                    """
+                    r"""
                     This implements the restriction of characters of
                     translation modules of ``M`` into characters of simple
                     modules of ``M_0``.
@@ -517,7 +517,7 @@ class BiHeckeMonoids(Category):
                         sage: for e in P0.basis():
                         ...       assert G.induce_from_M0_P(e) == P(G.induce_from_M0(S0(e)))
                     """
-                    print "warning: this is using a wrong formula for A_4, ..."
+                    print("warning: this is using a wrong formula for A_4, ...")
                     M0 = self.base().fix_w0_monoid()
                     P0 = M0.character_ring().P()
                     return P0.module_morphism(self.induce_from_M0_P_basis, codomain = self.P())
@@ -624,7 +624,7 @@ class BiHeckeMonoids(Category):
                         sage: for e in P0.basis():
                         ...       assert G.induce_from_M0_P(e) == P(G.induce_from_M0(S0(e)))
                     """
-                    print "warning: this is using a wrong formula for A_4, ..."
+                    print("warning: this is using a wrong formula for A_4, ...")
                     M0 = self.base().fix_w0_monoid()
                     P0 = M0.character_ring().P()
                     return P0.module_morphism(self.IndP0_P3_basis, codomain = self.P(), category = self.character_ring_category())
@@ -1043,7 +1043,7 @@ class BiHeckeMonoid(AutomaticMonoid):
             if u == v:
                 continue
             if i<0:
-                edge_label = "\overline{%s}"%-i
+                edge_label = r"\overline{%s}"%-i
             else:
                 edge_label = "%s"%i
             if dir == "both":
@@ -1128,7 +1128,7 @@ class BiHeckeMonoid(AutomaticMonoid):
                 side = side)
 
         def latex_reduced_word(self):
-            result = "".join(r"{\color{%s}%s}"%(self._colors[abs(i)], str(i) if i >0 else "\overline{%s}"%abs(i)) for i in self.reduced_word())
+            result = "".join(r"{\color{%s}%s}"%(self._colors[abs(i)], str(i) if i >0 else r"\overline{%s}"%abs(i)) for i in self.reduced_word())
             if self.is_idempotent():
                 result = "{%s}^*"%result
             return result
@@ -1324,7 +1324,7 @@ class TranslationModule(FiniteEnumeratedSet):
         return lower_ideal(self.descent_set_structure(J)[1], side = "right")
 
     def long_element(self, J):
-        """
+        r"""
         For J a descent set, returns the longest element w_J in self \intersect W_J
         """
         return self.descent_set_structure(J)[0]
@@ -1457,7 +1457,7 @@ class TranslationModule(FiniteEnumeratedSet):
         return self.simple_projection(i, length_increasing = True).to_matrix() + self.simple_projection(i, toward_max=False).to_matrix() - 1
 
     def simple_reflections(self, side = "right"):
-        """
+        r"""
         Code identical to CoxeterGroups.ParentMethods.simple_reflections
 
         EXAMPLES::

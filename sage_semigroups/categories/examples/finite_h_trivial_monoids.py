@@ -26,7 +26,7 @@ from sage.rings.integer import Integer
 ##########################################################################
 
 class MonoidOfOrderPreservingMaps(AutomaticMonoid):
-    """
+    r"""
     Finite `H`-trivial monoid of order preserving maps
 
     INPUT:

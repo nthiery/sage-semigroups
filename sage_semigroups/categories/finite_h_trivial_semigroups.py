@@ -12,7 +12,8 @@ FiniteHTrivialSemigroups
 #                  http://www.gnu.org/licenses/
 #******************************************************************************
 
-from sage.misc.cachefunc import cached_method#, cached_function
+from sage.misc.cachefunc import cached_method, cached_function
+from sage.cpython.getattr import raw_getattr
 from sage.categories.category_with_axiom import CategoryWithAxiom
 from sage.categories.semigroups import Semigroups
 from sage.categories.modules import Modules
@@ -202,7 +203,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
 
         @cached_method
         def simple_module_dimension(self, i):
-            """
+            r"""
             The dimension of the simple module indexed by ``i``
 
             INPUT:
@@ -340,7 +341,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
                 R = self.lr_regular_class_module(J, side=side)
                 principal_order_filters[J] = R.composition_series()
                 import time
-                print "%s  %s: %s %s %s"%(time.strftime("%H:%M:%S"), J, self.simple_module_dimension(J), R.dimension(), principal_order_filters[J])
+                print("%s  %s: %s %s %s"%(time.strftime("%H:%M:%S"), J, self.simple_module_dimension(J), R.dimension(), principal_order_filters[J]))
             P = Poset( ( Js, lambda J1, J2: J2 in principal_order_filters[J1] ), facade = True )
             from sage.sets.set import Set
             assert all( Set( P.principal_order_filter(J) ) == principal_order_filters[J]
@@ -369,18 +370,18 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
             GR = self.character_ring(side='right')
             SR = GR.S(); TR = GR.T_all(); # CR= GR.C()
             for j in self.simple_modules_index_set():
-                #print "Calculating the character of the left simple module %s"%j
-                #print "%s = %s"%(SL[j], CL(SL[j]))
+                #print("Calculating the character of the left simple module %s"%j)
+                #print("%s = %s"%(SL[j], CL(SL[j])))
                 #print "Calculating the character of the right simple module %s"%j
-                #print "%s = %s"%(SR[j], CR(SR[j]))
+                #print("%s = %s"%(SR[j], CR(SR[j])))
                 pass
             for j in self.j_classes().keys():
-                #print "Calculating the composition factors of the left class module %s"%j
+                #print("Calculating the composition factors of the left class module %s"%j)
                 L = SL(TL[j])  # The composition factors for the left  class module of this J-class
-                #print "%s = %s"%(TL[j], L)
-                #print "Calculating the composition factors of the right class module %s"%j
+                #print("%s = %s"%(TL[j], L))
+                #print("Calculating the composition factors of the right class module %s"%j)
                 R = SR(TR[j])  # The composition factors for the right class module of this J-class
-                #print "%s = %s"%(TR[j], R)
+                #print("%s = %s"%(TR[j], R))
                 for (jl, cl) in L:
                     for (jr, cr) in R:
                         result[jl,jr] = result.get((jl,jr), 0) + cl * cr
@@ -414,7 +415,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
     class ElementMethods:
 
         def pow_omega(self):
-            """
+            r"""
             The omega power of ``self``.
 
             EXAMPLES::
@@ -479,7 +480,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
                         sage: TtoS._test_triangular()
                     """
                     self.StoC = self.S().module_morphism(on_basis = self.StoC_on_basis,
-                                                         triangular = "upper", unitriangular = True, cmp = self.C().get_order_cmp(),
+                                                         triangular = "upper", unitriangular = True, key = self.C().get_order_key(),
                                                          codomain = self.C(),
                                                          category = self.character_ring_category())
                     self.StoC.register_as_coercion()
@@ -494,7 +495,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
 
                     # Could implement T -> T_all by relabelling
                     self.TtoC = self.T().module_morphism(on_basis = self.TtoC_on_basis,
-                                                         triangular = "upper", unitriangular = True, cmp = self.C().get_order_cmp(),
+                                                         triangular = "upper", unitriangular = True, key = self.C().get_order_key(),
                                                          codomain = self.C(),
                                                          category = self.character_ring_category())
                     self.TtoC.register_as_coercion()
@@ -535,13 +536,13 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
                     Let us look at the dimension of all simple and left class modules::
 
                         sage: for chi in G.S().basis():
-                        ...       print "dim %s = %s"%(chi, G.dimension(chi))
+                        ...       print("dim %s = %s"%(chi, G.dimension(chi)))
                         dim S[0] = 1
                         dim S[1] = 2
                         dim S[2] = 1
 
                         sage: for chi in G.T_all().basis():
-                        ...       print "dim %s = %s"%(chi, G.dimension(chi))
+                        ...       print("dim %s = %s"%(chi, G.dimension(chi)))
                         dim T[0] = 1
                         dim T[1] = 3
                         dim T[2] = 3
@@ -595,7 +596,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
                         sage: T.basis()
                         Finite family {0: T[0], 1: T[1], 2: T[2]}
                         sage: for chi in T.basis():
-                        ...       print "dim %s = %s"%(chi, chi.dimension())
+                        ...       print("dim %s = %s"%(chi, chi.dimension()))
                         dim T[0] = 1
                         dim T[1] = 2
                         dim T[2] = 1
@@ -645,7 +646,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
 
                         sage: S = G.S(); C = G.C()
                         sage: for chi in S.basis():
-                        ...       print chi, "=", C(chi)
+                        ...       print(chi, "=", C(chi))
                         S[0] = C[0]
                         S[1] = 2*C[0] + C[1]
                         S[2] = C[0] + C[1] + C[2]
@@ -656,13 +657,13 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
                         sage: G = M.character_ring(side = "left")
                         sage: S = G.S(); C = G.C()
                         sage: for chi in S.basis():
-                        ...       print chi, "=", C(chi)
+                        ...       print(chi, "=", C(chi))
                         S[0] = C[0]
                         S[1] = 2*C[0] + C[1]
                         S[2] = C[0] + C[1] + C[2]
 
                         sage: for chi in C.basis():
-                        ...       print chi, "=", S(chi)
+                        ...       print(chi, "=", S(chi))
                         C[0] = S[0]
                         C[1] = -2*S[0] + S[1]
                         C[2] = S[0] - S[1] + S[2]
@@ -699,7 +700,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
                         2*C[0] + C[1]
                         sage: C = G.C(); T = G.T_all(); S = G.S()
                         sage: for chi in T.basis():
-                        ...       print chi, "=", C(chi)
+                        ...       print(chi, "=", C(chi))
                         T[0] = C[0]
                         T[1] = 2*C[0] + C[1]
                         T[2] = C[0] + C[1] + C[2]
@@ -707,7 +708,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
                     The decomposition of right class modules into simple modules::
 
                         sage: for chi in T.basis():
-                        ...       print chi, "=", S(chi)
+                        ...       print(chi, "=", S(chi))
                         T[0] = S[0]
                         T[1] = S[1]
                         T[2] = S[2]
@@ -723,7 +724,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
 
                         sage: C = G.C(); T = G.T_all(); S = G.S()
                         sage: for chi in T.basis():
-                        ...       print chi, "=", C(chi)
+                        ...       print(chi, "=", C(chi))
                         T[0] = C[0]
                         T[1] = 3*C[0] + C[1]
                         T[2] = 3*C[0] + 2*C[1] + C[2]
@@ -731,7 +732,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
                     The decomposition of left class modules into simple modules::
 
                         sage: for chi in T.basis():
-                        ...       print chi, "=", S(chi)
+                        ...       print(chi, "=", S(chi))
                         T[0] = S[0]
                         T[1] = S[0] + S[1]
                         T[2] = S[1] + S[2]
@@ -761,7 +762,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
                         2*C[0] + C[1]
                         sage: C = G.C(); T = G.T(); S = G.S()
                         sage: for chi in T.basis():
-                        ...       print chi, "=", C(chi)
+                        ...       print(chi, "=", C(chi))
                         T[0] = C[0]
                         T[1] = 2*C[0] + C[1]
                         T[2] = C[0] + C[1] + C[2]
@@ -769,7 +770,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
                     The decomposition of right class modules into simple modules::
 
                         sage: for chi in T.basis():
-                        ...       print chi, "=", S(chi)
+                        ...       print(chi, "=", S(chi))
                         T[0] = S[0]
                         T[1] = S[1]
                         T[2] = S[2]
@@ -785,7 +786,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
 
                         sage: C = G.C(); T = G.T(); S = G.S()
                         sage: for chi in T.basis():
-                        ...       print chi, "=", C(chi)
+                        ...       print(chi, "=", C(chi))
                         T[0] = C[0]
                         T[1] = 3*C[0] + C[1]
                         T[2] = 3*C[0] + 2*C[1] + C[2]
@@ -793,7 +794,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
                     The decomposition of left class modules into simple modules::
 
                         sage: for chi in T.basis():
-                        ...       print chi, "=", S(chi)
+                        ...       print(chi, "=", S(chi))
                         T[0] = S[0]
                         T[1] = S[0] + S[1]
                         T[2] = S[1] + S[2]
@@ -825,7 +826,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
                         S[321] + S[231] + S[312] + S[213] + S[132] + S[123]
                         sage: C = G.C(); P = G.P(); S = G.S()
                         sage: for chi in P.basis():
-                        ...       print chi, "=", S(chi)
+                        ...       print(chi, "=", S(chi))
                         P[123] = S[321] + S[231] + S[312] + S[213] + S[132] + S[123]
                         P[213] = S[213]
                         P[132] = S[132]
@@ -841,7 +842,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
                         S[123]
                         sage: C = G.C(); P = G.P(); S = G.S()
                         sage: for chi in P.basis():
-                        ...       print chi, "=", S(chi)
+                        ...       print(chi, "=", S(chi))
                         P[123] = S[123]
                         P[213] = S[213] + S[123]
                         P[132] = S[132] + S[123]
@@ -885,7 +886,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
 
         class Algebras(AlgebrasCategory):
             # see the warning in sage.categories.set_with_action_functor.SetsWithActionCategory._algebras_extra_super_categories
-            extra_super_categories = SetsWithActionCategory._algebras_extra_super_categories.im_func
+            extra_super_categories = raw_getattr(SetsWithActionCategory, "_algebras_extra_super_categories")
 
     class Modules(ModulesCategory):
 

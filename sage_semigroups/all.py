@@ -1,1 +1,1 @@
-import monoids.catalog as semigroups
+from .monoids import catalog as semigroups

@@ -849,7 +849,7 @@ class FiniteSemigroups:
 
         @cached_method
         def group_of_regular_j_class(self, J):
-            """
+            r"""
             Returns the group associated to the regular `J`-class indexed by `J`
 
             INPUT:

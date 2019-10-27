@@ -12,7 +12,7 @@ from sage.misc.cachefunc import cached_method
 from sage.sets.set import Set_object_enumerated
 from sage.structure.element_wrapper import ElementWrapper
 from sage.combinat.set_partition import SetPartitions
-from set_compositions_monoid import SetCompositionsMonoid
+from .set_compositions_monoid import SetCompositionsMonoid
 
 class SetPartitionsMonoid(SetCompositionsMonoid):
     def _repr_(self):

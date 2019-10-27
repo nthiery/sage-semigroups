@@ -319,7 +319,7 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
 
         @cached_method
         def initial_of_iterated_radical(self,use_quiver=True):
-            """
+            r"""
             Returns the poset on self, where `u < w` if `w=uv` for
             some v such that `\lt (u-u^\infty)(v-v^\infty) = uv`
 
@@ -374,7 +374,7 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
             else:
                 factors = self.non_idempotents()
             for k in range(1, self.cardinality()):
-                # print k, len(smaller_factorizations)
+                # print(k, len(smaller_factorizations))
                 factorizations = []
                 found = False
                 for smaller_factorization in smaller_factorizations:
@@ -600,13 +600,13 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
             from sage.combinat.j_trivial_monoids import CompatibleSemiGroup
             C = CompatibleSemiGroup(M)
 
-            print M.cardinality()
+            print(M.cardinality())
             idm = M.idempotents()
-            print "#idemp = %s"%(len(idm))
-            print "sorting elements..."
+            print("#idemp = %s"%(len(idm)))
+            print("sorting elements...")
             M.symbol_sorted_non_idempotents("right")
             M.symbol_sorted_non_idempotents("left")
-            print "done"
+            print("done")
             right_bad_pairs = []
             left_bad_pairs = []
             for id in idm:
@@ -616,25 +616,25 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
                             right_bad_pairs.append((x,y))
                         if (x*y).symbol("left") != x.symbol("left"):
                             left_bad_pairs.append((x,y))
-            print "#right bad pairs = %i"%(len(right_bad_pairs))
-            print "#left bad pairs = %i"%(len(left_bad_pairs))
+            print("#right bad pairs = %i"%(len(right_bad_pairs)))
+            print("#left bad pairs = %i"%(len(left_bad_pairs)))
 
             for (x, y) in right_bad_pairs:
                 rsymb = y.symbol("right")
                 for z in M.symbol_sorted_non_idempotents("left").get(rsymb, []):
-                    print x, y, z
+                    print(x, y, z)
                     assert (C(x)*C(y))*C(z) == C(x)*(C(y)*C(z))
 
             for (x, y) in left_bad_pairs:
                 rsymb = x.symbol("left")
                 for z in M.symbol_sorted_non_idempotents("right").get(rsymb, []):
-                    print z, x, y
+                    print(z, x, y)
                     assert C(z)*(C(x)*C(y)) == (C(z)*C(x))*C(y)
 
 
         @cached_method
         def projective_module(self, idempotent, side = "left"):
-            """
+            r"""
             INPUT:
              - idempotent: an idempotent of this monoid
              - side: "left" or "right"
@@ -938,11 +938,11 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
                 """
                 from sage.matrix.constructor import matrix
                 result = dict()
-                print "Orthog idemps ..."
+                print("Orthog idemps ...")
                 idempotents = self.orthogonal_idempotents()
-                print "Done"
+                print("Done")
                 for x in idempotents.keys():
-                    print x
+                    print(x)
                     for y in idempotents.keys():
                         res = len(
                             matrix([(idempotents[x]*v*idempotents[y]).to_vector()
@@ -1013,7 +1013,7 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
                         (~(self.StoC)).register_as_coercion()
 
                 def C(self):
-                    """
+                    r"""
                     Return the character ring of the monoid ``self`` on
                     the basis indexed by the class functions of (conjugacy
                     classes of) idempotents. I.e. if `Xhi = \sum c_e C_e`,
@@ -1032,7 +1032,7 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
 
                 @cached_method
                 def StoC_on_basis(self, i):
-                    """
+                    r"""
                     INPUT:
 
                       - ``i`` -- the index of a `J`-class of idempotents
@@ -1047,7 +1047,7 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
                         sage: S = M.character_ring().S()
                         sage: C = M.character_ring().C()
                         sage: for chi in S.basis():
-                        ...       print chi, "=", C(chi) # indirect doctest
+                        ...       print(chi, "=", C(chi)) # indirect doctest
                         S[0] = C[0] + C[1] + C[2] + C[3] + C[4] + C[5] + C[6] + C[7]
                         S[1] = C[1] + C[2]
                         S[2] = C[2]
@@ -1078,7 +1078,7 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
                         sage: P = M.character_ring().P()
                         sage: S = M.character_ring().S()
                         sage: for e in P.basis():
-                        ...       print e, "=", S(e) # indirect doctest
+                        ...       print(e, "=", S(e))# indirect doctest
                         P[0] = S[0]                  # not fully checked; seems consistent with the cartan matrix
                         P[1] = S[1] + S[5]
                         P[2] = S[1] + S[2] + S[5]
@@ -1135,7 +1135,7 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
                         sage: E = M.character_ring().E()
                         sage: S = M.character_ring().S()
                         sage: for e in E.basis():
-                        ...       print e, "=", S(e) # indirect doctest
+                        ...       print(e, "=", S(e))# indirect doctest
                         E[0] = S[0] + S[2] + S[3] + S[4] + S[6] + 2*S[7]
                         E[1] = S[0] + S[1] + S[2] + S[3] + 2*S[4] + S[6] + 2*S[7]
                         E[2] = S[2] + S[4] + S[6] + 2*S[7]
@@ -1149,7 +1149,7 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
                     inverse morphism; it does not work for the BiHeckeMonoid::
 
                         sage: for e in S.basis():
-                        ...       print e, "=", E(e)
+                        ...       print(e, "=", E(e))
                         S[0] = E[0] - E[2] - E[3] + E[4]
                         S[1] = -E[0] + E[1] - E[4] + E[7]
                         S[2] = E[2] - E[4] + E[6] - E[7]
