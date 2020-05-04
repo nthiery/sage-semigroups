@@ -17,8 +17,8 @@ class DiGraph:
         EXAMPLES::
 
             sage: automaton = DiGraph( [ (1, 1, "b"), (1, 2, "a"),
-            ...                          (2, 2, "a"), (2, 2, "c"), (2, 3, "b"),
-            ...                          (3, 2, "a"), (3, 3, "b"), (3, 3, "c") ] )
+            ....:                        (2, 2, "a"), (2, 2, "c"), (2, 3, "b"),
+            ....:                        (3, 2, "a"), (3, 3, "b"), (3, 3, "c") ] )
             sage: automaton.transition(1, "a")
             2
             sage: automaton.transition(1, "b")
@@ -43,15 +43,15 @@ class DiGraph:
         EXAMPLES::
 
             sage: automaton = DiGraph( [ (1, 1, "b"), (1, 2, "a"),
-            ...                          (2, 2, "a"), (2, 2, "c"), (2, 3, "b"),
-            ...                          (3, 2, "a"), (3, 3, "b"), (3, 3, "c") ] )
+            ....:                        (2, 2, "a"), (2, 2, "c"), (2, 3, "b"),
+            ....:                        (3, 2, "a"), (3, 3, "b"), (3, 3, "c") ] )
             sage: M = automaton.transition_monoid()
             sage: M.cardinality()
             7
             sage: M.list()
             [[], ['a'], ['b'], ['c'], ['a', 'c'], ['b', 'a'], ['b', 'c']]
             sage: for f in M:
-            ...       print f, f.lift()
+            ....:     print(f, f.lift())
             []         map: 1 -> 1, 2 -> 2, 3 -> 3, None -> None
             ['a']      map: 1 -> 2, 2 -> 2, 3 -> 2, None -> None
             ['b']      map: 1 -> 1, 2 -> 3, 3 -> 3, None -> None
@@ -91,8 +91,8 @@ class DiGraph:
         EXAMPLES::
 
             sage: automaton = DiGraph( [ (1, 1, "b"), (1, 2, "a"),
-            ...                          (2, 2, "a"), (2, 2, "c"), (2, 3, "b"),
-            ...                          (3, 2, "a"), (3, 3, "b"), (3, 3, "c") ] )
+            ....:                        (2, 2, "a"), (2, 2, "c"), (2, 3, "b"),
+            ....:                        (3, 2, "a"), (3, 3, "b"), (3, 3, "c") ] )
             sage: M = automaton.transition_module()
             sage: M.cayley_graph().edges() == automaton.edges()  # todo: not implemented (some edges are repeated!!!)
             True
