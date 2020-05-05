@@ -5,7 +5,7 @@ The Transition Monoid of an automaton
 #  Copyright (C) 2011 Nicolas M. Thiery <nthiery at users.sf.net>
 #
 #  Distributed under the terms of the GNU General Public License (GPL)
-#                  http://www.gnu.org/licenses/
+#                  https://www.gnu.org/licenses/
 #******************************************************************************
 
 import functools
@@ -27,8 +27,8 @@ class TransitionMonoidOfDeterministicAutomaton(AutomaticMonoid):
     We consider the example p. 83 of [Pin.MPRI]_::
 
         sage: automaton = DiGraph( [ (1, 1, "b"), (1, 2, "a"),
-        ...                          (2, 2, "a"), (2, 2, "c"), (2, 3, "b"),
-        ...                          (3, 2, "a"), (3, 3, "b"), (3, 3, "c") ] )
+        ....:                        (2, 2, "a"), (2, 2, "c"), (2, 3, "b"),
+        ....:                        (3, 2, "a"), (3, 3, "b"), (3, 3, "c") ] )
         sage: M = automaton.transition_monoid()
         sage: M.cardinality()
         7
@@ -58,8 +58,8 @@ class TransitionMonoidOfDeterministicAutomaton(AutomaticMonoid):
     def __init__(self, automaton, alphabet, category, side):
         """
             sage: automaton = DiGraph( [ (1, 1, "b"), (1, 2, "a"),
-            ...                          (2, 2, "a"), (2, 2, "c"), (2, 3, "b"),
-            ...                          (3, 2, "a"), (3, 3, "b"), (3, 3, "c") ] )
+            ....:                        (2, 2, "a"), (2, 2, "c"), (2, 3, "b"),
+            ....:                        (3, 2, "a"), (3, 3, "b"), (3, 3, "c") ] )
             sage: from sage.monoids.transition_monoid import TransitionMonoidOfDeterministicAutomaton
             sage: M = TransitionMonoidOfDeterministicAutomaton(automaton)
             sage: M.cardinality()
@@ -90,8 +90,8 @@ class TransitionMonoidOfDeterministicAutomaton(AutomaticMonoid):
         EXAMPLES::
 
             sage: automaton = DiGraph( [ (1, 1, "b"), (1, 2, "a"),
-            ...                          (2, 2, "a"), (2, 2, "c"), (2, 3, "b"),
-            ...                          (3, 2, "a"), (3, 3, "b"), (3, 3, "c") ] )
+            ....:                        (2, 2, "a"), (2, 2, "c"), (2, 3, "b"),
+            ....:                        (3, 2, "a"), (3, 3, "b"), (3, 3, "c") ] )
             sage: M = automaton.transition_monoid()
             sage: M.automaton()
             Looped multi-digraph on 3 vertices
@@ -105,10 +105,10 @@ class TransitionMonoidOfDeterministicAutomaton(AutomaticMonoid):
         EXAMPLES::
 
             sage: automaton = DiGraph( [ (1, 1, "b"), (1, 2, "a"),
-            ...                          (2, 2, "a"), (2, 2, "c"), (2, 3, "b"),
-            ...                          (3, 2, "a"), (3, 3, "b"), (3, 3, "c") ] )
+            ....:                        (2, 2, "a"), (2, 2, "c"), (2, 3, "b"),
+            ....:                        (3, 2, "a"), (3, 3, "b"), (3, 3, "c") ] )
             sage: automaton.transition_monoid()
             The transition monoid of Looped multi-digraph on 3 vertices
 
         """
-        return "The transition monoid of %s"%self.automaton()
+        return "The transition monoid of %s" % self.automaton()
