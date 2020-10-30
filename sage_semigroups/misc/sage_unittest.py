@@ -70,21 +70,20 @@ class IsMethod(MethodDecorator):
 
         sage: from sage.misc.sage_unittest import is_method, _test_method_from_is
         sage: class Union(Parent):
-        ...       def __init__(self, sets):
-        ...           self._sets = sets
-        ...       @is_method
-        ...       def is_finite(self, proof=False, **options):
-        ...           tester = self._tester(**options)
-        ...           if proof: # we only run a full test if proof=True
-        ...               sets = self._sets
-        ...           else:     # otherwise we only check the first element
-        ...               sets = self._sets[:1]
-        ...           for set in sets:
-        ...               tester.assert_( set.is_finite(), "The set %s is not finite"%set )
-        ...           return Sets().Finite()
-        ...
+        ....:     def __init__(self, sets):
+        ....:         self._sets = sets
+        ....:     @is_method
+        ....:     def is_finite(self, proof=False, **options):
+        ....:         tester = self._tester(**options)
+        ....:         if proof: # we only run a full test if proof=True
+        ....:             sets = self._sets
+        ....:         else:     # otherwise we only check the first element
+        ....:             sets = self._sets[:1]
+        ....:         for set in sets:
+        ....:             tester.assert_( set.is_finite(), "The set %s is not finite"%set )
+        ....:         return Sets().Finite()
         sage: class FiniteUnion(Union):
-        ...       _test_finite = _test_method_from_is(Union.is_finite)
+        ....:     _test_finite = _test_method_from_is(Union.is_finite)
 
         sage: U = Union([GF(2), GF(3)])
         sage: U.category()
