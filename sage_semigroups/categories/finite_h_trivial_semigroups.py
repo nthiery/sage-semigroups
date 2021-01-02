@@ -5,12 +5,12 @@ FiniteHTrivialSemigroups
 
     sage: import sage_semigroups    # random
 """
-#*****************************************************************************
+# ****************************************************************************
 #  Copyright (C) 2009-2011 Nicolas M. Thiery <nthiery at users.sf.net>
 #
 #  Distributed under the terms of the GNU General Public License (GPL)
 #                  http://www.gnu.org/licenses/
-#******************************************************************************
+# *****************************************************************************
 
 from sage.misc.cachefunc import cached_method, cached_function
 from sage.cpython.getattr import raw_getattr
@@ -24,6 +24,7 @@ from sage_semigroups.categories.set_with_action_functor import SetsWithActionCat
 from sage.categories.realizations import RealizationsCategory
 from sage.categories.with_realizations import WithRealizationsCategory
 from sage.sets.family import Family
+
 
 class FiniteHTrivialSemigroups(CategoryWithAxiom):
     r"""
@@ -122,7 +123,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
             `M` corresponds to a left class of `J`, while each column
             corresponds to a right class. The entry is `1` if the
             `l[i]*r[i]` is idempotent, and `0` otherwise. Each column
-            and each row is garanteed to contain at least a `1`.
+            and each row is garantueed to contain at least a `1`.
 
             The monoid induced by ``self`` on `J\cup 0` is an
             aperiodic Rees matrix monoid with `0`, whose structure is
@@ -505,7 +506,7 @@ class FiniteHTrivialSemigroups(CategoryWithAxiom):
                                                          codomain = self.S(),
                                                          category = self.character_ring_category())
                     self.PtoS.register_as_coercion()
-                    # TODO: reenable this when the inverse will be computed lazily
+                    # TODO: re-enable this when the inverse will be computed lazily
                     # Right now we get a recursion loop
                     #(~(self.PtoS)).register_as_coercion()
 

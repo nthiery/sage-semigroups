@@ -4,13 +4,13 @@ Finite J-Trivial semigroups
 
     sage: import sage_semigroups # random
 """
-#*****************************************************************************
+# ****************************************************************************
 #  Copyright (C) 2009-2010 Florent Hivert <florent.hivert at univ-rouen.fr>
 #                2009-2017 Nicolas M. Thiery <nthiery at users.sf.net>
 #
 #  Distributed under the terms of the GNU General Public License (GPL)
 #                  http://www.gnu.org/licenses/
-#******************************************************************************
+# *****************************************************************************
 
 from sage.misc.cachefunc import cached_method, cached_in_parent_method
 from sage.misc.misc import attrcall
@@ -20,6 +20,7 @@ from sage_semigroups.categories.character_ring_functor import CharacterRingsCate
 from sage.categories.with_realizations import WithRealizationsCategory
 from sage.sets.family import Family
 from sage.combinat.ranker import rank_from_list
+
 
 class FiniteJTrivialSemigroups(CategoryWithAxiom):
     """
@@ -415,7 +416,7 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
         @cached_method
         def symbol_sorted_non_idempotents(self, side="left"):
             """
-            Returns a dictionnary ``s : [k_1,...,k_l]`` which associates to
+            Return a dictionary ``s : [k_1,...,k_l]`` which associates to
             each idempotent ``e`` of ``self`` the list of all non-idempotent
             elements ``k`` of symbol ``e``. The symbols are taken on the given
             side. If side is ``"both"`` then ``s`` is replaced by the pair of
@@ -797,12 +798,12 @@ class FiniteJTrivialSemigroups(CategoryWithAxiom):
                 INPUT:
 
                  - ``idmlist`` - the list (in a given order) of the idempotent
-                   of the monoid. If none is given then a default is choosen.
+                   of the monoid. If none is given then a default is chosen.
 
                 OUTPUT:
 
-                  -- A family of idempotents indexed by the idempotents of
-                  the monoid.
+                A family of idempotents indexed by the idempotents of
+                the monoid.
 
                 EXAMPLES::
 
