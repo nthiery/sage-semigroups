@@ -122,7 +122,7 @@ class FiniteSemigroups:
                 AssertionError: The r-class {...,...} is non trivial
 
             Even more information can then be recovered by
-            introspection using the debbuger (see :meth:`pdb.pm`).
+            introspection using the debugger (see :meth:`pdb.pm`).
 
             This method is also used to implement
             ``RTrivialMonoids.Finite.ParentMethods._test_r_trivial``::

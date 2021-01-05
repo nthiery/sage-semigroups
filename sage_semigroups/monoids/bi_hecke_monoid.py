@@ -631,7 +631,7 @@ class BiHeckeMonoids(Category):
 
                 def EtoT_on_basis(self, w):
                     """
-                    Express the caracter of `E_w=e_w M` in term of that of
+                    Express the character of `E_w=e_w M` in term of that of
                     translation modules.
 
                     This is achieved by inducing the expression of the
@@ -1223,7 +1223,7 @@ def simple_module_structure(w):
         ...       print "%s %s %3s %2s %-12s%s"%(w.to_permutation(), wcomp.to_permutation(), len(t), len(simple), [len(blocks[J]) for J in minimal_Js], minimal_Js)
 
     Computer evidence: the minimal Js always form a connected subgraph of the dynkin diagram
-    (if everything commute, one can split two blocs?)
+    (if everything commute, one can split two blocks?)
     """
     W = w.parent()
     # the simple reflections used to go from w to w0 in right order,

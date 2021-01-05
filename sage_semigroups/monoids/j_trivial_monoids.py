@@ -190,9 +190,10 @@ class NDPFMonoidB(AutomaticMonoid):
                                  one=ambient_monoid.one(), mul=operator.mul,
                                  category=category)
 
+
 ##########################################################################
 # Monoid of contracting function of a poset !
-# Beware not allways j-trivial
+# Beware not always j-trivial
 class ContractingMonoidPoset(AutomaticMonoid):
     """
     EXAMPLES::
@@ -508,7 +509,7 @@ class NDPFMonoidPosetNew(FiniteSetEndoMaps_N):
 
         OUTPUT:
 
-        ``None`` : an exeption is raised if ``el`` is incorrect.
+        ``None`` : an exception is raised if ``el`` is incorrect.
 
         EXAMPLES::
 
@@ -647,7 +648,7 @@ class NDPFMonoidPosetNewSet(FiniteSetEndoMaps_Set):
 
         OUTPUT:
 
-        ``None`` : an exeption is raised if ``el`` is incorrect.
+        ``None`` : an exception is raised if ``el`` is incorrect.
 
         EXAMPLES::
 
