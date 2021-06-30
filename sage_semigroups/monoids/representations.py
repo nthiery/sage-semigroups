@@ -8,21 +8,20 @@
 # - given a module M, name of the method recovering the
 #   semigroup/algebra/... acting on it?
 
-from sage.misc.cachefunc import cached_method
 from sage.misc.constant_function import ConstantFunction
 from sage.categories.enumerated_sets import EnumeratedSets
-from sage.categories.semigroups import Semigroups
-from sage.categories.homset import End
 from sage.structure.unique_representation import UniqueRepresentation
 from sage.structure.parent import Parent
 
-def identity(x): # TODO: find this in the Python or Sage library
+
+def identity(x):  # TODO: find this in the Python or Sage library
     return x
+
 
 class SetWithAction(UniqueRepresentation, Parent):
 
     @staticmethod
-    def __classcall__(cls, semigroup, set, action, side = None, category = None):
+    def __classcall__(cls, semigroup, set, action, side=None, category=None):
         set = EnumeratedSets()(set)
         assert set in EnumeratedSets().Finite()
         category = semigroup.category().SetsWithAction().or_subcategory(category)
@@ -43,7 +42,7 @@ class SetWithAction(UniqueRepresentation, Parent):
         self.action = action   # This could be made into an Action
         # TODO: simplify what's below once we have support for *isomorphic facade sets*
         category = (EnumeratedSets().Finite().IsomorphicObjects(), category)
-        Parent.__init__(self, facade = set, category = category)
+        Parent.__init__(self, facade=set, category=category)
         self.ambient = ConstantFunction(set)
         self.lift = identity
         self.retract = identity
@@ -56,7 +55,8 @@ class SetWithAction(UniqueRepresentation, Parent):
             sage: SetWithAction(ZZ, IntegerModRing(5), operator.mul)
             Ring of integers modulo 5 endowed with an action of Integer Ring
         """
-        return "%s endowed with an action of %s"%(self.ambient(), self.semigroup())
+        return "%s endowed with an action of %s" % (self.ambient(),
+                                                    self.semigroup())
 
     def semigroup(self):
         """
@@ -142,6 +142,7 @@ class SetWithAction(UniqueRepresentation, Parent):
         .. todo:: make this a proper subquotient, with lift / retract / ...
         """
         elements_set = set(elements)
+
         def action(g, x):
             gx = self._action(g, x)
             if gx in elements_set:
@@ -183,5 +184,5 @@ class SetWithAction(UniqueRepresentation, Parent):
             sage: N.cayley_graph().edges()
             [(2, 4, 2), (2, 6, 3), (4, 2, 3), (4, 8, 2), (6, 2, 2), (6, 8, 3), (8, 4, 3), (8, 6, 2)]
         """
-        return SetWithAction(self.semigroup(), elements, self._action, side=self.side())
-
+        return SetWithAction(self.semigroup(), elements, self._action,
+                             side=self.side())

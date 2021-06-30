@@ -1,7 +1,8 @@
 from sage.structure.parent import Parent
 
+
 class AutomaticSemigroup:
-    def __init__(self, generators, ambient, one, mul, category): # Bug fix
+    def __init__(self, generators, ambient, one, mul, category):  # Bug fix
         """
         Initializes this semigroup.
 

@@ -6,13 +6,13 @@ Rees Matrix Monoids
     sage: import sage_semigroups
     Loading sage-semigroups and patching its features into Sage's library: ...
 """
-#*****************************************************************************
+# ****************************************************************************
 #  Copyright (C) 2009-2010 Florent Hivert <florent.hivert at univ-rouen.fr>
 #                2009-2017 Nicolas M. Thiery <nthiery at users.sf.net>
 #
 #  Distributed under the terms of the GNU General Public License (GPL)
-#                  http://www.gnu.org/licenses/
-#******************************************************************************
+#                  https://www.gnu.org/licenses/
+# *****************************************************************************
 
 from copy import copy
 from sage.categories.monoids import Monoids
@@ -21,6 +21,7 @@ from sage.structure.parent import Parent
 from sage.structure.element_wrapper import ElementWrapper
 from sage.sets.family import Family
 from sage.rings.integer import Integer
+
 
 class AperiodicReesMatrixMonoid(UniqueRepresentation, Parent):
     r"""
@@ -118,7 +119,7 @@ class AperiodicReesMatrixMonoid(UniqueRepresentation, Parent):
                                                    [0 1 0]
                                                    [0 0 1]
         """
-        return "Aperiodic Rees matrix monoid of matrix %s"%self._mat
+        return "Aperiodic Rees matrix monoid of matrix %s" % self._mat
 
     def cardinality(self):
         return Integer(2 + self._m * self._n)
@@ -148,7 +149,8 @@ class AperiodicReesMatrixMonoid(UniqueRepresentation, Parent):
         """
         if self._m == 0 and self._n == 0:
             return self.zero()
-        return self._element_constructor_((min(1, self._m-1), min(2, self._n-1)))
+        return self._element_constructor_((min(1, self._m - 1),
+                                           min(2, self._n - 1)))
 
     def __iter__(self):
         """
@@ -167,14 +169,14 @@ class AperiodicReesMatrixMonoid(UniqueRepresentation, Parent):
         yield self.zero()
         for i in range(self._m):
             for j in range(self._n):
-                yield self._element_constructor_((i,j))
+                yield self._element_constructor_((i, j))
         yield self.one()
 
     def one(self):
-        return  self._element_constructor_(True)
+        return self._element_constructor_(True)
 
     def zero(self):
-        return  self._element_constructor_(False)
+        return self._element_constructor_(False)
 
     def product(self, x, y):
         r"""
@@ -210,12 +212,14 @@ class AperiodicReesMatrixMonoid(UniqueRepresentation, Parent):
         """
         if x.is_zero() or y.is_zero():
             return self.zero()
-        if x.is_one(): return y
-        if y.is_one(): return x
-        (i,k) = x.value
-        (l,j) = y.value
-        if self._mat[l,k]:
-            return self._element_constructor_((i,j))
+        if x.is_one():
+            return y
+        if y.is_one():
+            return x
+        (i, k) = x.value
+        (l, j) = y.value
+        if self._mat[l, k]:
+            return self._element_constructor_((i, j))
         else:
             return self.zero()
 

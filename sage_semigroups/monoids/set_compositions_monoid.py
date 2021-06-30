@@ -7,13 +7,16 @@ EXAMPLES::
     Loading sage-semigroups and patching its features into Sage's library: ...
 
 """
-
-from sage.misc.cachefunc import cached_method
-from sage.structure.unique_representation import UniqueRepresentation
-from sage.structure.parent import Parent
-from sage.structure.element_wrapper import ElementWrapper
-from sage.sets.set import Set
+from sage.combinat.partition import Partitions
 from sage.combinat.permutation import Permutations
+from sage.misc.cachefunc import cached_method
+from sage.modules.free_module_element import vector
+from sage.rings.rational_field import QQ
+from sage.sets.set import Set
+from sage.structure.element_wrapper import ElementWrapper
+from sage.structure.parent import Parent
+from sage.structure.unique_representation import UniqueRepresentation
+
 
 class SetCompositionsMonoid(UniqueRepresentation, Parent):
     r"""
@@ -26,8 +29,8 @@ class SetCompositionsMonoid(UniqueRepresentation, Parent):
     """
     def __init__(self, underlyingset):
         from sage.rings.integer import Integer
-        if isinstance(underlyingset, (int,Integer)):
-            underlyingset = range(1,underlyingset+1)
+        if isinstance(underlyingset, (int, Integer)):
+            underlyingset = range(1, underlyingset + 1)
         self._underlying_set = Set(underlyingset)
         from sage_semigroups.categories.finite_left_regular_bands import FiniteLeftRegularBands
         Parent.__init__(self, category=FiniteLeftRegularBands().FinitelyGenerated())
@@ -38,32 +41,32 @@ class SetCompositionsMonoid(UniqueRepresentation, Parent):
     def _repr_(self):
         return "Monoid of set compositions of %s" % (self.underlying_set(),)
 
-    #def __iter__(self):
-    #    for osp in OrderedSetPartitions(self.underlying_set()):
-    #        yield self(self.Element.wrapped_class(osp))
+    # def __iter__(self):
+    #     for osp in OrderedSetPartitions(self.underlying_set()):
+    #         yield self(self.Element.wrapped_class(osp))
 
-    #@cached_method
+    # @cached_method
     def product(self, x, y):
         assert x in self
         assert y in self
         new_composition = []
         for B in x.value:
-           for C in y.value:
+            for C in y.value:
                 BintC = B.intersection(C)
                 if BintC:
                     new_composition.append(BintC)
-        return self( self.Element.wrapped_class(new_composition) )
+        return self(self.Element.wrapped_class(new_composition))
 
     @cached_method
     def one(self):
-        return self( self.Element.wrapped_class([self.underlying_set()]) )
+        return self(self.Element.wrapped_class([self.underlying_set()]))
 
     @cached_method
     def semigroup_generators(self):
         from sage.combinat.set_partition_ordered import OrderedSetPartitions
         from sage.sets.family import Family
         return Family([self(self.Element.wrapped_class(X)) for X in
-            OrderedSetPartitions(self.underlying_set(),2)])
+                       OrderedSetPartitions(self.underlying_set(), 2)])
 
     def an_element(self):
         return self.semigroup_generators()[0]
@@ -119,5 +122,3 @@ class SetCompositionsMonoid(UniqueRepresentation, Parent):
 
         def _repr_(self):
             return '|'.join(''.join(map(str, block)) for block in self.value)
-
-

@@ -14,6 +14,7 @@ from sage.structure.element_wrapper import ElementWrapper
 from sage.combinat.set_partition import SetPartitions
 from .set_compositions_monoid import SetCompositionsMonoid
 
+
 class SetPartitionsMonoid(SetCompositionsMonoid):
     def _repr_(self):
         return "Monoid of set partitions of %s" % self._underlying_set
@@ -38,7 +39,7 @@ class SetPartitionsMonoid(SetCompositionsMonoid):
     @cached_method
     def semigroup_generators(self):
         from sage.sets.family import Family
-        return Family([self(Set_object_enumerated(X)) for X in SetPartitions(self._underlying_set,2)])
+        return Family([self(Set_object_enumerated(X)) for X in SetPartitions(self._underlying_set, 2)])
 
     class Element (ElementWrapper):
         wrapped_class = Set_object_enumerated
@@ -48,5 +49,3 @@ class SetPartitionsMonoid(SetCompositionsMonoid):
             n = sum(map(len, self.value))
             x = tuple(sorted(self.value, key=min))
             return SetCompositionsMonoid(n)(x)
-
-

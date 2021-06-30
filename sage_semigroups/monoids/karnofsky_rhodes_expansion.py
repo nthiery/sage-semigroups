@@ -15,8 +15,8 @@ from sage.misc.cachefunc import cached_method
 from sage.misc.lazy_attribute import lazy_attribute
 from sage.sets.family import Family
 from sage.categories.monoids import Monoids
-from sage.categories.finite_enumerated_sets import FiniteEnumeratedSets
 from sage.sets.set import Set
+
 
 class KarnofskyRhodesExpansion(UniqueRepresentation, Parent):
     def __init__(self, monoid, generators=None):
@@ -47,7 +47,7 @@ class KarnofskyRhodesExpansion(UniqueRepresentation, Parent):
     def succ_generators(self, side="twosided"):
         def fcn(x):
             pgens = []
-            if side == "right"  or side == "twosided":
+            if side == "right" or side == "twosided":
                 pgens += [self(x.value * g.value) for g in self.semigroup_generators()]
             if side == "left" or side == "twosided":
                 pgens += [self(g.value * x.value) for g in self.semigroup_generators()]
@@ -63,16 +63,16 @@ class KarnofskyRhodesExpansion(UniqueRepresentation, Parent):
         return fcn
 
     def _repr_(self):
-        return "Karnofsky-Rhodes expansion of %s"%(self._underlying_monoid,)
+        return "Karnofsky-Rhodes expansion of %s" % (self._underlying_monoid,)
 
     @cached_method
     def one(self):
         return self(self._words())
 
-    def _canonicalize(self,x):
+    def _canonicalize(self, x):
         m = self.projection(x)
         T = self.path_transition_edges(x)
-        return (m,T)
+        return (m, T)
 
     def representative(self, x):
         return self._representatives[self._canonicalize(x)]
@@ -90,17 +90,16 @@ class KarnofskyRhodesExpansion(UniqueRepresentation, Parent):
     @lazy_attribute
     def _underlying_monoid_cayley_graph(self):
         return self._underlying_monoid.cayley_graph(side="right",
-                generators=self._underlying_monoid_generators)
+                                generators=self._underlying_monoid_generators)
 
     @lazy_attribute
     def _transition_edges(self):
         G = self._underlying_monoid_cayley_graph
         d = {}
-        for (i,C) in enumerate(G.strongly_connected_components()):
+        for (i, C) in enumerate(G.strongly_connected_components()):
             for v in C:
                 d[v] = i
-        transition_edges = Set([(a,b,l) for (a,b,l) in G.edges() if d[a] != d[b]])
-        return transition_edges
+        return Set([(a, b, l) for (a, b, l) in G.edges() if d[a] != d[b]])
 
     def projection(self, w):
         return self._underlying_monoid.prod(w.value)
@@ -108,7 +107,7 @@ class KarnofskyRhodesExpansion(UniqueRepresentation, Parent):
     @lazy_attribute
     def _transition_dictionary(self):
         t = {}
-        for (u,v,l) in self._underlying_monoid_cayley_graph.edge_iterator():
+        for (u, v, l) in self._underlying_monoid_cayley_graph.edge_iterator():
             t[u, l] = v
         return t
 
@@ -118,28 +117,28 @@ class KarnofskyRhodesExpansion(UniqueRepresentation, Parent):
         v = self._underlying_monoid.one()
         path = []
         for a in w.value:
-            w = t[v,i[a]]
-            path.append((v,w,i[a]))
+            w = t[v, i[a]]
+            path.append((v, w, i[a]))
             v = w
         return path
 
     def path_transition_edges(self, w):
         tedges = self._transition_edges
         output = []
-        for (a,b,l) in self._read_path(w):
-            if (a,b,l) in tedges:
-                output.append((a,b,l))
+        for abl in self._read_path(w):
+            if abl in tedges:
+                output.append(abl)
         return Set(output)
 
     def are_equivalent(self, u, v):
         assert u in self
         assert v in self
-        return self.projection(u) == self.projection(v) and \
-                    self.path_transition_edges(u) == self.path_transition_edges(v)
+        return (self.projection(u) == self.projection(v) and
+                self.path_transition_edges(u) == self.path_transition_edges(v))
 
     def __iter__(self):
         from sage.combinat.backtrack import TransitiveIdeal
-        return TransitiveIdeal(self.succ_generators(side = "right"), [self.one()]).__iter__()
+        return TransitiveIdeal(self.succ_generators(side="right"), [self.one()]).__iter__()
 
     class Element (ElementWrapper):
         wrapped_class = FiniteWord_class
