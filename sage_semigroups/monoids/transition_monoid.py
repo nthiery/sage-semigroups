@@ -1,12 +1,12 @@
 r"""
 The Transition Monoid of an automaton
 """
-#*****************************************************************************
+# ****************************************************************************
 #  Copyright (C) 2011 Nicolas M. Thiery <nthiery at users.sf.net>
 #
 #  Distributed under the terms of the GNU General Public License (GPL)
 #                  https://www.gnu.org/licenses/
-#******************************************************************************
+# *****************************************************************************
 
 import functools
 import operator
@@ -15,6 +15,7 @@ from sage.sets.family import Family
 from sage.sets.finite_set_maps import FiniteSetMaps
 from sage.categories.monoids import Monoids
 from sage.monoids.automatic_semigroup import AutomaticMonoid
+
 
 class TransitionMonoidOfDeterministicAutomaton(AutomaticMonoid):
     """
@@ -51,7 +52,7 @@ class TransitionMonoidOfDeterministicAutomaton(AutomaticMonoid):
         if alphabet is None:
             alphabet = tuple(sorted(set(automaton.edge_labels())))
         else:
-            alphabet = tuple(alphabet) # for safety for the moment
+            alphabet = tuple(alphabet)  # for safety for the moment
 
         return super(TransitionMonoidOfDeterministicAutomaton, cls).__classcall__(cls, automaton, alphabet, category, side)
 
@@ -79,10 +80,12 @@ class TransitionMonoidOfDeterministicAutomaton(AutomaticMonoid):
         # Should check that automaton is deterministic
         self._automaton = automaton
         # We would want to have FiniteSetPartialMaps
-        ambient = FiniteSetMaps( list(automaton.vertices())+[None], action=side)
+        ambient = FiniteSetMaps(list(automaton.vertices()) + [None],
+                                action=side)
+
         def generator(a):
-            return ambient( functools.partial(automaton.transition, a = a) )
-        generators = Family( alphabet, generator )
+            return ambient(functools.partial(automaton.transition, a=a))
+        generators = Family(alphabet, generator)
         AutomaticMonoid.__init__(self, generators, ambient, ambient.one(), operator.mul, category)
 
     def automaton(self):

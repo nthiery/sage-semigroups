@@ -7,12 +7,15 @@ EXAMPLES::
     Loading sage-semigroups and patching its features into Sage's library: ...
 
 """
+from functools import reduce
+
 from sage.structure.unique_representation import UniqueRepresentation
 from sage.structure.parent import Parent
 from sage.structure.element_wrapper import ElementWrapper
 from sage.misc.cachefunc import cached_method
 from sage.graphs.graph import Graph
 from sage.graphs.digraph import DiGraph
+
 
 class FreePartiallyCommutativeLeftRegularBand(UniqueRepresentation, Parent):
     r"""
@@ -34,12 +37,12 @@ class FreePartiallyCommutativeLeftRegularBand(UniqueRepresentation, Parent):
         if isinstance(graph, Graph):
             graph = graph.relabel(str, inplace=False)
             vertices = tuple(graph.vertices())
-            edges = tuple((u,v) for (u,v,l) in graph.edges())
+            edges = tuple((u, v) for (u, v, l) in graph.edges())
         elif isinstance(graph, tuple) and len(graph) == 2:
             vertices, edges = graph
         else:
             raise ValueError("incorrect input to __classcall__")
-        return super(FreePartiallyCommutativeLeftRegularBand,cls).__classcall__(cls,(vertices,edges))
+        return super(FreePartiallyCommutativeLeftRegularBand, cls).__classcall__(cls, (vertices, edges))
 
     def __init__(self, args):
         r"""
@@ -66,17 +69,17 @@ class FreePartiallyCommutativeLeftRegularBand(UniqueRepresentation, Parent):
         graph.add_edges(edges)
         self._graph = graph
         from sage_semigroups.categories.finite_left_regular_bands import FiniteLeftRegularBands
-        Parent.__init__(self, category = FiniteLeftRegularBands().FinitelyGenerated())
+        Parent.__init__(self, category=FiniteLeftRegularBands().FinitelyGenerated())
 
     def __iter__(self):
         from sage.combinat.backtrack import TransitiveIdeal
-        return TransitiveIdeal(self.succ_generators(side = "right"), [self.one()]).__iter__()
+        return TransitiveIdeal(self.succ_generators(side="right"), [self.one()]).__iter__()
 
     def associated_graph(self):
         return self._graph
 
     def _repr_(self):
-        return "Free partially commutative left regular band on %s"%(repr(self.associated_graph()),)
+        return "Free partially commutative left regular band on %s" % (repr(self.associated_graph()),)
 
     @cached_method
     def one(self):
@@ -244,32 +247,32 @@ class FreePartiallyCommutativeLeftRegularBand(UniqueRepresentation, Parent):
         from sage.sets.set import Set
         if len(F) == 0:
             return (Set([z]),)
-        j = len(F)-1
+        j = len(F) - 1
         while j >= 0:
             if self._is_connected(z, F[j]):
                 break
             else:
                 j -= 1
-        if j+1 == len(F):
+        if j + 1 == len(F):
             return F + (Set([z]),)
         else:
-            return F[:j+1] + (F[j+1].union(Set([z])),) + F[j+2:]
+            return F[:j + 1] + (F[j + 1].union(Set([z])),) + F[j + 2:]
 
     def _is_connected(self, z, F_j):
         r"""
         Return whether `z` is connected to the set `F_j`.
         """
-        return z in F_j or any(not self._graph.has_edge(x,z) for x in F_j)
+        return z in F_j or any(not self._graph.has_edge(x, z) for x in F_j)
 
     def _element_constructor_(self, x):
-        if isinstance(x,str):
+        if isinstance(x, str):
             return self.normal_form(x)
         else:
-            return super(FreePartiallyCommutativeLeftRegularBand,self)._element_constructor_(x)
+            return super(FreePartiallyCommutativeLeftRegularBand, self)._element_constructor_(x)
 
     def quiver_v2(self):
-        #if hasattr(self, "_quiver_cache"):
-        #    return self._quiver_cache
+        # if hasattr(self, "_quiver_cache"):
+        #     return self._quiver_cache
         from sage.combinat.subset import Subsets
         from sage.graphs.digraph import DiGraph
         Q = DiGraph(multiedges=True)
@@ -286,7 +289,7 @@ class FreePartiallyCommutativeLeftRegularBand(UniqueRepresentation, Parent):
                         Q.add_edge(w, u, i)
         return Q
 
-    ##### miscellaneous methods
+    # miscellaneous methods
     def iter_from_free_lrb(self):
         r"""
         Iterate through elements of the semigroup by projection elements of the
@@ -327,15 +330,15 @@ class FreePartiallyCommutativeLeftRegularBand(UniqueRepresentation, Parent):
             [('d', 'a', None)]
 
         """
-        pos = dict((wi,i) for (i,wi) in enumerate(w.value))
+        pos = {wi: i for i, wi in enumerate(w.value)}
         D = DiGraph()
         D.add_vertices(pos)
-        for (u,v,l) in self.associated_graph().complement().edges():
+        for (u, v, l) in self.associated_graph().complement().edges():
             if u in pos and v in pos:
                 if pos[u] < pos[v]:
-                    D.add_edge(u,v)
+                    D.add_edge(u, v)
                 else:
-                    D.add_edge(v,u)
+                    D.add_edge(v, u)
         return D
 
     class Element (ElementWrapper):
@@ -373,5 +376,3 @@ class FreePartiallyCommutativeLeftRegularBand(UniqueRepresentation, Parent):
 
 
 FPCLRB = FreePartiallyCommutativeLeftRegularBand
-
-

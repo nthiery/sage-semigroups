@@ -20,8 +20,13 @@ from sage.categories.semigroups import Semigroups
 
 from sage.calculus.var import var
 
+from sage.sets.finite_set_maps import FiniteSetEndoMaps_N, FiniteSetEndoMaps_Set
+from sage.sets.finite_set_map_cy import FiniteSetEndoMap_N, FiniteSetEndoMap_Set
+
+
 #######################################################################
 # Monoid of standard (type A) 0-Hecke
+
 
 class HeckeMonoid(AutomaticMonoid):
     """
@@ -49,9 +54,9 @@ class HeckeMonoid(AutomaticMonoid):
             24
         """
         from sage.categories.coxeter_groups import CoxeterGroups
-        if not W in CoxeterGroups():
+        if W not in CoxeterGroups():
             from sage.combinat.root_system.weyl_group import WeylGroup
-            W = WeylGroup(W) # CoxeterGroup(W)
+            W = WeylGroup(W)  # CoxeterGroup(W)
         return super(PiMonoid, cls).__classcall__(cls, W)
 
     def __init__(self, W):
@@ -59,7 +64,7 @@ class HeckeMonoid(AutomaticMonoid):
         self.W = W
         from sage.sets.finite_set_maps import FiniteSetMaps
         ambient_monoid = FiniteSetMaps(self.W, action="right")
-        pi  = self.W.simple_projections(length_increasing = True).map(ambient_monoid)
+        pi = self.W.simple_projections(length_increasing=True).map(ambient_monoid)
         category = Monoids().JTrivial().Finite() & Monoids().Transformation().Subobjects()
         AutomaticMonoid.__init__(self, pi, ambient_monoid,
                                  one=ambient_monoid.one(), mul=operator.mul,
@@ -67,7 +72,7 @@ class HeckeMonoid(AutomaticMonoid):
         self.domain = self.W
         self.codomain = self.W
         # This would requires add_cache-nt.patch from the Sage-Combinat queue
-        #self.cache_element_methods(["rank"])
+        # self.cache_element_methods(["rank"])
 
     def quiver_index_iterator(self):
         """
@@ -87,7 +92,7 @@ class HeckeMonoid(AutomaticMonoid):
         from sage.sets.set import Set
         S = Set(self.W.index_set())
         pi = self.semigroup_generators()
-        for size_A in range(len(S)-1):
+        for size_A in range(len(S) - 1):
             for A in S.subsets(size=size_A):
                 SminusA = S.difference(A)
                 for J in SminusA.subsets():
@@ -97,7 +102,8 @@ class HeckeMonoid(AutomaticMonoid):
                     for K in SminusAJ.subsets():
                         if K.cardinality() == 0:
                             continue
-                        if any( pi[j]*pi[k] == pi[k]*pi[j] for j in J for k in K ):
+                        if any(pi[j] * pi[k] == pi[k] * pi[j]
+                               for j in J for k in K):
                             continue
                         yield A.union(J), A.union(K)
 
@@ -122,14 +128,12 @@ class HeckeMonoid(AutomaticMonoid):
             sage: H = HeckeMonoid(['A',3])
             sage: H.cardinality()
             sage: H.quiver_element(([1,2],[1,3]))
-
-
         """
-        JK = pair
+        J, K = JK
         pi = self.semigroup_generators()
         piJ = self.prod(pi[j] for j in J).pow_omega()
         piK = self.prod(pi[k] for k in K).pow_omega()
-        return piJ*piK
+        return piJ * piK
 
     def quiver_elements(self):
         """
@@ -141,12 +145,15 @@ class HeckeMonoid(AutomaticMonoid):
         return Family(self.quiver_index(), self.quiver_element)
 
     def _repr_(self):
-        return "zero_hecke monoid for type %s"%self.W.cartan_type()
+        return "zero_hecke monoid for type %s" % self.W.cartan_type()
+
 
 PiMonoid = HeckeMonoid
 
 #######################################################################
 # Monoid of standard (type A) NDPF
+
+
 class NDPFMonoid(AutomaticMonoid):
     """
     EXAMPLES::
@@ -156,20 +163,24 @@ class NDPFMonoid(AutomaticMonoid):
         sage: TestSuite(p).run()
     """
     def __init__(self, n, action="right"):
-        ambient_monoid = FiniteSetMaps(range(1,n+1), action=action)
+        ambient_monoid = FiniteSetMaps(range(1, n + 1), action=action)
+
         def pii(i):
-            return ambient_monoid.from_dict({j: j-1 if j == i+1 else j
-                                             for j in range(1, n+1)})
+            return ambient_monoid.from_dict({j: j - 1 if j == i + 1 else j
+                                             for j in range(1, n + 1)})
         pi = Family(range(1, n), pii)
         category = Monoids().JTrivial().Finite() & Monoids().Transformation().Subobjects()
         AutomaticMonoid.__init__(self, pi, ambient_monoid,
                                  one=ambient_monoid.one(), mul=operator.mul,
                                  category=category)
+
     def _repr_(self):
-        return "The monoid of Non Decreasing Parking Functions on %s"%self.domain()
+        return "The monoid of Non Decreasing Parking Functions on %s" % self.domain()
 
 #######################################################################
 # Monoid of type B NDPF
+
+
 class NDPFMonoidB(AutomaticMonoid):
     """
     EXAMPLES::
@@ -179,12 +190,15 @@ class NDPFMonoidB(AutomaticMonoid):
         sage: TestSuite(p).run()
     """
     def __init__(self, n):
-        ambient_monoid = FiniteSetMaps(range(-n,0)+range(1, n+1),
-                                           action="right")
+        ambient_monoid = FiniteSetMaps(list(range(-n, 0)) +
+                                       list(range(1, n + 1)),
+                                       action="right")
         pi = Family(range(1, n),
                     lambda j: ambient_monoid.from_dict(dict(
-                        [(i, i) for i in range(1,n+1) if i != j+1]+[(j+1,j)]+
-                        [(i, i) for i in range(-n,0)  if i != -j]+ [(-j,-j-1)])))
+                        [(i, i) for i in range(1, n + 1) if i != j + 1] +
+                        [(j + 1, j)] +
+                        [(i, i) for i in range(-n, 0) if i != -j] +
+                        [(-j, -j - 1)])))
         category = Monoids().JTrivial().Finite() & Monoids().Transformation().Subobjects()
         AutomaticMonoid.__init__(self, pi, ambient_monoid,
                                  one=ambient_monoid.one(), mul=operator.mul,
@@ -211,27 +225,31 @@ class ContractingMonoidPoset(AutomaticMonoid):
         self.poset = poset
         support = poset.list()
         ambient_monoid = FiniteSetMaps(support, action="right")
+
         def genij(ij):
-            (i,j) = ij
-            return ambient_monoid.from_dict({k: i if k == j else k for k in support})
-        index = map(tuple, poset.cover_relations()) # index elems must be hashable
+            (i, j) = ij
+            return ambient_monoid.from_dict({k: i if k == j else k
+                                             for k in support})
+        index = map(tuple, poset.cover_relations())  # index elems must be hashable
         self.pi = Family(index, genij)
         category = Monoids().JTrivial().Finite() & Monoids().Transformation().Subobjects()
         AutomaticMonoid.__init__(self, self.pi, ambient_monoid,
                                  one=ambient_monoid.one(), mul=operator.mul,
-                                 category = category)
+                                 category=category)
 
     class Element(AutomaticMonoid.Element):
 
-       def is_weakly_increasing(self):
-           poset = self.parent().poset
-           return all(poset.is_lequal(self(i), self(j))
-                      for (i,j) in poset.cover_relations())
+        def is_weakly_increasing(self):
+            poset = self.parent().poset
+            return all(poset.is_lequal(self(i), self(j))
+                       for (i, j) in poset.cover_relations())
 
 ##########################################################################
 # Monoid of NDPF of a poset !
 
 # TODO: make this into just a function?
+
+
 class NDPFMonoidPoset(AutomaticMonoid):
     """
     EXAMPLES::
@@ -253,10 +271,12 @@ class NDPFMonoidPoset(AutomaticMonoid):
                                  one=ambient_monoid.one(), mul=operator.mul,
                                  category=category)
 
-        self.rename("NDPF monoid of Poset (%s)"%(self._poset.cover_relations()))
+        self.rename("NDPF monoid of Poset (%s)" % (self._poset.cover_relations()))
 
 ##########################################################################
 # Compatible semi-group associated to the monoid of NDPF of a poset !
+
+
 def compatible_semi_group(poset):
     M = NDPFMonoidPoset(poset)
     return CompatibleSemiGroup(M)
@@ -264,6 +284,8 @@ def compatible_semi_group(poset):
 ##########################################################################
 # Compatible semi-group associated to a j-trivial monoid.
 # WARNING : This is not always a semi-group
+
+
 class CompatibleSemiGroup(UniqueRepresentation, Parent):
     """
     sage: from sage.monoids.j_trivial_monoids import *
@@ -286,7 +308,7 @@ class CompatibleSemiGroup(UniqueRepresentation, Parent):
     def __init__(self, jmonoid):
         assert (jmonoid in Monoids().JTrivial().Finite())
         self.jmonoid = jmonoid
-        Parent.__init__(self, category = Semigroups().Finite())
+        Parent.__init__(self, category=Semigroups().Finite())
 
     def zero(self):
         return self._element_constructor_(None)
@@ -303,14 +325,14 @@ class CompatibleSemiGroup(UniqueRepresentation, Parent):
         x = xm.lift()
         y = ym.lift()
         if x.symbol("right") == y.symbol("left"):
-            xy = x*y
+            xy = x * y
             if (x.symbol("left") == xy.symbol("left") and
-                y.symbol("right") == xy.symbol("right")):
+                    y.symbol("right") == xy.symbol("right")):
                 return self._element_constructor_(xy)
         return self.zero()
 
     def _repr_(self):
-        return "The compatible monoid associated with %s"%(self.jmonoid)
+        return "The compatible monoid associated with %s" % (self.jmonoid)
 
     def an_element(self):
         return self._element_constructor_(self.jmonoid.an_element())
@@ -323,9 +345,9 @@ class CompatibleSemiGroup(UniqueRepresentation, Parent):
     def _element_constructor_(self, x):
         return self.element_class(self, x)
 
-    class Element(Element_sage): # UniqueRepresentation
+    class Element(Element_sage):  # UniqueRepresentation
         # The extra zero element is represented by None.
-        def __init__(self, parent, ambient_element = None):
+        def __init__(self, parent, ambient_element=None):
             Element_sage.__init__(self, parent)
             self.ambient_element = ambient_element
 
@@ -340,10 +362,11 @@ class CompatibleSemiGroup(UniqueRepresentation, Parent):
         def _repr_(self):
             if self.is_zero():
                 return "0"
-            return "%s"%(self.ambient_element)
+            return "%s" % (self.ambient_element)
 
 ##########################################################################
 # Idempotent generated sub-monoid of a monoid
+
 
 def IdempotentGeneratedSubMonoid(monoid):
     category = Monoids().JTrivial().Finite()
@@ -352,6 +375,7 @@ def IdempotentGeneratedSubMonoid(monoid):
         category = category & Monoids().Transformation().Subobjects()
     return monoid.submonoid(monoid.idempotents(),
                             category=category)
+
 
 def check_conj_q_matrix(M):
     """
@@ -379,16 +403,16 @@ def check_conj_q_matrix(M):
     """
     msage = M.cartan_matrix(var('q'))
     rsage = sum(sum(msage))
-    mmup  = M.cartan_matrix_mupad(var('q'))
-    rmup  = sum(sum(mmup))
+    mmup = M.cartan_matrix_mupad(var('q'))
+    rmup = sum(sum(mmup))
     assert (rmup == rsage), "Conjecture False "
     return msage, rsage, rmup
 
 
 #######################################################################
 # NDPF monoid of a poset, fast version
-from sage.sets.finite_set_maps import FiniteSetEndoMaps_N, FiniteSetEndoMaps_Set
-from sage.sets.finite_set_map_cy import FiniteSetEndoMap_N, FiniteSetEndoMap_Set
+
+
 class NDPFMonoidPosetNew(FiniteSetEndoMaps_N):
     """
     ..warning: The poset is supposed to be supported by range(n)
@@ -411,7 +435,7 @@ class NDPFMonoidPosetNew(FiniteSetEndoMaps_N):
         self._size = 0
 
     def _repr_(self):
-        return "NDPF of Poset %s"%(self._poset.cover_relations())
+        return "NDPF of Poset %s" % (self._poset.cover_relations())
 
     def cardinality(self):
         return self._cardinality_from_iterator()
@@ -476,7 +500,7 @@ class NDPFMonoidPosetNew(FiniteSetEndoMaps_N):
         int2p = poset._vertex_to_element
         linext = poset.linear_extension()
         stack = [[poset.minimal_elements()[0]]]
-        res   = self.one().__copy__()
+        res = self.one().__copy__()
         while len(stack) > 0:
             try:
                 image = stack[-1].pop(0)
@@ -490,7 +514,7 @@ class NDPFMonoidPosetNew(FiniteSetEndoMaps_N):
                     res2.set_immutable()
                     self._size += 1
                     if self._size % 100 == 0:
-                        print("Size ... %i ..."%(self._size))
+                        print("Size ... %i ..." % (self._size))
                     yield res2
                 else:
                     el = linext[i]
@@ -540,12 +564,11 @@ class NDPFMonoidPosetNew(FiniteSetEndoMaps_N):
         p2int = poset._element_to_vertex
         int2p = poset._vertex_to_element
         for i in range(len(el)):
-            assert int2p(el[i]) <= int2p(i), "%s is not regressive"%el
+            assert int2p(el[i]) <= int2p(i), "%s is not regressive" % el
             for pred in poset.lower_covers_iterator(int2p(i)):
-                assert int2p(el[p2int(pred)]) <= int2p(el[i]), "%s is not nondecreasing"%el
+                assert int2p(el[p2int(pred)]) <= int2p(el[i]), "%s is not nondecreasing" % el
 
     Element = FiniteSetEndoMap_N
-
 
 
 class NDPFMonoidPosetNewSet(FiniteSetEndoMaps_Set):
@@ -566,7 +589,7 @@ class NDPFMonoidPosetNewSet(FiniteSetEndoMaps_Set):
         self._size = 0
 
     def _repr_(self):
-        return "NDPF of Poset %s"%(self._poset.cover_relations())
+        return "NDPF of Poset %s" % (self._poset.cover_relations())
 
     def cardinality(self):
         return self._cardinality_from_iterator()
@@ -615,7 +638,7 @@ class NDPFMonoidPosetNewSet(FiniteSetEndoMaps_Set):
         poset = self._poset
         linext = poset.linear_extension()
         stack = [[poset.minimal_elements()[0]]]
-        res   = self.one().__copy__()
+        res = self.one().__copy__()
         while len(stack) > 0:
             try:
                 image = stack[-1].pop(0)
@@ -629,7 +652,7 @@ class NDPFMonoidPosetNewSet(FiniteSetEndoMaps_Set):
                     res2.set_immutable()
                     self._size += 1
                     if self._size % 100 == 0:
-                        print("Size ... %i ..."%(self._size))
+                        print("Size ... %i ..." % (self._size))
                     yield res2
                 else:
                     el = linext[i]
@@ -677,11 +700,12 @@ class NDPFMonoidPosetNewSet(FiniteSetEndoMaps_Set):
         """
         poset = self._poset
         for i in poset:
-            assert el(i) <= i, "%s is not regressive"%el
+            assert el(i) <= i, "%s is not regressive" % el
             for pred in poset.lower_covers_iterator(i):
-                assert el(pred) <= el(i), "%s is not nondecreasing"%el
+                assert el(pred) <= el(i), "%s is not nondecreasing" % el
 
     Element = FiniteSetEndoMap_Set
+
 
 """
 TIMING comparison::
