@@ -6,12 +6,12 @@ BiHecke Monoids
 
     sage: import sage_semigroups # random
 """
-#*****************************************************************************
+# *****************************************************************************
 #  Copyright (C) 2009-2010 Nicolas M. Thiéry <nthiery at users.sf.net>
 #
 #  Distributed under the terms of the GNU General Public License (GPL)
 #                  http://www.gnu.org/licenses/
-#******************************************************************************
+# ******************************************************************************
 
 import operator
 from sage.misc.cachefunc import cached_function, cached_method
@@ -42,6 +42,7 @@ from sage.structure.element import parent
 from sage.combinat.permutation import Permutation
 from sage.rings.integer_ring import ZZ
 
+
 class BiHeckeMonoids(Category):
 
     def super_categories(self):
@@ -50,7 +51,7 @@ class BiHeckeMonoids(Category):
     class ParentMethods:
 
         @cached_method
-        def e(self, a, b = None):
+        def e(self, a, b=None):
             """
             With a single argument `w` in ``self.W``, returns the unique
             idempotent in this monoid with image set `[1, w]_L`. With two
@@ -106,7 +107,7 @@ class BiHeckeMonoids(Category):
                 return self.piw(w**-1 * self.W.w0) * self.opiw(self.W.w0 * w)
             else:
                 assert(b in self.W)
-                return self.opiw(a**-1) * self.e(b*a**-1) * self.piw(a)
+                return self.opiw(a**-1) * self.e(b * a**-1) * self.piw(a)
 
         def j_idempotent_representative(self, w):
             """
@@ -136,11 +137,12 @@ class BiHeckeMonoids(Category):
                 sage: M.simple_modules_index_set()
                 Weyl Group of type ['A', 2] (as a matrix group acting on the ambient space)
             """
-            W = sorted(self.W, key = attrcall("length"))
-            return Family( W, self.j_idempotent_representative )
+            W = sorted(self.W, key=attrcall("length"))
+            return Family(W, self.j_idempotent_representative)
 
         def simple_module_dimension_cutting(self, w):
-            t, simple, minimal_Js, blocks, intervals = simple_module_structure(w**-1*self.W.w0)
+            t, simple, minimal_Js, blocks, intervals = simple_module_structure(
+                w**-1 * self.W.w0)
             return len(simple)
 
         def cartan_matrix_as_table_from_M0(self):
@@ -153,20 +155,23 @@ class BiHeckeMonoids(Category):
             """
 
             result = dict()
-            GL = self.character_ring(side='left')
             GR = self.character_ring(side='right')
-            SR = GR.S(); TR = GR.T(); CR= GR.C()
+            SR = GR.S()
+            TR = GR.T()
             M0 = self.fix_w0_monoid()
-            G0 = M0.character_ring(side="left"); P0 = G0.P()
+            G0 = M0.character_ring(side="left")
+            P0 = G0.P()
             for j in self.regular_j_classes().keys():
-                L = SR(P0[j]) # The composition factors of the left M0-projective module for this J-class
-                              # Note: doing it on the right or the left is equivalent, but
-                              # S0 -> T (and thus P0->S0->T->S) is only implemented on the right
-                R = SR(TR[j]) # The composition factors for the right class module of this J-class
-                #print "%s = %s"%(TR[j], R)
+                # The composition factors of the left M0-projective module for this J-class
+                L = SR(P0[j])
+                # Note: doing it on the right or the left is equivalent, but
+                # S0 -> T (and thus P0->S0->T->S) is only implemented on the right
+                # The composition factors for the right class module of this J-class
+                R = SR(TR[j])
+                # print "%s = %s"%(TR[j], R)
                 for (jl, cl) in L:
                     for (jr, cr) in R:
-                        result[jl,jr] = result.get((jl,jr), 0) + cl * cr
+                        result[jl, jr] = result.get((jl, jr), 0) + cl * cr
             return result
 
     class CharacterRings(CharacterRingsCategory):
@@ -240,22 +245,21 @@ class BiHeckeMonoids(Category):
                         P[312] = S[312]
                         P[231] = S[231]
                         P[321] = S[321]
-
                     """
-
-                    #self.TtoS = self.T().module_morphism(on_basis = self.TtoS_on_basis, codomain = self.S(), category = self.character_ring_category())
-                    #self.TtoS.register_as_coercion()
-                    #(~(self.TtoS)).register_as_coercion()
+                    # self.TtoS = self.T().module_morphism(on_basis = self.TtoS_on_basis, codomain = self.S(), category = self.character_ring_category())
+                    # self.TtoS.register_as_coercion()
+                    # (~(self.TtoS)).register_as_coercion()
 
                     if self._q == self.base_ring().one():
-                        self.EtoT = self.E().module_morphism(on_basis = self.EtoT_on_basis, codomain = self.T(), category = self.character_ring_category())
+                        self.EtoT = self.E().module_morphism(on_basis=self.EtoT_on_basis,
+                                                             codomain=self.T(), category=self.character_ring_category())
                         self.EtoT.register_as_coercion()
-                        #(~(self.EtoT)).register_as_coercion()
+                        # (~(self.EtoT)).register_as_coercion()
 
-                        self.CMtoC = self.CM().module_morphism(on_basis = self.CMtoC_on_basis,
-                                                               triangular = "upper", unitriangular = True, key = self.C().get_order_key(),
-                                                               codomain = self.C(),
-                                                               category = self.character_ring_category())
+                        self.CMtoC = self.CM().module_morphism(on_basis=self.CMtoC_on_basis,
+                                                               triangular="upper", unitriangular=True, key=self.C().get_order_key(),
+                                                               codomain=self.C(),
+                                                               category=self.character_ring_category())
                         self.CMtoC.register_as_coercion()
                         (~(self.CMtoC)).register_as_coercion()
 
@@ -263,62 +267,90 @@ class BiHeckeMonoids(Category):
                             M0 = self.base().fix_w0_monoid()
                             # FIXME: pass down the module base ring
                             S0 = M0.character_ring().S()
-                            self.restrict_TtoS0 = self.T().module_morphism \
-                                (on_basis = self.restrict_TtoS0_on_basis,
-                                 triangular = "upper", unitriangular = True, cmp = S0.get_order_cmp(),
-                                 codomain = S0)
+                            self.restrict_TtoS0 = self.T().module_morphism(on_basis=self.restrict_TtoS0_on_basis,
+                                                                           triangular="upper", unitriangular=True, cmp=S0.get_order_cmp(),
+                                                                           codomain=S0)
 
                             self.restrict_TtoS0.register_as_coercion()
                             (~(self.restrict_TtoS0)).register_as_coercion()
 
                             S0left = M0.character_ring(side="left").S()
-                            S0left.module_morphism(on_basis=S0.monomial).register_as_coercion()
+                            S0left.module_morphism(
+                                on_basis=S0.monomial).register_as_coercion()
 
-                    if self.base().W == WeylGroup(["A",3]):
+                    if self.base().W == WeylGroup(["A", 3]):
                         # hardcoded data for A3
                         T = self.T()
                         q = self._q
                         p = self.base().W.from_compact_permutation
-                        PtoT = dict( (p, T[p]) for p in self.base().simple_modules_index_set())
-                        PtoT[p(1243)] += q*(T[p(3412)])
-                        PtoT[p(1324)] += q*(T[p(2341)] + T[p(4123)] + T[p(4231)])
-                        PtoT[p(1432)] += q*(T[p(3412)])
-                        PtoT[p(2134)] += q*(T[p(3412)])
-                        PtoT[p(2143)] += q*(T[p(2341)] + T[p(4123)])
-                        PtoT[p(3214)] += q*(T[p(3412)])
+                        PtoT = dict(
+                            (p, T[p]) for p in self.base().simple_modules_index_set())
+                        PtoT[p(1243)] += q * (T[p(3412)])
+                        PtoT[p(1324)] += q * (T[p(2341)] +
+                                              T[p(4123)] + T[p(4231)])
+                        PtoT[p(1432)] += q * (T[p(3412)])
+                        PtoT[p(2134)] += q * (T[p(3412)])
+                        PtoT[p(2143)] += q * (T[p(2341)] + T[p(4123)])
+                        PtoT[p(3214)] += q * (T[p(3412)])
 
-                        self.PtoT = self.P().module_morphism(on_basis = PtoT.__getitem__, codomain = self.T(), category = self.character_ring_category())
+                        self.PtoT = self.P().module_morphism(on_basis=PtoT.__getitem__,
+                                                             codomain=self.T(), category=self.character_ring_category())
                         self.PtoT.register_as_coercion()
                         (~(self.PtoT)).register_as_coercion()
 
                         dims = {}
-                        dims[p(1234)] = {'simple': 1, 'translation':  1, 'projective':  1}
-                        dims[p(1243)] = {'simple': 1, 'translation':  2, 'projective':  8}
-                        dims[p(1324)] = {'simple': 1, 'translation':  2, 'projective': 22}
-                        dims[p(1342)] = {'simple': 2, 'translation':  3, 'projective':  3}
-                        dims[p(1423)] = {'simple': 2, 'translation':  3, 'projective':  3}
-                        dims[p(1432)] = {'simple': 1, 'translation':  6, 'projective': 12}
-                        dims[p(2134)] = {'simple': 1, 'translation':  2, 'projective':  8}
-                        dims[p(2143)] = {'simple': 1, 'translation':  4, 'projective': 12}
-                        dims[p(2314)] = {'simple': 2, 'translation':  3, 'projective':  3}
-                        dims[p(2341)] = {'simple': 3, 'translation':  4, 'projective':  4}
-                        dims[p(2413)] = {'simple': 4, 'translation':  5, 'projective':  5}
-                        dims[p(2431)] = {'simple': 4, 'translation':  8, 'projective':  8}
-                        dims[p(3124)] = {'simple': 2, 'translation':  3, 'projective':  3}
-                        dims[p(3142)] = {'simple': 4, 'translation':  5, 'projective':  5}
-                        dims[p(3214)] = {'simple': 1, 'translation':  6, 'projective': 12}
-                        dims[p(3241)] = {'simple': 4, 'translation':  8, 'projective':  8}
-                        dims[p(3412)] = {'simple': 5, 'translation':  6, 'projective':  6}
-                        dims[p(3421)] = {'simple': 3, 'translation': 12, 'projective': 12}
-                        dims[p(4123)] = {'simple': 3, 'translation':  4, 'projective':  4}
-                        dims[p(4132)] = {'simple': 4, 'translation':  8, 'projective':  8}
-                        dims[p(4213)] = {'simple': 4, 'translation':  8, 'projective':  8}
-                        dims[p(4231)] = {'simple': 5, 'translation': 12, 'projective': 12}
-                        dims[p(4312)] = {'simple': 3, 'translation': 12, 'projective': 12}
-                        dims[p(4321)] = {'simple': 1, 'translation': 24, 'projective': 24}
+                        dims[p(1234)] = {'simple': 1,
+                                         'translation': 1, 'projective': 1}
+                        dims[p(1243)] = {'simple': 1,
+                                         'translation': 2, 'projective': 8}
+                        dims[p(1324)] = {'simple': 1,
+                                         'translation': 2, 'projective': 22}
+                        dims[p(1342)] = {'simple': 2,
+                                         'translation': 3, 'projective': 3}
+                        dims[p(1423)] = {'simple': 2,
+                                         'translation': 3, 'projective': 3}
+                        dims[p(1432)] = {'simple': 1,
+                                         'translation': 6, 'projective': 12}
+                        dims[p(2134)] = {'simple': 1,
+                                         'translation': 2, 'projective': 8}
+                        dims[p(2143)] = {'simple': 1,
+                                         'translation': 4, 'projective': 12}
+                        dims[p(2314)] = {'simple': 2,
+                                         'translation': 3, 'projective': 3}
+                        dims[p(2341)] = {'simple': 3,
+                                         'translation': 4, 'projective': 4}
+                        dims[p(2413)] = {'simple': 4,
+                                         'translation': 5, 'projective': 5}
+                        dims[p(2431)] = {'simple': 4,
+                                         'translation': 8, 'projective': 8}
+                        dims[p(3124)] = {'simple': 2,
+                                         'translation': 3, 'projective': 3}
+                        dims[p(3142)] = {'simple': 4,
+                                         'translation': 5, 'projective': 5}
+                        dims[p(3214)] = {'simple': 1,
+                                         'translation': 6, 'projective': 12}
+                        dims[p(3241)] = {'simple': 4,
+                                         'translation': 8, 'projective': 8}
+                        dims[p(3412)] = {'simple': 5,
+                                         'translation': 6, 'projective': 6}
+                        dims[p(3421)] = {'simple': 3,
+                                         'translation': 12, 'projective': 12}
+                        dims[p(4123)] = {'simple': 3,
+                                         'translation': 4, 'projective': 4}
+                        dims[p(4132)] = {'simple': 4,
+                                         'translation': 8, 'projective': 8}
+                        dims[p(4213)] = {'simple': 4,
+                                         'translation': 8, 'projective': 8}
+                        dims[p(4231)] = {'simple': 5,
+                                         'translation': 12, 'projective': 12}
+                        dims[p(4312)] = {'simple': 3,
+                                         'translation': 12, 'projective': 12}
+                        dims[p(4321)] = {'simple': 1,
+                                         'translation': 24, 'projective': 24}
                         K = self.S().base_ring()
                         self.dims = dims
-                        self.dim = self.S().module_morphism(lambda x: K(dims[x]['simple']), codomain = K)
+                        self.dim = self.S().module_morphism(
+                            lambda x: K(dims[x]['simple']), codomain=K)
 
                 def T_disabled(self):
                     """
@@ -331,7 +363,7 @@ class BiHeckeMonoids(Category):
                         Character ring of bi-Hecke monoid of Weyl Group of type ['A', 2] (as a matrix group acting on the ambient space) over Integer Ring in the basis of characters of translation modules
                     """
                     from sage_semigroups.monoids.character_ring import CharacterRing
-                    return CharacterRing(self, prefix = "T", modules = "translation")
+                    return CharacterRing(self, prefix="T", modules="translation")
 
                 def CM(self):
                     r"""
@@ -352,8 +384,10 @@ class BiHeckeMonoids(Category):
                         Character ring of bi-Hecke monoid of Weyl Group of type ['A', 2] (as a matrix group acting on the ambient space) over Integer Ring in the basis of characters of translation modules
                     """
                     from sage_semigroups.monoids.character_ring import CharacterRing
-                    result = CharacterRing(self, prefix = "CM", modules = "%s-mobius inverted class functions"%self.side())
-                    result.set_order(list(self.base().simple_modules_index_set()))
+                    result = CharacterRing(
+                        self, prefix="CM", modules="%s-mobius inverted class functions" % self.side())
+                    result.set_order(
+                        list(self.base().simple_modules_index_set()))
                     return result
 
                 @lazy_attribute
@@ -411,14 +445,15 @@ class BiHeckeMonoids(Category):
                         sage: G.TtoS_on_basis(p(1234))
                         S[1234]
                     """
-                    if self.side()=='left':
+                    if self.side() == 'left':
                         # Gloups, we need a good idiom to do super calls!!!
                         return Monoids().HTrivial().Finite().CharacterRings(self.base_ring()).parent_class.TtoS_on_basis(self, w)
                     c = cutting_poset(w.parent())
                     r = c.rank_function()
                     S = self.S()
                     q = self._q
-                    return S.sum( S.term(u.element, q**(r(w)-r(u))) for u in c.principal_order_ideal(w) )
+                    return S.sum(S.term(u.element, q**(r(w) - r(u)))
+                                 for u in c.principal_order_ideal(w))
 
                 @lazy_attribute
                 def induce_from_M0(self):
@@ -447,8 +482,9 @@ class BiHeckeMonoids(Category):
                     """
                     M0 = self.base().fix_w0_monoid()
                     S0 = M0.character_ring().S()
-                    T  = self.T()
-                    return S0.module_morphism(T.monomial)#, category = self.character_ring_category())
+                    T = self.T()
+                    # , category = self.character_ring_category())
+                    return S0.module_morphism(T.monomial)
 
                 @lazy_attribute
                 def restrict_TtoS0_on_basis(self):
@@ -494,7 +530,7 @@ class BiHeckeMonoids(Category):
                     S0 = M0.character_ring().S()
                     S0.set_order(list(self.base().simple_modules_index_set()))
                     W = self.base().W
-                    R = W.weak_poset(side = "right", facade=True)
+                    R = W.weak_poset(side="right", facade=True)
                     return S0.sum_of_monomials * R.principal_order_ideal
 
                 @lazy_attribute
@@ -520,7 +556,7 @@ class BiHeckeMonoids(Category):
                     print("warning: this is using a wrong formula for A_4, ...")
                     M0 = self.base().fix_w0_monoid()
                     P0 = M0.character_ring().P()
-                    return P0.module_morphism(self.induce_from_M0_P_basis, codomain = self.P())
+                    return P0.module_morphism(self.induce_from_M0_P_basis, codomain=self.P())
 
                 def induce_from_M0_P_basis(self, w):
                     """
@@ -543,20 +579,23 @@ class BiHeckeMonoids(Category):
                     R = W.weak_poset(side="right")
                     C = cutting_poset(W)
                     w0 = W.w0
-                    result = set(u.element for u in R.principal_order_filter(w))
+                    result = set(
+                        u.element for u in R.principal_order_filter(w))
                     for u in C.principal_order_ideal(w0 * w):
                         u = w0 * u.element
-                        if u == w: continue
+                        if u == w:
+                            continue
                         result.remove(u)
                     # This computes the smallest element v in [w,w_0]
                     # which is at the bottom of a descent class D_I;
                     # e.g. the interval [v,w0]_R is a translate of the
                     # parabolic subgroup W_I.
-                    I = (w**-1 * w0).descents(side = "right")
-                    v = w0.coset_representative(index_set = I, side = "right")
+                    I = (w**-1 * w0).descents(side="right")
+                    v = w0.coset_representative(index_set=I, side="right")
                     for u in R.principal_order_filter(v):
                         u = u.element
-                        if u == v: continue
+                        if u == v:
+                            continue
                         result.discard(u)
                     P = self.P()
                     return P.sum_of_monomials(result)
@@ -582,11 +621,13 @@ class BiHeckeMonoids(Category):
                     R = W.weak_poset(side="right")
                     C = cutting_poset(W)
                     w0 = W.w0
-                    result = set(u.element for u in R.principal_order_filter(w))
+                    result = set(
+                        u.element for u in R.principal_order_filter(w))
                     # Remove non trivial cutting points
                     for u in C.principal_order_ideal(w0 * w):
                         u = w0 * u.element
-                        if u == w: continue
+                        if u == w:
+                            continue
                         result.remove(u)
                     # For u_J in [w,w_0]_L obtained by pealing off as many j-descents
                     # as possible (bottom of a parabolic sub...), and if u <> J,
@@ -594,12 +635,15 @@ class BiHeckeMonoids(Category):
                     #
                     # The type of [w, w_0]_R: v * w = w0
                     w_w0 = w**-1 * w0
-                    I = set( w_w0.reduced_word() )
-                    for J in Subsets(I, len(I)-1):
-                        v = w * w_w0.coset_representative(index_set = J, side ="right")
+                    I = set(w_w0.reduced_word())
+                    for J in Subsets(I, len(I) - 1):
+                        v = w * \
+                            w_w0.coset_representative(
+                                index_set=J, side="right")
                         for u in R.principal_order_filter(v):
                             u = u.element
-                            if u == v: continue
+                            if u == v:
+                                continue
                             result.discard(u)
                     P = self.P()
                     return P.sum_of_monomials(result)
@@ -627,7 +671,7 @@ class BiHeckeMonoids(Category):
                     print("warning: this is using a wrong formula for A_4, ...")
                     M0 = self.base().fix_w0_monoid()
                     P0 = M0.character_ring().P()
-                    return P0.module_morphism(self.IndP0_P3_basis, codomain = self.P(), category = self.character_ring_category())
+                    return P0.module_morphism(self.IndP0_P3_basis, codomain=self.P(), category=self.character_ring_category())
 
                 def EtoT_on_basis(self, w):
                     """
@@ -653,7 +697,8 @@ class BiHeckeMonoids(Category):
                     M0 = self.base().fix_w0_monoid()
                     S0 = M0.character_ring().S()
                     E0 = M0.character_ring().E()
-                    return self.induce_from_M0( S0(E0[w]) )
+                    return self.induce_from_M0(S0(E0[w]))
+
 
 class BiHeckeBorelSubmonoids(Category):
 
@@ -684,7 +729,7 @@ class BiHeckeBorelSubmonoids(Category):
             result = []
             w = W.one()
             for i in W.long_element().reduced_word():
-                result.append(0 if self(w) == self(s[i]*w) else 1)
+                result.append(0 if self(w) == self(s[i] * w) else 1)
                 w = s[i] * w
             return result
 
@@ -731,10 +776,12 @@ class BiHeckeMonoid(AutomaticMonoid):
         assert 0 not in W.index_set()
         ambient_monoid = FiniteSetMaps(self.W, action="right")
         #
-        pi  = self.W.simple_projections(length_increasing = True ).map(ambient_monoid)
-        opi = self.W.simple_projections(length_increasing = False).map(ambient_monoid)
-        piopi = Family(dict([ [ i,  pi[i] ] for i in  pi.keys()] +
-                            [ [-i, opi[i] ] for i in opi.keys()]))
+        pi = self.W.simple_projections(
+            length_increasing=True).map(ambient_monoid)
+        opi = self.W.simple_projections(
+            length_increasing=False).map(ambient_monoid)
+        piopi = Family(dict([[i, pi[i]] for i in pi.keys()] +
+                            [[-i, opi[i]] for i in opi.keys()]))
         assert piopi.cardinality() == len(W.index_set()) * 2,\
             "Oops: using -i as key causes trouble!"
         #
@@ -744,10 +791,9 @@ class BiHeckeMonoid(AutomaticMonoid):
         AutomaticMonoid.__init__(self, piopi,
                                  ambient=ambient_monoid, one=ambient_monoid.one(), mul=operator.mul,
                                  category=category)
-        self.rename("bi-Hecke monoid of %s"%W)
+        self.rename("bi-Hecke monoid of %s" % W)
         self.domain = self.W
         self.codomain = self.W
-
 
     def from_word(self, word):
         g = self.monoid_generators()
@@ -781,7 +827,6 @@ class BiHeckeMonoid(AutomaticMonoid):
         """
         return self.elements_by_image_set()[frozenset(S)]
 
-
 #        if isinstance(w, sage.combinat.permutation.Permutation_class):
 #            # Temporary workaround until Permutation_class.reduced_word accept the 'positive' option)
 #            red = (Permutation([i for i in reversed(range(1,len(w)+1))]) * w.inverse()).reduced_word()
@@ -807,8 +852,8 @@ class BiHeckeMonoid(AutomaticMonoid):
 
         """
         return AutomaticMonoid(Family(dict((w, self.e(w)) for w in [~u * self.W.w0 for u in self.W.grassmannian_elements(side="right")])),
-                               one = self.one(),
-                               category = Monoids().JTrivial().Finite())
+                               one=self.one(),
+                               category=Monoids().JTrivial().Finite())
 
     @cached_method
     def fix_w0_monoid(self):
@@ -824,22 +869,21 @@ class BiHeckeMonoid(AutomaticMonoid):
             71
         """
         w0 = self.W.w0
-        #from sage.libs.semigroupe import semigroupe
-        #F = semigroupe.AutomaticSemigroup# ...  cardinality_bound = 150000 (for S6)
-        return self.submonoid(Family(dict((w, self.e(w,w0))
-                                     for w in self.W.grassmannian_elements(side="left"))),
-                               category=BiHeckeBorelSubmonoids())
+        # from sage.libs.semigroupe import semigroupe
+        # F = semigroupe.AutomaticSemigroup# ...  cardinality_bound = 150000 (for S6)
+        return self.submonoid(Family(dict((w, self.e(w, w0))
+                                          for w in self.W.grassmannian_elements(side="left"))),
+                              category=BiHeckeBorelSubmonoids())
 
     @cached_method
     def cardinality(self):
         M0 = self.fix_w0_monoid()
-        #W = M0.simple_modules_index_set()
+        # W = M0.simple_modules_index_set()
         W = self.W
         w0 = W.long_element()
         e = M0.j_transversal_of_idempotents()
-        return sum(len(M0.projective_module(e[w], side="left")) * e[w0*~w].image_set().cardinality()
+        return sum(len(M0.projective_module(e[w], side="left")) * e[w0 * ~w].image_set().cardinality()
                    for w in W)
-
 
     def zero_hecke_monoid(self):
         """
@@ -855,7 +899,7 @@ class BiHeckeMonoid(AutomaticMonoid):
             sage: H0 = M.zero_hecke_monoid(); H0.cardinality()
             24
         """
-        return AutomaticMonoid(Family(dict((w, self.piw(w)) for w in self.W)), one = self.one(), category = Monoids().JTrivial().Finite())
+        return AutomaticMonoid(Family(dict((w, self.piw(w)) for w in self.W)), one=self.one(), category=Monoids().JTrivial().Finite())
 
     def projective_module1(self, w):
         """
@@ -875,15 +919,16 @@ class BiHeckeMonoid(AutomaticMonoid):
             321 6
         """
         w0 = self.W.w0
-        covers = [self.e(c, w0) for c in w.weak_covers(side = "left", positive = True)]
+        covers = [self.e(c, w0)
+                  for c in w.weak_covers(side="left", positive=True)]
+
         def succ(x):
             for g in self.semigroup_generators():
-                y = x*g
-                if any(e*y == y for e in covers):
+                y = x * g
+                if any(e * y == y for e in covers):
                     continue
                 yield y
-        return TransitiveIdeal(succ, [self.e(w,w0)])
-
+        return TransitiveIdeal(succ, [self.e(w, w0)])
 
     def projective_module3(self, w):
         """
@@ -933,11 +978,12 @@ class BiHeckeMonoid(AutomaticMonoid):
         P = self.j_poset_on_regular_classes()
 
         idempotents = sum((self.j_class_idempotents(self.j_class_index(e[f]))
-                           for f in P.lower_covers(w)),[])
+                           for f in P.lower_covers(w)), [])
+
         def succ(x):
             for g in self.semigroup_generators():
-                y = x*g
-                if any(f*y == y for f in idempotents):
+                y = x * g
+                if any(f * y == y for f in idempotents):
                     continue
                 yield y
         return TransitiveIdeal(succ, [e])
@@ -987,13 +1033,14 @@ class BiHeckeMonoid(AutomaticMonoid):
             4321: 24 24 24
         """
         w0 = self.W.w0
-        e = self.e(w,w0)
+        e = self.e(w, w0)
         P = self.h_poset_on_idempotents()
         idempotents = [f.element for f in P.lower_covers(e)]
+
         def succ(x):
             for g in self.semigroup_generators():
-                y = x*g
-                if any(f*y == y for f in idempotents):
+                y = x * g
+                if any(f * y == y for f in idempotents):
                     continue
                 yield y
         return TransitiveIdeal(succ, [e])
@@ -1009,7 +1056,7 @@ class BiHeckeMonoid(AutomaticMonoid):
         for m in self:
             l = len(m.reduced_word())
             result += r"""\node(%s) at (%s,%s) {};
-"""%(m.node_label(), x[l], 10*l)
+""" % (m.node_label(), x[l], 10 * l)
             x[l] += 10
         return result
 
@@ -1022,47 +1069,47 @@ class BiHeckeMonoid(AutomaticMonoid):
             sage: print M.latex_graph_node_placement()
             sage: M = semigroups.BiHeckeMonoid(["A",2]); fd = open("essai-inner.tex", "write"); fd.write(M.latex_graph_inner()); fd.close()
         """
-        colors = {1:"blue", 2:"red", 3:"green"}
+        colors = {1: "blue", 2: "red", 3: "green"}
         result = r"""\begin{pgfonlayer}{nodes}
 """
         for m in self:
             result += r"""  \node(n%s) at (%s) {\scalebox{1}{%s}};
-"""%(m.node_label(), m.node_label(), latex(m))
+""" % (m.node_label(), m.node_label(), latex(m))
         result += r"""\end{pgfonlayer}{nodes}
 """
 
         edges = {}
-        for (u, v, (i, dir)) in self.cayley_graph(side = "twosided").edges():
-            if (u,v,i) in edges:
-                edges[u,v,i] = "both"
+        for (u, v, (i, dir)) in self.cayley_graph(side="twosided").edges():
+            if (u, v, i) in edges:
+                edges[u, v, i] = "both"
             else:
-                edges[u,v,i] = dir
+                edges[u, v, i] = dir
 
         for (u, v, i) in edges.keys():
-            dir = edges[u,v,i]
+            dir = edges[u, v, i]
             if u == v:
                 continue
-            if i<0:
-                edge_label = r"\overline{%s}"%-i
+            if i < 0:
+                edge_label = r"\overline{%s}" % -i
             else:
-                edge_label = "%s"%i
+                edge_label = "%s" % i
             if dir == "both":
-                edge_label = r"%s\!\!\times\!\!%s"%(edge_label, edge_label)
+                edge_label = r"%s\!\!\times\!\!%s" % (edge_label, edge_label)
             elif dir == "left":
-                edge_label = r"%s\!\!\times\!\!\phantom{1}"%edge_label
+                edge_label = r"%s\!\!\times\!\!\phantom{1}" % edge_label
             else:
-                edge_label = r"\phantom{1}\!\!\times\!\!%s"%edge_label
+                edge_label = r"\phantom{1}\!\!\times\!\!%s" % edge_label
             if u != v:
                 result += r"""  \draw [->, color = %s](n%s) -- node {$%s$} (n%s);
-"""%(colors[abs(i)], u.node_label(), edge_label, v.node_label())
+""" % (colors[abs(i)], u.node_label(), edge_label, v.node_label())
         return result
 
     class Element(AutomaticMonoid.Element):
 
-        #def left_symbol(self):
+        # def left_symbol(self):
         #
 
-        #@cached_method
+        # @cached_method
         def type(self):
             """
             Returns the type of ``self``.
@@ -1082,10 +1129,11 @@ class BiHeckeMonoid(AutomaticMonoid):
             else:
                 return result
 
-        def latex_sub_weak_order(self, edge_options = lambda u,v: "", draw_node = lambda w: False, side = "right"):
+        def latex_sub_weak_order(self, edge_options=lambda u, v: "", draw_node=lambda w: False, side="right"):
             """
             INPUT:
-             - draw_edge: a predicate taking two elements of the Coxeter group 
+
+             - draw_edge: a predicate taking two elements of the Coxeter group
 
             Returns a LaTeX / tikz picture of the left weak order,
             including only those edges for which the predicate is satisfied.
@@ -1098,43 +1146,46 @@ class BiHeckeMonoid(AutomaticMonoid):
             layout = right_weak_order_layout(W.cartan_type())
             for w in W:
                 label = draw_node(w)
-                if label == True:
+                if label is True:
                     label = r"$\bullet$"
-                elif label == False:
+                elif label is False:
                     label = "."
                 else:
-                    label = "\""+str(label)+"\""
+                    label = "\"" + str(label) + "\""
                 result += r"""  \node (%s) at %s {%s};
-"""%(w.to_permutation_string(), layout[(~w).to_permutation()], label)
+""" % (w.to_permutation_string(), layout[(~w).to_permutation()], label)
 
             for w in self.parent().W:
-                for i in w.descents(side = side):
-                    w1 = w.apply_simple_reflection(i, side = side)
+                for i in w.descents(side=side):
+                    w1 = w.apply_simple_reflection(i, side=side)
                     result += r"""  \draw [color=%s,%s] (%s) -- (%s);
-"""%(self._colors[i],edge_options(w, w1),w.to_permutation_string(), w1.to_permutation_string())
+""" % (self._colors[i], edge_options(w, w1), w.to_permutation_string(), w1.to_permutation_string())
             return result + r"""\end{tikzpicture}
 """
 
-        def latex_image_set(self, side = "left"):
+        def latex_image_set(self, side="left"):
             image_set = self.image_set()
             return self.latex_sub_weak_order(
-                edge_options = lambda u,v: "line width="+("2pt" if u in image_set and v in image_set else "0pt"),
-                draw_node = lambda u: u in image_set,
-                side = side)
+                edge_options=lambda u, v: "line width=" +
+                ("2pt" if u in image_set and v in image_set else "0pt"),
+                draw_node=lambda u: u in image_set,
+                side=side)
 
-        def latex_fibers(self, side = "left"):
+        def latex_fibers(self, side="left"):
             return self.latex_sub_weak_order(
-                edge_options = lambda u,v: "line width="+("2pt" if self(u) != self(v) else "0pt"),
-                side = side)
+                edge_options=lambda u, v: "line width=" +
+                ("2pt" if self(u) != self(v) else "0pt"),
+                side=side)
 
         def latex_reduced_word(self):
-            result = "".join(r"{\color{%s}%s}"%(self._colors[abs(i)], str(i) if i >0 else r"\overline{%s}"%abs(i)) for i in self.reduced_word())
+            result = "".join(r"{\color{%s}%s}" % (self._colors[abs(i)], str(
+                i) if i > 0 else r"\overline{%s}" % abs(i)) for i in self.reduced_word())
             if self.is_idempotent():
-                result = "{%s}^*"%result
+                result = "{%s}^*" % result
             return result
 
         @cached_method
-        def _latex_(self, side = "left"):
+        def _latex_(self, side="left"):
             """
             Latex output (currently only implemented for A2/A3)
 
@@ -1147,63 +1198,65 @@ class BiHeckeMonoid(AutomaticMonoid):
                 sage: view(M.one(), format = 'pdf')
             """
             if right_weak_order_layout(self.parent().W.cartan_type()) is not None:
-                return r"""\fbox{$\stackrel{%s}{%s \raisebox{-.5ex}{$\ \mapsto\ $} %s}$}"""%(self.latex_reduced_word(), self.latex_fibers(), self.latex_image_set())
+                return r"""\fbox{$\stackrel{%s}{%s \raisebox{-.5ex}{$\ \mapsto\ $} %s}$}""" % (self.latex_reduced_word(), self.latex_fibers(), self.latex_image_set())
             else:
                 return self.latex_reduced_word()
 
-        _colors = {1:"blue", 2:"red", 3:"green"}
+        _colors = {1: "blue", 2: "red", 3: "green"}
+
 
 def right_weak_order_layout(cartan_type):
-    if cartan_type == CartanType(["A",1]):
+    if cartan_type == CartanType(["A", 1]):
         return {
-            (1,2) : (0,1),
-            (2,1) : (0,0),
+            (1, 2): (0, 1),
+            (2, 1): (0, 0),
         }
-    if cartan_type == CartanType(["A",2]):
+    if cartan_type == CartanType(["A", 2]):
         return {
-            (1,2,3) : (1,3),
+            (1, 2, 3): (1, 3),
 
-            (2,1,3) : (0,2),
-            (1,3,2) : (2,2),
+            (2, 1, 3): (0, 2),
+            (1, 3, 2): (2, 2),
 
-            (2,3,1) : (0,1),
-            (3,1,2) : (2,1),
+            (2, 3, 1): (0, 1),
+            (3, 1, 2): (2, 1),
 
-            (3,2,1) : (1,0)
+            (3, 2, 1): (1, 0)
         }
-    elif cartan_type == CartanType(["A",3]):
+    elif cartan_type == CartanType(["A", 3]):
         return {
-            (1, 2, 3, 4) : ( 0,6),
+            (1, 2, 3, 4): (0, 6),
 
-            (2, 1, 3, 4) : (-1,5),
-            (1, 3, 2, 4) : ( 0,5),
-            (1, 2, 4, 3) : ( 1,5),
+            (2, 1, 3, 4): (-1, 5),
+            (1, 3, 2, 4): (0, 5),
+            (1, 2, 4, 3): (1, 5),
 
-            (2, 3, 1, 4) : (-2,4),
-            (3, 1, 2, 4) : (-1,4),
-            (2, 1, 4, 3) : ( 0,4),
-            (1, 3, 4, 2) : ( 1,4),
-            (1, 4, 2, 3) : ( 2,4),
+            (2, 3, 1, 4): (-2, 4),
+            (3, 1, 2, 4): (-1, 4),
+            (2, 1, 4, 3): (0, 4),
+            (1, 3, 4, 2): (1, 4),
+            (1, 4, 2, 3): (2, 4),
 
-            (2, 3, 4, 1) : (-2.5,3),
-            (3, 2, 1, 4) : (-1.5,3),
-            (2, 4, 1, 3) : (-0.5,3),
-            (3, 1, 4, 2) : ( 0.5,3),
-            (4, 1, 2, 3) : ( 1.5,3),
-            (1, 4, 3, 2) : ( 2.5,3),
+            (2, 3, 4, 1): (-2.5, 3),
+            (3, 2, 1, 4): (-1.5, 3),
+            (2, 4, 1, 3): (-0.5, 3),
+            (3, 1, 4, 2): (0.5, 3),
+            (4, 1, 2, 3): (1.5, 3),
+            (1, 4, 3, 2): (2.5, 3),
 
-            (3, 2, 4, 1) : (-2,2),
-            (2, 4, 3, 1) : (-1,2),
-            (3, 4, 1, 2) : ( 0,2),
-            (4, 2, 1, 3) : ( 1,2),
-            (4, 1, 3, 2) : ( 2,2),
+            (3, 2, 4, 1): (-2, 2),
+            (2, 4, 3, 1): (-1, 2),
+            (3, 4, 1, 2): (0, 2),
+            (4, 2, 1, 3): (1, 2),
+            (4, 1, 3, 2): (2, 2),
 
-            (3, 4, 2, 1) : (-1,1),
-            (4, 2, 3, 1) : ( 0,1),
-            (4, 3, 1, 2) : ( 1,1),
+            (3, 4, 2, 1): (-1, 1),
+            (4, 2, 3, 1): (0, 1),
+            (4, 3, 1, 2): (1, 1),
 
-            (4, 3, 2, 1) : ( 0,0),
-       }
+            (4, 3, 2, 1): (0, 0),
+        }
+
 
 def simple_module_structure(w):
     """
@@ -1227,9 +1280,9 @@ def simple_module_structure(w):
     """
     W = w.parent()
     # the simple reflections used to go from w to w0 in right order,
-    I = set( ((w**-1) * W.long_element()).reduced_word() )
+    I = set(((w**-1) * W.long_element()).reduced_word())
     translation_module = upper_ideal(w)
-    blocks    = dict()
+    blocks = dict()
     intervals = dict()
     simple_module = translation_module
 
@@ -1237,20 +1290,24 @@ def simple_module_structure(w):
     # For this, we assume that the Subsets(I) are sorted by increasing cardinality
     for J in Subsets(I):
         J = tuple(sorted(J))
-        block = upper_ideal(w, index_set = J)
-        if len(block) == 1 or len(translation_module) % len(block) != 0: continue
+        block = upper_ideal(w, index_set=J)
+        if len(block) == 1 or len(translation_module) % len(block) != 0:
+            continue
         if block in blocks.values():
-#            print "Ignoring J giving an already know block"
+            #            print "Ignoring J giving an already know block"
             continue
 
         # construct the top interval by removing from the translation
         # module everything that is below elements u in block with u != w
-        top_interval = translation_module.difference( upper_ideal(block.difference([w]) ))
+        top_interval = translation_module.difference(
+            upper_ideal(block.difference([w])))
 
         interval = [w**-1 * u for u in top_interval]
-        if len(interval) * len(block) != len(translation_module): continue
-        if len(set( u * v for u in block for v in interval )) != len(translation_module): continue
-        bot = max(block, key = attrcall('length'))
+        if len(interval) * len(block) != len(translation_module):
+            continue
+        if len(set(u * v for u in block for v in interval)) != len(translation_module):
+            continue
+        bot = max(block, key=attrcall('length'))
         bottom_interval = set(bot * v for v in interval)
         simple_module = simple_module.difference(bottom_interval)
         blocks[J] = block
@@ -1258,16 +1315,18 @@ def simple_module_structure(w):
 
     # Check that the set of J's is closed under union, and extract
     # those that are not unions of smaller ones
-    Js        = set(blocks.keys())
+    Js = set(blocks.keys())
     minimalJs = set(blocks.keys())
-    for a,b in Subsets(Js, 2):
+    for a, b in Subsets(Js, 2):
         ab = tuple(sorted(set(a).union(set(b))))
-        if a == ab or b == ab: continue
+        if a == ab or b == ab:
+            continue
         assert ab in Js
         minimalJs.discard(ab)
-    minimalJs = sorted(minimalJs, key = lambda l: (len(l), l))
+    minimalJs = sorted(minimalJs, key=lambda l: (len(l), l))
 
     return translation_module, simple_module, minimalJs, blocks, intervals
+
 
 class TranslationModule(FiniteEnumeratedSet):
     @staticmethod
@@ -1285,7 +1344,7 @@ class TranslationModule(FiniteEnumeratedSet):
             [123, 213, 231]
 
         """
-        W = WeylGroup(["A",2])
+        W = WeylGroup(["A", 2])
         s = W.simple_reflections()
         return cls(s[1] * s[2])
 
@@ -1301,7 +1360,8 @@ class TranslationModule(FiniteEnumeratedSet):
         """
         self._w = w
         self._W = w.parent()
-        FiniteEnumeratedSet.__init__(self, sorted(lower_ideal(w, side = "right"), key = attrcall("to_permutation")))
+        FiniteEnumeratedSet.__init__(self, sorted(lower_ideal(
+            w, side="right"), key=attrcall("to_permutation")))
 
     @cached_method
     def index_set(self):
@@ -1310,18 +1370,18 @@ class TranslationModule(FiniteEnumeratedSet):
     @cached_method
     def descent_set_structure(self, J):
         w = self._w
-        u = w.coset_representative(side = "left", index_set = J)
-        if w == u: # Trivial block
+        u = w.coset_representative(side="left", index_set=J)
+        if w == u:  # Trivial block
             return None
-        if not weak_lequal(u, w, side = "right"): # u \not <_R w
+        if not weak_lequal(u, w, side="right"):  # u \not <_R w
             return None
         wJ = w * u**-1
-        if set(J) != set(wJ.reduced_word()): # J not minimal
+        if set(J) != set(wJ.reduced_word()):  # J not minimal
             return None
         return (wJ, u)
 
     def coset(self, J):
-        return lower_ideal(self.descent_set_structure(J)[1], side = "right")
+        return lower_ideal(self.descent_set_structure(J)[1], side="right")
 
     def long_element(self, J):
         r"""
@@ -1337,9 +1397,9 @@ class TranslationModule(FiniteEnumeratedSet):
 
     @cached_method
     def descent_sets(self):
-        return [ J
-                 for J in (tuple(sorted(J)) for J in Subsets(self.index_set()))
-                 if self.descent_set_structure(J) is not None ]
+        return [J
+                for J in (tuple(sorted(J)) for J in Subsets(self.index_set()))
+                if self.descent_set_structure(J) is not None]
 
     @cached_method
     def minimal_descent_sets(self):
@@ -1379,25 +1439,27 @@ class TranslationModule(FiniteEnumeratedSet):
         """
         # Check that the set of J's is closed under union, and extract
         # those that are not unions of smaller ones
-        Js        = set(self.descent_sets())
+        Js = set(self.descent_sets())
         minimalJs = set(self.descent_sets())
-        for a,b in Subsets(Js, 2):
+        for a, b in Subsets(Js, 2):
             ab = tuple(sorted(set(a).union(set(b))))
-            if a == ab or b == ab: continue
+            if a == ab or b == ab:
+                continue
             assert ab in Js
             minimalJs.discard(ab)
-        minimalJs = sorted(minimalJs, key = lambda l: (len(l), l))
+        minimalJs = sorted(minimalJs, key=lambda l: (len(l), l))
         return minimalJs
 
     def partial_hom(self):
         """
         Returns the set of (partially defined) functions from self to self
         """
-        return FiniteSetMaps(self, self, action = "right")
+        return FiniteSetMaps(self, self, action="right")
 
-    def simple_projection(self, i, side = "right", length_increasing = True):
+    def simple_projection(self, i, side="right", length_increasing=True):
         assert side == "right"
-        pi = self.W.simple_projection(i, length_increasing=toward_max)
+        pi = self.W.simple_projection(i, length_increasing=length_increasing)
+
         def simple_projection(w):
             if w.apply_simple_reflection(i) in self:
                 return pi(w)
@@ -1416,13 +1478,13 @@ class TranslationModule(FiniteEnumeratedSet):
         """
         result = set()
         for J in self.minimal_descent_sets():
-            if weak_lequal(self.long_element(J), x, side = "right"):
+            if weak_lequal(self.long_element(J), x, side="right"):
                 result = result.union(J)
         return result
 
     # identical to CoxeterGroups
     @cached_method
-    def simple_projections(self, side = "right", length_increasing = True):
+    def simple_projections(self, side="right", length_increasing=True):
         """
 
         Code identical to CoxeterGroups.ParentMethods.simple_projections
@@ -1450,13 +1512,13 @@ class TranslationModule(FiniteEnumeratedSet):
             [0 1 0]
 
         """
-        return Family(self.index_set(), lambda i: self.simple_projection(i, side = side, length_increasing=toward_max))
+        return Family(self.index_set(), lambda i: self.simple_projection(i, side=side, length_increasing=length_increasing))
 
-    def simple_reflection(self, i, side = "right"):
+    def simple_reflection(self, i, side="right"):
         assert side == "right"
-        return self.simple_projection(i, length_increasing = True).to_matrix() + self.simple_projection(i, toward_max=False).to_matrix() - 1
+        return self.simple_projection(i, length_increasing=True).to_matrix() + self.simple_projection(i, toward_max=False).to_matrix() - 1
 
-    def simple_reflections(self, side = "right"):
+    def simple_reflections(self, side="right"):
         r"""
         Code identical to CoxeterGroups.ParentMethods.simple_reflections
 
@@ -1502,10 +1564,11 @@ class TranslationModule(FiniteEnumeratedSet):
             ...           if (s[j]+1).is_zero(): continue
             ...           assert ((s[i]*s[j]) ** m(i,j) - 1).is_zero()
         """
-        return Family(self.index_set(), lambda i: self.simple_reflection(i, side = side))
+        return Family(self.index_set(), lambda i: self.simple_reflection(i, side=side))
 
-    def unsigned_simple_reflection(self, i, side = "right"):
+    def unsigned_simple_reflection(self, i, side="right"):
         assert side == "right"
+
         def unsigned_simple_reflection(u):
             v = u.apply_simple_reflection(i)
             if v in self:
@@ -1514,7 +1577,7 @@ class TranslationModule(FiniteEnumeratedSet):
                 return u
         return self.partial_hom()(unsigned_simple_reflection)
 
-    def unsigned_simple_reflections(self, side = "right"):
+    def unsigned_simple_reflections(self, side="right"):
         """
 
         EXAMPLES::
@@ -1530,7 +1593,7 @@ class TranslationModule(FiniteEnumeratedSet):
             [ 0  0  1]
             [ 0  1  0]
         """
-        return Family(self.index_set(), lambda i: self.unsigned_simple_reflection(i, side = side))
+        return Family(self.index_set(), lambda i: self.unsigned_simple_reflection(i, side=side))
 
     def piopi_algebra(self):
         """
@@ -1566,9 +1629,9 @@ class TranslationModule(FiniteEnumeratedSet):
             4321 211
         """
         ambient = gap.MatrixAlgebra(QQ, self.cardinality())
-        pi  = self.simple_projections(length_increasing = True )
-        opi = self.simple_projections(length_increasing = False)
-        generators = [ f.to_matrix() for f in list(pi) + list(opi) ]
+        pi = self.simple_projections(length_increasing=True)
+        opi = self.simple_projections(length_increasing=False)
+        generators = [f.to_matrix() for f in list(pi) + list(opi)]
         if len(generators) == 0:
             generators = [ambient.One()]
         return gap.SubalgebraWithOne(ambient, generators)
@@ -1589,23 +1652,22 @@ class TranslationModule(FiniteEnumeratedSet):
             16
             sage: TestSuite(M).run()
         """
-        pi = self.simple_projections(length_increasing = True )
+        pi = self.simple_projections(length_increasing=True)
         us = self.unsigned_simple_reflections()
-        pius = Family(dict([ [ i, pi[i] ] for i in pi.keys()] +
-                           [ [-i, us[i] ] for i in us.keys()]))
+        pius = Family(dict([[i, pi[i]] for i in pi.keys()] +
+                           [[-i, us[i]] for i in us.keys()]))
         #
         return AutomaticMonoid(pius, one=self.partial_hom().one(),
                                category=Monoids().Transformation().Subobjects())
 
     def triangular_element(self, u, v):
         M = self.partial_hom()
-        pi  = self.simple_projections(length_increasing = True )
-        opi = self.simple_projections(length_increasing = False )
-        us  = self.unsigned_simple_reflections()
+        pi = self.simple_projections(length_increasing=True)
+        opi = self.simple_projections(length_increasing=False)
+        us = self.unsigned_simple_reflections()
         u_to_v = v * u**-1
         v_to_w = self._w * v**-1
         return M.prod(us[i] for i in u_to_v.reduced_word()) * M.prod(pi[i] for i in v_to_w.reduced_word()) * M.prod(opi[i] for i in reversed(v_to_w.reduced_word()))
-
 
     def arrows(self):
         """
@@ -1623,7 +1685,7 @@ class TranslationModule(FiniteEnumeratedSet):
              (213, 231),
              (231, 231))
         """
-        return tuple( (u, v) for u in self for v in self if self.descents(u).issubset(self.descents(v)) )
+        return tuple((u, v) for u in self for v in self if self.descents(u).issubset(self.descents(v)))
 
     def n_arrows(self):
         """
@@ -1668,16 +1730,21 @@ class TranslationModule(FiniteEnumeratedSet):
         Jw = self.Jw(J)
 
         one = self.partial_hom().one().to_matrix()
-        pi  = self.simple_projections(length_increasing = True ).map(attrcall("to_matrix"))
-        opi = self.simple_projections(length_increasing = False).map(attrcall("to_matrix"))
+        pi = self.simple_projections(
+            length_increasing=True).map(attrcall("to_matrix"))
+        opi = self.simple_projections(
+            length_increasing=False).map(attrcall("to_matrix"))
 
-        antisymmetrizer = prod(((1-opi[i]) for i in self._W.long_element(J).reduced_word()), one)
+        antisymmetrizer = prod(
+            ((1 - opi[i]) for i in self._W.long_element(J).reduced_word()), one)
 
         word = Jw.reduced_word()
         result = antisymmetrizer
-        for i in range(len(word)-1):
-            result *= prod((pi[word[j]] for j in range(i)), one) * (1-pi[word[i]]) * prod((opi[word[j]] for j in reversed(range(i))),one) * antisymmetrizer
+        for i in range(len(word) - 1):
+            result *= prod((pi[word[j]] for j in range(i)), one) * (1 - pi[word[i]]) * prod(
+                (opi[word[j]] for j in reversed(range(i))), one) * antisymmetrizer
         return result
+
 
 @cached_function
 def cutted_points(w):
@@ -1702,22 +1769,26 @@ def cutted_points(w):
     sSet = Set(s)
     # The index of the simple roots that are mapped to simple roots
     # In type A this is i such that w(i+1) = w(i) + 1 (2x2 identity block)
-    J = tuple( i for i in w.descents(side="right", positive=True) if w*s[i]*w**-1 in sSet )
+    J = tuple(i for i in w.descents(side="right",
+                                    positive=True) if w * s[i] * w**-1 in sSet)
     # This is {w * u, u \in W_J}, where the products are reduced
     # this is an upper ideal in right weak order
-    return upper_ideal((w), side = "right", index_set = J)
+    return upper_ideal((w), side="right", index_set=J)
+
 
 @cached_function
 def cutting_poset(self):
     """
     """
-    return Poset((self, tuple((u,v) for u in self for v in cutted_points(u))), cover_relations=False)
+    return Poset((self, tuple((u, v) for u in self for v in cutted_points(u))), cover_relations=False)
+
 
 @cached_function
 def cutting_lattice(self):
-    return LatticePoset(poset_concatenation(cutting_poset(self), Poset([["top"],[]])))
+    return LatticePoset(poset_concatenation(cutting_poset(self), Poset([["top"], []])))
 
-def ideal(generators, side = "right", index_set = None, positive = False):
+
+def ideal(generators, side="right", index_set=None, positive=False):
     """
     Returns the lower (resp. upper) ideal in right (resp. right) order
     generated by the elements.
@@ -1745,17 +1816,21 @@ def ideal(generators, side = "right", index_set = None, positive = False):
         generators = tuple(generators)
     return ideal_internal(generators, side, index_set, positive)
 
+
 @cached_function
-def ideal_internal(generators, side = "right", index_set = None, positive = False):
-    return set(TransitiveIdeal(lambda u: u.weak_covers(side = side, index_set = index_set, positive = positive), generators))
+def ideal_internal(generators, side="right", index_set=None, positive=False):
+    return set(TransitiveIdeal(lambda u: u.weak_covers(side=side, index_set=index_set, positive=positive), generators))
+
 
 def upper_ideal(*args, **options):
-    return ideal(positive = True, *args, **options)
+    return ideal(positive=True, *args, **options)
+
 
 def lower_ideal(*args, **options):
-    return ideal(positive = False, *args, **options)
+    return ideal(positive=False, *args, **options)
 
-def weak_lequal(x, y, side = "right"):
+
+def weak_lequal(x, y, side="right"):
     """
     Returns whether x <= y in weak order
 
@@ -1771,22 +1846,25 @@ def weak_lequal(x, y, side = "right"):
         True
     """
     if side == "right":
-        div = x^(-1)*y
+        div = ~x * y
     else:
-        div = y*x^(-1)
+        div = y * ~x
     return x.length() + div.length() == y.length()
+
 
 def hasse_diagram_on_element(poset):
     G = poset.hasse_diagram()
     G.relabel(dict([x, x.element] for x in poset))
     return G
 
+
 def poset_concatenation(P, Q):
     P = hasse_diagram_on_element(P)
     Q = hasse_diagram_on_element(Q)
     G = P.disjoint_union(Q)
-    G.add_edges([p,q] for p in P.vertices() for q in Q.vertices())
+    G.add_edges([p, q] for p in P.vertices() for q in Q.vertices())
     return Poset(G)
+
 
 def weyl_from_compact_permutation(self, x):
     """
